@@ -14,4 +14,118 @@
     --green-complementary: #A8024F;
     --blue-complementary: #FF6A00;
     --green-blue-complementary: #A14C4D;
+    --background-white: #dfe6e9;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: Roboto;
+    background: hsla(198, 19%, 89%, 1);
+    background:
+        linear-gradient(135deg, hsla(198, 19%, 89%, 1) 64%, hsla(197, 66%, 85%, 1) 100%);
+}
+
+.header {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10%;
+    background-color: var(--green-blue-analogous);
+    border-bottom-right-radius: 30% 20%;
+}
+
+.header__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10rem;
+    color: var(--background-white);
+}
+
+.header__image-container {
+    width: auto;
+    height: 100%;
+}
+
+.header__image-container img {
+    width: clamp(auto, auto, auto);
+    height: clamp(98vh, 99vh, 100vh);
+    aspect-ratio: auto 1 / 2;
+    border: 1px solid var(--blue-light-shade);
+    border-bottom-right-radius: 40% 20%;
+    filter: drop-shadow(12px 4px 8px var(--blue-monochromatic));
+}
+
+.header--title {
+    align-self: flex-start;
+    font-family: 'Anek Telugu';
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    user-select: none;
+    text-shadow: 6px 4px 6.4px var(--blue-monochromatic);
+}
+
+.header--title__content {
+    display: flex;
+    flex-direction: column;
+}
+
+.header--title__content--slice {
+    display: inline-block;
+}
+
+.header--title__content--slice:first-child {
+    font-size: 36pt;
+}
+
+.header--title__content--slice:last-child {
+    font-size: 24pt;
+}
+
+.header--appointment {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    user-select: none;
+}
+
+.header--appointment__text {
+    display: inline-block;
+    font-size: 16pt;
+    text-align: center;
+    text-shadow: 8px 4px 12px var(--blue-monochromatic);
+    line-height: 28px;
+    letter-spacing: 0.045rem;
+}
+
+.header--appointment__button {
+    display: inline-block;
+    font: 700 16pt Roboto;
+    text-decoration: none;
+    letter-spacing: 0.045rem;
+    color: var(--background-white);
+    background-color: var(--green-complementary);
+    padding: .8rem 3.2rem;
+    border-radius: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--blue-monochromatic);
+    transition: all .3s ease 0s;
+}
+
+.header--appointment__button:hover {
+    background-image:
+        linear-gradient(165deg, var(--green-complementary) 55%, var(--blue-complementary) 100%);
+    box-shadow:
+        2px 12px 12px var(--blue-monochromatic),
+        -2px -4px 14px rgba(0, 43, 77, 60%);
 }
