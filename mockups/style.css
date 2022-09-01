@@ -1,0 +1,17 @@
+:root {
+    --green: #01a95a;
+    --blue: #0192fe;
+    --green-blue: #4a839c;
+    --green-light-shade: #C2F2DC;
+    --blue-light-shade: #C2DDF2;
+    --green-blue-light-shade: #C2E4F2;
+    --green-monochromatic: #014D29;
+    --blue-monochromatic: #002B4D;
+    --green-blue-monochromatic: #24404D;
+    --green-analogous: #02AFB5;
+    --blue-analogous: #4DB2FF;
+    --green-blue-analogous: #1D7EA8;
+    --green-complementary: #A8024F;
+    --blue-complementary: #FF6A00;
+    --green-blue-complementary: #A14C4D;
+}
