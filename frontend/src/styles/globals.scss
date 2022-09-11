@@ -1,3 +1,22 @@
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto-Regular.woff2') format('woff2');
+    font-display: fallback;
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url('/assets/fonts/Montserrat-Regular.woff2') format('woff2');
+    font-display: fallback;
+}
+
+$title-font: Montserrat;
+$body-font: Roboto;
+
 html {
     font-size: 62.5%;
+}
+
+body {
+    font-family: $body-font, sans-serif;
 }
