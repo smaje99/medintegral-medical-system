@@ -1,0 +1,10 @@
+@import 'palette';
+
+@mixin non-list {
+    list-style-type: none;
+}
+
+@mixin non-link {
+    text-decoration: none;
+    color: $black;
+}
