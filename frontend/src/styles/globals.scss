@@ -8,16 +8,13 @@
 }
 
 @font-face {
-    font-family: Montserrat;
+    font-family: Oswald;
     src:
-        local('Montserrat'),
-        url('/assets/fonts/Montserrat-Regular.woff2') format('woff2'),
-        url('/public/assets/fonts/Montserrat-Regular.woff2') format('woff2');
+        local('Oswald'),
+        url('/assets/fonts/oswald-regular.woff2') format('woff2'),
+        url('/public/assets/fonts/oswald-regular.woff2') format('woff2');
     font-display: fallback;
 }
-
-$title-font: Montserrat;
-$body-font: Roboto;
 
 html {
     font-size: 62.5%;
@@ -25,4 +22,5 @@ html {
 
 body {
     font-family: $body-font, sans-serif;
+    color: $black;
 }
