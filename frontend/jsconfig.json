@@ -2,11 +2,13 @@
     "compilerOptions": {
         "target": "es2022",
         "allowSyntheticDefaultImports": false,
-        "baseUrl": "./src/",
+        "baseUrl": "./",
         "paths": {
-            "@Components/*": ["components/*"],
-            "@Helpers/*": ["helpers/*"],
-            "@Styles/*": ["styles/*"]
+            "@Components/*": ["src/components/*"],
+            "@Helpers/*": ["src/helpers/*"],
+            "@Icons/*": ["public/icons/*"],
+            "@Pictures/*": ["public/assets/pictures/*"],
+            "@Styles/*": ["src/styles/*"]
         }
     },
     "exclude": [
