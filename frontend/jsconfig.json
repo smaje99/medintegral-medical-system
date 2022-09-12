@@ -4,6 +4,8 @@
         "allowSyntheticDefaultImports": false,
         "baseUrl": "./src/",
         "paths": {
+            "@Components/*": ["components/*"],
+            "@Helpers/*": ["helpers/*"],
             "@Styles/*": ["styles/*"]
         }
     },
