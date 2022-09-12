@@ -1,5 +1,6 @@
 const routes = {
-    home: '/'
+    home: '/',
+    appointment: '/citas'
 }
 
 export default routes;
