@@ -1,6 +1,8 @@
 import Image from 'next/future/image';
 import Link from 'next/link';
 
+import Button from '@Components/Button';
+
 import routes from '@Helpers/routes';
 
 import styles from './HomeHeader.module.scss';
@@ -30,9 +32,9 @@ const HomeHeader = () => (
             ¡Agenda una cita médica con los mejores profesionales en el cuidado de la salud!
         </span>
         <Link href={routes.appointment}>
-            <a className={styles.button}>
+            <Button style="floating" className={styles.button}>
                 Agendar cita
-            </a>
+            </Button>
         </Link>
     </header>
 )

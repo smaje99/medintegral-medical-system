@@ -79,23 +79,4 @@
 
     justify-self: center;
     align-self: start;
-    display: inline-block;
-    font: 700 16pt Roboto;
-    text-decoration: none;
-    letter-spacing: 0.045rem;
-    color: $white;
-    background-color: $green-complementary;
-    padding: .8rem 3.2rem;
-    border-radius: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 4px 12px $blue-monochromatic;
-    transition: all .3s ease 0s;
-
-    &:hover {
-        background-image:
-            linear-gradient(165deg, $green-complementary 55%, $blue-complementary 100%);
-        box-shadow:
-            2px 12px 12px $blue-monochromatic,
-            -2px -4px 14px rgba(0, 43, 77, 60%);
-    }
 }
