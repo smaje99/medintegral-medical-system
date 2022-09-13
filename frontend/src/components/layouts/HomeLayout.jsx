@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import HomeHeader from '@Components/HomeHeader';
+import { Navigation } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
@@ -18,8 +19,11 @@ const HomeLayout = ({ children }) => {
 
     return (
         <>
+            <Navigation />
             <HomeHeader />
-            {children}
+            <main>
+                {children}
+            </main>
         </>
     )
 }
