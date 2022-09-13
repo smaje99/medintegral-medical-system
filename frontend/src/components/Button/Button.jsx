@@ -1,12 +1,15 @@
+import Link from 'next/link';
 import { forwardRef } from 'react'
 
 import styles from './Button.module.scss';
 
-const ButtonAnchor = forwardRef(({children, ...props }, ref) => (
-    <a ref={ref} {...props}>
-        {children}
-    </a>
-))
+const ButtonAnchor = ({href, children, ...props }) => (
+    <Link href={href}>
+        <a {...props}>
+            {children}
+        </a>
+    </Link>
+)
 
 const ButtonAux = ({ children, ...props }) => (
     <button {...props}>
@@ -14,21 +17,28 @@ const ButtonAux = ({ children, ...props }) => (
     </button>
 )
 
-const Button = forwardRef(({ className, style, as="a", children, ...props }, ref) => {
+const Button = ({ href, className, style, as="a", children, ...props }) => {
     const isAnchor = () => as === 'a';
 
     return (
         <>
             {isAnchor()
-                ? (<ButtonAnchor ref={ref} className={`${styles.button} ${styles[style]} ${className}`}>
+                ? (<ButtonAnchor
+                    href={href}
+                    className={`${styles.button} ${styles[style]} ${className}`}
+                    {...props}
+                >
                     {children}
                 </ButtonAnchor>)
-                : (<ButtonAux className={`${styles.button} ${styles[style]} ${className}`}>
+                : (<ButtonAux
+                    className={`${styles.button} ${styles[style]} ${className}`}
+                    {...props}
+                >
                     {children}
                 </ButtonAux>)
             }
         </>
     )
-})
+}
 
 export default Button;

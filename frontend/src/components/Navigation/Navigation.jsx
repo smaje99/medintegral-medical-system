@@ -44,11 +44,9 @@ const Navigation = () => {
                 ))}
 
                 <li className={styles.item}>
-                    <Link href={routes.login}>
-                        <Button style="floating" className={styles.login}>
-                            Iniciar sesión
-                        </Button>
-                    </Link>
+                    <Button href={routes.login} style="floating" className={styles.login}>
+                        Iniciar sesión
+                    </Button>
                 </li>
             </ul>
         </nav>

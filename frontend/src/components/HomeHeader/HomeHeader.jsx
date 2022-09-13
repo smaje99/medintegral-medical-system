@@ -1,5 +1,4 @@
 import Image from 'next/future/image';
-import Link from 'next/link';
 
 import Button from '@Components/Button';
 
@@ -31,11 +30,9 @@ const HomeHeader = () => (
         <span className={styles.text}>
             ¡Agenda una cita médica con los mejores profesionales en el cuidado de la salud!
         </span>
-        <Link href={routes.appointment}>
-            <Button style="floating" className={styles.button}>
-                Agendar cita
-            </Button>
-        </Link>
+        <Button href={routes.appointment} style="floating" className={styles.button}>
+            Agendar cita
+        </Button>
     </header>
 )
 

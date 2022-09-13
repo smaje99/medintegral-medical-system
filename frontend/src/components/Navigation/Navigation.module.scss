@@ -34,12 +34,11 @@
 
 .link,
 .login {
+    @include non-link;
     font: 600 12pt Roboto;
 }
 
 .link {
-    @include non-link;
-
     position: relative;
     display: inline-block;
     color: $black;
