@@ -1,0 +1,59 @@
+@import '../../styles/palette';
+@import '../../styles/fonts';
+@import '../../styles/mixins';
+
+.footer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 6rem;
+    flex-direction: column;
+    place-content: center;
+    place-items: center;
+    margin: 8rem 0 6rem 0;
+}
+
+.brand {
+    width: 100%;
+    height: 12rem;
+    filter: drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.group {
+    width: 100%;
+    display: flex;
+    gap: 2rem 12rem;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.title {
+    font: 700 16pt $title-font;
+    letter-spacing: .1rem;
+}
+
+.subinfo,
+.copyright {
+    font-size: 12pt;
+    letter-spacing: .07rem;
+}
+
+.info_list {
+    @include non-list;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding-left: 0;
+}
+
+.subinfo a {
+    @include non-link;
+
+    color: $black;
+}
+
+.subinfo a ,
+.copyright {
+    display: inline-block;
+}
