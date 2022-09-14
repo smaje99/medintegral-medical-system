@@ -1,27 +1,25 @@
 import { useEffect } from 'react';
 
 import Footer from '@Components/Footer';
-import HomeHeader from '@Components/HomeHeader';
 import { Navigation } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
-const HomeLayout = ({ children }) => {
+const PublicLayout = ({ children }) => {
     /** Add home class to the root element. */
     useEffect(() => {
         const rootElement = document.getElementById('__next');
 
-        rootElement.classList.add(styles.home);
+        rootElement.classList.add(styles.public);
 
         return () => {
-            rootElement.classList.remove(styles.home)
+            rootElement.classList.remove(styles.public)
         };
     }, [])
 
     return (
         <>
             <Navigation />
-            <HomeHeader />
             <main>
                 {children}
             </main>
@@ -30,4 +28,4 @@ const HomeLayout = ({ children }) => {
     )
 }
 
-export default HomeLayout;
+export default PublicLayout;

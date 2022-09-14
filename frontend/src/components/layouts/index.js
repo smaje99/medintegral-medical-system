@@ -1,3 +1,4 @@
 import HomeLayout from './HomeLayout';
+import PublicLayout from './PublicLayout';
 
-export { HomeLayout };
+export { HomeLayout, PublicLayout };
