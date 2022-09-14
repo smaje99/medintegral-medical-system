@@ -22,9 +22,26 @@
 
 html {
     font-size: 62.5%;
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: $body-font, sans-serif;
     color: $black;
+    background: hsla(198, 19%, 89%, 1);
+    background:
+        linear-gradient(135deg, hsla(198, 19%, 89%, 1) 64%, hsla(197, 66%, 85%, 1) 100%);
+}
+
+body::-webkit-scrollbar {
+    width: 1rem;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: $blue-monochromatic;
+    border-radius: 1rem;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: $blue-light-shade;
 }
