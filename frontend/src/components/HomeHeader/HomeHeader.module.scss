@@ -2,7 +2,7 @@
 @import '../../styles/fonts';
 
 .header {
-    max-width: clamp(100vw, 100vw, 100vw);
+    width: 100%;
     height: 100vh;
     position: sticky;
     display: grid;
