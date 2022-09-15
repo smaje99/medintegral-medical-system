@@ -46,7 +46,7 @@ const Home = () => {
                 <h2 className={styles.title}>Sobre nosotros</h2>
                 <section className={styles.group}>
                     {items.map((item) => (
-                        <Card {...item} />
+                        <Card key={item.title} {...item} />
                     ))}
                 </section>
             </section>
