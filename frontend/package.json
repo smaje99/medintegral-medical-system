@@ -16,6 +16,7 @@
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.35.0",
     "react-icons": "^4.4.0",
     "sass": "^1.54.9"
   },
