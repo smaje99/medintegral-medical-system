@@ -1,0 +1,27 @@
+@import '../../styles/fonts';
+
+.about_us {
+    width: 80vw;
+    height: 100%;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 2rem;
+    margin: 5rem auto;
+}
+
+.title {
+    font: 600 28pt $title-font;
+    letter-spacing: .1rem;
+}
+
+.group {
+    width: 100%;
+    display: grid;
+    grid-gap: 3.2rem 2rem;
+    grid-auto-rows: 15rem;
+    grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+    grid-auto-flow: dense;
+}
