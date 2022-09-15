@@ -1,10 +1,18 @@
 @import '../../styles/palette';
 @import '../../styles/fonts';
+@import '../../styles/mixins';
 
 .button {
+    @include non-link;
+
     display: inline-block;
     padding: .8rem 3.2rem;
     border-radius: 1.2rem;
+    transition: transform .25s ease;
+
+    &:active {
+        transform: scale(.9);
+    }
 }
 
 .floating {
@@ -22,5 +30,19 @@
         box-shadow:
             0 12px 12px $blue-monochromatic,
             0 -4px 14px rgba(0, 43, 77, 60%);
+    }
+}
+
+.primary {
+    font: 600 12pt $body-font;
+    color: $white;
+    background-color: $blue;
+    letter-spacing: 0.07rem;
+
+    &:hover {
+        transition: box-shadow 400ms;
+        box-shadow:
+            3px 3px 10px rgba($blue-analogous, .8),
+            -3px -3px 10px rgba($blue-analogous, .8);
     }
 }
