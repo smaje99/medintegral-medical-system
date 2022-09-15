@@ -20,9 +20,7 @@ const PublicLayout = ({ children }) => {
     return (
         <>
             <Navigation />
-            <main>
-                {children}
-            </main>
+            {children}
             <Footer />
         </>
     )
