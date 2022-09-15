@@ -1,3 +1,5 @@
+import Head from 'next/head';
+
 import Card from '@Components/Card';
 import { HomeLayout } from '@Components/layouts';
 
@@ -41,6 +43,10 @@ const items = [
 const Home = () => {
     return (
         <>
+            <Head>
+                <title>Inicio | Medintegral IPS SAS</title>
+            </Head>
+
             <section className={styles.about_us}>
                 <span id="sobre-nosotros" style={{visibility: 'none', height: '4rem'}}></span>
                 <h2 className={styles.title}>Sobre nosotros</h2>
