@@ -33,16 +33,31 @@
     }
 }
 
-.primary {
+.primary,
+.secondary {
     font: 600 12pt $body-font;
-    color: $white;
-    background-color: $blue;
     letter-spacing: 0.07rem;
+    color: $white;
+}
+
+.primary {
+    background-color: $blue;
 
     &:hover {
         transition: box-shadow 400ms;
         box-shadow:
             3px 3px 10px rgba($blue-analogous, .8),
             -3px -3px 10px rgba($blue-analogous, .8);
+    }
+}
+
+.secondary {
+    background-color: $green-complementary;
+
+    &:hover {
+        transition: box-shadow 400ms;
+        box-shadow:
+            3px 3px 10px rgba($green-complementary, .5),
+            -3px -3px 10px rgba($green-complementary, .5);
     }
 }
