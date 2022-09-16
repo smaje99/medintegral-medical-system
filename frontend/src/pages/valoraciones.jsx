@@ -9,10 +9,10 @@ const Ratings = () => {
     return (
         <main className={styles.ratings}>
             <Head>
-                <title>Valoraciones | Medintegral IPS SAS</title>
+                <title>Sugerencias | Medintegral IPS SAS</title>
             </Head>
 
-            <h1 className={styles.title}>Valoraciones</h1>
+            <h1 className={styles.title}>Sugerencias</h1>
             <span className={styles.paragraph}>
                 Porque nos importa tu opinión creamos este espacio para ti 😎
             </span>
