@@ -7,7 +7,7 @@ const routes = {
     about: '/quienes-somos',
     bulletin: '/boletin',
     socialParticipation: '/participacion-social',
-    ratings: '/valoraciones'
+    suggestions: '/sugerencias'
 }
 
 export default routes;

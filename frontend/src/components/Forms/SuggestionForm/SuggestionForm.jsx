@@ -2,9 +2,9 @@ import { useForm } from 'react-hook-form';
 
 import Button from '@Components/Button';
 
-import styles from './RatingForm.module.scss';
+import styles from './SuggestionForm.module.scss';
 
-const RatingForm = () => {
+const SuggestionForm = () => {
     const { register, handleSubmit } = useForm();
 
     const handleFormSubmit = async (formData) => {}
@@ -32,4 +32,4 @@ const RatingForm = () => {
     )
 }
 
-export default RatingForm;
+export default SuggestionForm;

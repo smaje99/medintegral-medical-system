@@ -36,7 +36,7 @@ const items = [
     {
         title: 'Sugerencias',
         content: 'Para nosotros es importante saber que piensas de nosotros',
-        route: routes.ratings
+        route: routes.suggestions
     }
 ]
 

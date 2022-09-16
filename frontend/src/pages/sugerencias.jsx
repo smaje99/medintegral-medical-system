@@ -1,13 +1,13 @@
 import Head from 'next/head';
 
-import { RatingForm } from '@Components/Forms';
+import { SuggestionForm } from '@Components/Forms';
 import { PublicLayout } from '@Components/layouts';
 
-import styles from '@Styles/pages/Ratings.module.scss';
+import styles from '@Styles/pages/Suggestions.module.scss';
 
-const Ratings = () => {
+const Suggestions = () => {
     return (
-        <main className={styles.ratings}>
+        <main className={styles.suggestions}>
             <Head>
                 <title>Sugerencias | Medintegral IPS SAS</title>
             </Head>
@@ -16,15 +16,15 @@ const Ratings = () => {
             <span className={styles.paragraph}>
                 Porque nos importa tu opinión creamos este espacio para ti 😎
             </span>
-            <RatingForm />
+            <SuggestionForm />
         </main>
     )
 }
 
-Ratings.getLayout = (page) => (
+Suggestions.getLayout = (page) => (
     <PublicLayout>
         {page}
     </PublicLayout>
 )
 
-export default Ratings;
+export default Suggestions;

@@ -1,3 +1,3 @@
-import RatingForm from './RatingForm';
+import SuggestionForm from './SuggestionForm';
 
-export { RatingForm };
+export { SuggestionForm };
