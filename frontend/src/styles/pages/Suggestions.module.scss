@@ -1,13 +1,9 @@
-@import '../../styles/fonts';
+@import '../fonts';
 
 .suggestions {
-    width: 80vw;
-    height: 100%;
-    position: sticky;
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    margin: 10rem auto 5rem auto;
 }
 
 .title {
