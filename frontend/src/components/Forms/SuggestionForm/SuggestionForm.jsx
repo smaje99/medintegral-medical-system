@@ -12,12 +12,13 @@ const SuggestionForm = () => {
     return (
         <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)}>
             <textarea
-                spellCheck
-                placeholder="Escribe aquí tus opiniones"
-                maxLength="500"
-                required
                 className={styles.textarea}
-                {...register('rating')}
+                placeholder="Escribe aquí tus opiniones"
+                autoFocus={true}
+                required
+                maxLength="500"
+                spellCheck={true}
+                {...register('opinion')}
             >
             </textarea>
             <div className={styles.commands}>
