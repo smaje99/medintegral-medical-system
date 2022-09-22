@@ -17,7 +17,7 @@ create table if not exists suggestion.suggestion (
     pinned boolean not null default false,
     created_at timestamp not null default now(),
 
-    constraint pk_rating primary key (id)
+    constraint pk_suggestion primary key (id)
 );
 
 create index idx_suggestion on suggestion.suggestion (pinned);
