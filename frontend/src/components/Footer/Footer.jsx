@@ -68,7 +68,7 @@ const Footer = () => {
                 </Info>
             </section>
             <span className={styles.copyright}>
-                &copy; 2022 - Medicina Integral del Caquetá IPS S.A.S
+                &copy; {new Date().getFullYear()} - Medicina Integral del Caquetá IPS S.A.S
             </span>
         </footer>
     )
