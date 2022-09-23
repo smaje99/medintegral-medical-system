@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useEffect } from 'react';
 
 import Footer from '@Components/Footer';
@@ -20,6 +21,9 @@ const HomeLayout = ({ children }) => {
 
     return (
         <>
+            <Head>
+                <title>Inicio | Medintegral IPS SAS</title>
+            </Head>
             <Navigation />
             <HomeHeader />
             <main>

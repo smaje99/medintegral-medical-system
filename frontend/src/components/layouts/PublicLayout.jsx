@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useEffect } from 'react';
 
 import Footer from '@Components/Footer';
@@ -5,7 +6,7 @@ import { Navigation } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
-const PublicLayout = ({ children }) => {
+const PublicLayout = ({ title, children }) => {
     /** Add home class to the root element. */
     useEffect(() => {
         const rootElement = document.getElementById('__next');
@@ -19,6 +20,9 @@ const PublicLayout = ({ children }) => {
 
     return (
         <>
+            <Head>
+                <title>{title} | Medintegral IPS SAS</title>
+            </Head>
             <Navigation />
             {children}
             <Footer />
