@@ -2,6 +2,7 @@
 
 @mixin non-list {
     list-style-type: none;
+    padding-left: 0;
 }
 
 @mixin non-link {
