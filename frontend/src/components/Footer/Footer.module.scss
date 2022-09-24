@@ -3,29 +3,58 @@
 @import '../../styles/mixins';
 
 .footer {
-    width: 100%;
+    width: 80vw;
     display: flex;
-    gap: 6rem;
+    gap: 4rem;
     flex-direction: column;
     place-content: center;
     place-items: center;
-    margin: 8rem 0 6rem 0;
+    margin: 8rem auto 6rem;
+    overflow-x: hidden;
 }
 
 .brand {
     width: 100%;
-    height: 12rem;
+    height: max(12rem, 10vh);
     position: sticky;
     filter: drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.5));
 }
 
 .group {
-    width: 100%;
-    display: flex;
-    gap: 2rem 12rem;
-    justify-content: center;
-    align-items: flex-start;
+    display: grid;
+    gap: 2rem 8rem;
+    grid-template:
+        "address" max-content
+        "schedule" max-content
+        "contact" max-content;
+
+    @media screen and (min-width: 620px) {
+        grid-template:
+            "address schedule" max-content
+            "contact contact" max-content /
+            1fr 1fr;
+    }
+
+    @media screen and (min-width: 940px) {
+        grid-template:
+            "address schedule contact" max-content /
+            max-content max-content max-content;
+    }
 }
+
+
+#address {
+    grid-area: address;
+}
+
+#schedule {
+    grid-area: schedule;
+}
+
+#contact {
+    grid-area: contact;
+}
+
 
 .title {
     font: 700 16pt $title-font;
@@ -55,7 +84,7 @@
     &:hover {
         text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
         transform: scale(1.1);
-        transform-origin: center;
+        transform-origin: left;
         transition: transform 0.25s ease;
     }
 
@@ -67,4 +96,8 @@
 .subinfo a ,
 .copyright {
     display: inline-block;
+}
+
+.copyright {
+    text-align: center;
 }

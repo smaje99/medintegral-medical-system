@@ -6,8 +6,8 @@ import styles from './Footer.module.scss';
 
 import medintegralIcon from '@Icons/medintegral.svg';
 
-const Info = ({ title, children }) => (
-    <section className={styles.info}>
+const Info = ({ id, title, children }) => (
+    <section className={styles.info} id={styles[id]}>
         <h3 className={styles.title}>{title}</h3>
         {children}
     </section>
@@ -23,13 +23,13 @@ const Footer = () => {
                 priority
             />
             <section className={styles.group}>
-                <Info title="Dirección">
+                <Info id="address" title="Dirección">
                     <span className={styles.subinfo}>
                         Cra. 13 # 6-104 Juan XXIII<br />
                         Florencia - Caquetá
                     </span>
                 </Info>
-                <Info title="Horario de atención">
+                <Info id="schedule" title="Horario de atención">
                     <ul className={styles.info_list}>
                         <li className={styles.subinfo}>
                             <strong>Lunes a Viernes</strong><br />
@@ -42,7 +42,7 @@ const Footer = () => {
                         </li>
                     </ul>
                 </Info>
-                <Info title="Contáctenos">
+                <Info id="contact" title="Contáctenos">
                     <ul className={styles.info_list}>
                         <li className={styles.subinfo}>
                             <a href="tel:+576084355711">
