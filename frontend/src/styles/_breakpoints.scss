@@ -1,0 +1,9 @@
+$s: 620px;
+$m: 940px;
+$l: 1280px;
+
+@mixin for-size($size) {
+    @media screen and (min-width: $size) {
+        @content;
+    }
+}
