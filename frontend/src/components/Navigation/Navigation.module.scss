@@ -1,4 +1,5 @@
 @import '../../styles/mixins';
+@import '../../styles/breakpoints';
 
 .navbar {
     width: 98%;
@@ -30,6 +31,28 @@
     place-content: center space-between;
     align-items: center;
     gap: 4rem;
+}
+
+.item {
+    &:nth-child(-n+4) {
+        display: none;
+    }
+
+    @include for-size($s) {
+        &:nth-child(4) {
+            display: inherit;
+        }
+    }
+
+    @include for-size($m) {
+        &:last-child {
+            display: none;
+        }
+
+        &:nth-child(-n+3) {
+            display: inherit;
+        }
+    }
 }
 
 .link,

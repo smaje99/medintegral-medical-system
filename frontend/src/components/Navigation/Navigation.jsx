@@ -2,7 +2,7 @@ import Image from 'next/future/image';
 import Link from 'next/link';
 
 import NavLink from '@Components/NavLink';
-import Button from '@Components/Button';
+import Button, { BurgerButton } from '@Components/Button';
 
 import routes from '@Helpers/routes';
 
@@ -35,7 +35,7 @@ const Navigation = () => {
                         <NavLink
                             href={route}
                             className={(active) => (
-                                active ? `${styles.link} ${styles.active}` : styles.link
+                                `${styles.link} ${active && styles.active}`
                             )}
                         >
                             {name}
@@ -47,6 +47,9 @@ const Navigation = () => {
                     <Button href={routes.login} style="floating" className={styles.login}>
                         Iniciar sesión
                     </Button>
+                </li>
+                <li className={styles.item}>
+                    <BurgerButton />
                 </li>
             </ul>
         </nav>
