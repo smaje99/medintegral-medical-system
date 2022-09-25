@@ -5,7 +5,7 @@ import styles from './BurgerButton.module.scss';
 const BurgerButton = ({ className, onEvent }) => {
     const [isActive, handleBurger] = useReducer((state) => {
         const newState = !state;
-        onEvent(newState);
+        onEvent && onEvent(newState);
         return newState;
     }, false);
 
