@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     POSTGRES_PWD: str
     POSTGRES_DB: str
 
+    DATABASE_ECHO: bool
+
     SQLALCHEMY_DATABASE_URI: PostgresDsn | None = None
 
     @validator('SQLALCHEMY_DATABASE_URI', pre=True)
