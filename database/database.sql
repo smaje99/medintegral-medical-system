@@ -9,6 +9,8 @@ create extension if not exists "uuid-ossp";
 
 -- schemas
 create schema if not exists suggestion;
+create schema if not exists person;
+create schema if not exists "user";
 
 
 -- tables, constraints, indexes, views, stored procedures and triggers
@@ -57,3 +59,32 @@ create or replace trigger trSuggestion_setPinned
     on suggestion.suggestion
     for each row
     execute procedure suggestion.fnSuggestion_setPinned();
+
+-- person
+
+create type Gender as enum ('male', 'female');
+create type DocumentType as enum ('R.C.', 'T.I.', 'C.C.', 'C.E.');
+create type BloodType as enum ('A', 'B', 'AB', 'O');
+create type RHFactor as enum ('+', '-');
+create type CivilStatus as enum ('single', 'married', 'divorced', 'widower', 'union');
+
+create table if not exists person.Person(
+    dni integer not null,
+    "name" text not null,
+    surname text not null,
+    "address" text,
+    email text not null,
+    phone bigint not null,
+    gender Gender not null,
+    birthdate date not null,
+    document_type DocumentType not null,
+    blood_type BloodType,
+    rh_factor RHFactor,
+    ethnicity text,
+    occupation text,
+    civil_status CivilStatus,
+    created_at timestamp not null default now(),
+
+    constraint pk_person primary key (dni),
+    constraint chk_phone check(trunc(log(phone)) + 1 = 10)
+);
