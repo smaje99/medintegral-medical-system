@@ -1,18 +1,40 @@
 from typing import Any
 
-from pydantic import AnyHttpUrl, BaseSettings, BaseConfig, PostgresDsn, validator
+from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
 
 
-class Settings(BaseSettings):
-    API_VERSION: str
+class DatabaseSettings(BaseSettings):
+    host: str
+    port: str
+    uid: str
+    pwd: str
+    db: str
 
-    PROJECT_NAME: str
-    PROJECT_VERSION: str
-    PROJECT_DESCRIPTION: str
+    echo: bool
 
-    BACKEND_CORS_ORIGINS: list[AnyHttpUrl | str] = ['*']
+    sqlalchemy_database_uri: PostgresDsn | None = None
 
-    @validator('BACKEND_CORS_ORIGINS', pre=True)
+    @validator('sqlalchemy_database_uri', pre=True)
+    def assemble_db_connection(cls, v: str | None, values: dict[str, Any]) -> Any:
+        if isinstance(v, str):
+            return v
+
+        return PostgresDsn.build(
+            scheme='postgresql+asyncpg',
+            user=values.get('uid'),
+            password=values.get('pwd'),
+            host=values.get('host', ''),
+            port=values.get('port'),
+            path=f"/{values.get('db', '')}"
+        )
+
+
+class DomainSettings(BaseSettings):
+    api_version: str
+
+    backend_cors_origins: str | list[AnyHttpUrl | str] = ['*']
+
+    @validator('backend_cors_origins', pre=True)
     def assemble_cors_origins(cls, v: str | list[str]) -> list[str] | str:
         if isinstance(v, str) and not v.startswith('['):
             return [i.strip() for i in v.split(',')]
@@ -20,34 +42,24 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    POSTGRES_HOST: str
-    POSTGRES_PORT: str
-    POSTGRES_UID: str
-    POSTGRES_PWD: str
-    POSTGRES_DB: str
-    SQLALCHEMY_DATABASE_URI: PostgresDsn | None = None
 
-    @validator('SQLALCHEMY_DATABASE_URI', pre=True)
-    def assemble_db_connection(cls, v: str | None, values: dict[str, Any]) -> Any:
-        if isinstance(v, str):
-            return v
+class ProjectSettings(BaseSettings):
+    name: str
+    version: str
+    description: str
 
-        return PostgresDsn.build(
-            scheme='postgresql+asyncpg',
-            user=values.get('POSTGRES_UID'),
-            password=values.get('POSTGRES_PWD'),
-            host=values.get('POSTGRES_HOST', ''),
-            port=values.get('POSTGRES_PORT'),
-            path=f"/{values.get('POSTGRES_DB') or ''}"
-        )
 
-    DATABASE_ECHO: bool
+class Settings(BaseSettings):
+    db: DatabaseSettings
+    domain: DomainSettings
+    project: ProjectSettings
 
-    class Config(BaseConfig):  # pyright: ignore
+    class Config:  # pyright: ignore
         env_file = '.env'
+        env_prefix = ''
         env_nested_delimiter = '__'
         allow_mutation = False
-        case_sensitive = True
+        case_sensitive = False
 
 
 settings = Settings()  # pyright: ignore

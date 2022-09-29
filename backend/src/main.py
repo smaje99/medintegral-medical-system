@@ -7,16 +7,16 @@ from database.event import init_db
 
 
 app = FastAPI(
-    title=settings.PROJECT_NAME,
-    description=settings.PROJECT_DESCRIPTION,
-    version=settings.PROJECT_VERSION,
-    openapi_url=f'{settings.API_VERSION}/openapi.json'
+    title=settings.project.name,
+    description=settings.project.description,
+    version=settings.project.version,
+    openapi_url=f'{settings.domain.api_version}/openapi.json'
 )
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
+    allow_origins=[str(origin) for origin in settings.domain.backend_cors_origins],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']

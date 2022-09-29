@@ -5,8 +5,8 @@ from core.config import settings
 
 
 engine = create_async_engine(
-    settings.SQLALCHEMY_DATABASE_URI,
-    echo=settings.DATABASE_ECHO,
+    settings.db.sqlalchemy_database_uri,
+    echo=settings.db.echo,
     future=True
 )
 
