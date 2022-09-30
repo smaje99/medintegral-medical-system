@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn  # pyright: ignore
 
+from api.api_v1 import api_router
 from core.config import settings
 from database.event import init_db
 
@@ -26,6 +27,9 @@ app.add_middleware(
 @app.on_event('startup')  # pyright: ignore
 async def startup():
     await init_db()
+
+
+app.include_router(api_router, prefix=settings.domain.api_version)
 
 
 if __name__ == '__main__':
