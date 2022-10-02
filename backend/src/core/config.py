@@ -20,7 +20,7 @@ class DatabaseSettings(BaseSettings):
             return v
 
         return PostgresDsn.build(
-            scheme='postgresql+asyncpg',
+            scheme='postgresql+psycopg2',
             user=values.get('uid'),
             password=values.get('pwd'),
             host=values.get('host', ''),
