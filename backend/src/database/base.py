@@ -26,7 +26,7 @@ class Base:
         return self.__name__.lower()
 
     def _asdict(self) -> dict[str, Any]:
-        ''' Convierte el modelo de la tabla de la tabla a un dict '''
+        ''' Convert the table model to a dict '''
         return {
             obj.key: getattr(self, obj.key)
             for obj in inspect(self).mapper.column_attrs
