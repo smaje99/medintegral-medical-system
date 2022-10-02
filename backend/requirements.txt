@@ -16,6 +16,7 @@ MarkupSafe==2.1.1
 mypy==0.981
 mypy-extensions==0.4.3
 orjson==3.8.0
+phonenumbers==8.12.56
 psycopg2==2.9.3
 pydantic==1.10.2
 python-dotenv==0.21.0
