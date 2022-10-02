@@ -25,12 +25,12 @@ app.add_middleware(
 
 
 @app.on_event('startup')  # pyright: ignore
-async def startup():
-    await init_db()
+def startup():
+    init_db()
 
 
 app.include_router(api_router, prefix=settings.domain.api_version)
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app')  # pyright: ignore
+    uvicorn.run('main:app', reload=True)  # pyright: ignore

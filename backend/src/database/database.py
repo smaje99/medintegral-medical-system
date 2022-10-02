@@ -1,13 +1,12 @@
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine  # pyright: ignore
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from core.config import settings
 
 
-engine = create_async_engine(
+engine = create_engine(
     settings.db.sqlalchemy_database_uri,
-    echo=settings.db.echo,
-    future=True
+    echo=settings.db.echo
 )
 
-SessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+SessionLocal = sessionmaker(engine, autocommit=False, autoflush=False)
