@@ -13,6 +13,6 @@ class Suggestion(Base):  # pyright: ignore
     )
     opinion = Column(String(500))
     pinned = Column(Boolean, server_default=expression.false(), index=True)
-    create_at = Column(TIMESTAMP, server_default=func.current_timestamp())
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.current_timestamp())
 
     __table_args__ = { 'schema': 'suggestion' }
