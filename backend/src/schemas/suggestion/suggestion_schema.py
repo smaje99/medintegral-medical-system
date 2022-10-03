@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 # Shared properties
@@ -12,6 +12,10 @@ class SuggestionBase(BaseModel):
 # Properties to receive on suggestion creation
 class SuggestionCreate(SuggestionBase):
     opinion: str = Field(..., min_length=1, max_length=500)
+
+    @validator('opinion', pre=True)
+    def format_opinion(cls, v: str) -> str:
+        return v.lower().strip()
 
 
 # Properties to receive on suggestion update
