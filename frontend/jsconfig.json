@@ -8,6 +8,7 @@
             "@Helpers/*": ["src/helpers/*"],
             "@Icons/*": ["public/assets/icons/*"],
             "@Pictures/*": ["public/assets/pictures/*"],
+            "@Services/*": ["src/services/*"],
             "@Styles/*": ["src/styles/*"]
         }
     },
