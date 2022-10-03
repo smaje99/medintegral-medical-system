@@ -1,13 +1,32 @@
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Button from '@Components/Button';
+import { createSuggestion } from '@Services/suggestion.service';
+
+import getToastConfig from '@Helpers/toast.config';
 
 import styles from './SuggestionForm.module.scss';
 
 const SuggestionForm = () => {
-    const { register, handleSubmit } = useForm();
+    const { register, reset, handleSubmit } = useForm();
 
-    const handleFormSubmit = async (formData) => {}
+    const handleFormSubmit = async (formData) => {
+        await toast.promise(
+            createSuggestion(formData),
+            {
+                pending: 'Procesando la sugerencia',
+                success: {
+                    render() {
+                        reset();
+                        return 'La sugerencia fue enviada';
+                    }
+                },
+                error: 'La sugerencia no puedo crearse'
+            },
+            getToastConfig()
+        );
+    }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(handleFormSubmit)}>
