@@ -1,0 +1,8 @@
+@import './fonts';
+@import './palette';
+
+.toast {
+    font: 12pt $body-font;
+    color: $white;
+    background-color: $blue-monochromatic;
+}
