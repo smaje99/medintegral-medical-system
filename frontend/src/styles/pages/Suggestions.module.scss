@@ -1,6 +1,7 @@
 @import '../fonts';
 
 .suggestions {
+    height: 80vh !important;
     display: flex;
     flex-direction: column;
     gap: 2rem;
