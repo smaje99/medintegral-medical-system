@@ -38,6 +38,8 @@
     font: 600 12pt $body-font;
     letter-spacing: 0.07rem;
     color: $white;
+    border-color: transparent;
+    outline: 0;
 }
 
 .primary {
@@ -46,8 +48,8 @@
     &:hover {
         transition: box-shadow 400ms;
         box-shadow:
-            3px 3px 10px rgba($blue-analogous, .8),
-            -3px -3px 10px rgba($blue-analogous, .8);
+            3px 3px 10px rgba($blue-analogous, .5),
+            -3px -3px 10px rgba($blue-analogous, .5);
     }
 }
 
