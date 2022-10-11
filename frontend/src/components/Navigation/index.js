@@ -1,3 +1,4 @@
-import Navigation from './Navigation';
+import MenuModal from './MenuModal';
+import Navbar from './Navbar';
 
-export { Navigation };
+export { MenuModal, Navbar };

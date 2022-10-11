@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 
 import Footer from '@Components/Footer';
-import { Navigation } from '@Components/Navigation';
+import { Navbar } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
@@ -23,7 +23,7 @@ const PublicLayout = ({ title, children }) => {
             <Head>
                 <title>{title} | Medintegral IPS SAS</title>
             </Head>
-            <Navigation />
+            <Navbar />
             {children}
             <Footer />
         </>

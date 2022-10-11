@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
 
-import { Navigation } from '@Components/Navigation';
+import { Navbar } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
@@ -22,7 +22,7 @@ const LoginLayout = ({ children }) => {
             <Head>
                 <title>Inicio de sesión | Medintegral IPS SAS</title>
             </Head>
-            <Navigation />
+            <Navbar />
             <main>
                 {children}
             </main>

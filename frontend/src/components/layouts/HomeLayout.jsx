@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 import Footer from '@Components/Footer';
 import HomeHeader from '@Components/HomeHeader';
-import { Navigation } from '@Components/Navigation';
+import { Navbar } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
@@ -24,7 +24,7 @@ const HomeLayout = ({ children }) => {
             <Head>
                 <title>Inicio | Medintegral IPS SAS</title>
             </Head>
-            <Navigation />
+            <Navbar />
             <HomeHeader />
             <main>
                 {children}
