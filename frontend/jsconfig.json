@@ -6,6 +6,7 @@
         "paths": {
             "@Components/*": ["src/components/*"],
             "@Helpers/*": ["src/helpers/*"],
+            "@Hooks/*": ["src/hooks/*"],
             "@Icons/*": ["public/assets/icons/*"],
             "@Pictures/*": ["public/assets/pictures/*"],
             "@Services/*": ["src/services/*"],
