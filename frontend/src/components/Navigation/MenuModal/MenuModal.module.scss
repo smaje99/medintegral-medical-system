@@ -1,0 +1,57 @@
+@import '../../../styles/breakpoints';
+@import '../../../styles/mixins';
+@import '../../../styles/palette';
+
+.modal {
+    inset: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    border: none;
+    padding: 9rem 4rem;
+    z-index: 9;
+    outline: 0;
+    transition: all .3s ease 0s;
+    background: hsla(198, 19%, 89%, 1);
+    background:
+        linear-gradient(135deg, hsla(198, 19%, 89%, 1) 64%, hsla(197, 66%, 85%, 1) 100%);
+}
+
+.menu {
+    @include non-list;
+
+    width: 100%;
+    display: grid;
+    gap: 2.8rem;
+    grid-template-columns: 100%;
+    justify-content: start;
+    align-items: center;
+}
+
+.item {
+    &:not(:last-child) {
+        padding-bottom: 0.6rem;
+        border-bottom: 1px solid $green-blue;
+    }
+
+    &:last-child {
+        margin: 4rem auto 0 auto;
+        display: flex;
+        justify-content: center;
+
+        @include for-size($s) {
+            display: none;
+        }
+    }
+}
+
+.link {
+    @include non-link;
+
+    display: inline-block;
+    color: $black;
+    font: 600 14pt Roboto;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.08em;
+}
