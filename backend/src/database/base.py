@@ -18,6 +18,7 @@ __metadata = MetaData(naming_convention=__convention)
 
 @as_declarative(metadata=__metadata)  # pyright: ignore
 class Base:
+    ''' Base class for all SQLAlchemy models. '''
     __name__: str
 
     @declared_attr

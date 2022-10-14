@@ -4,6 +4,7 @@ from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
 
 
 class DatabaseSettings(BaseSettings):
+    ''' Settings for the database. '''
     host: str
     port: str
     uid: str
@@ -16,6 +17,7 @@ class DatabaseSettings(BaseSettings):
 
     @validator('sqlalchemy_database_uri', pre=True)
     def assemble_db_connection(cls, v: str | None, values: dict[str, Any]) -> Any:
+        ''' Assemble the URI of the database connection. '''
         if isinstance(v, str):
             return v
 
@@ -30,12 +32,14 @@ class DatabaseSettings(BaseSettings):
 
 
 class DomainSettings(BaseSettings):
+    ''' Settings for the domain. '''
     api_version: str
 
     backend_cors_origins: str | list[AnyHttpUrl | str] = ['*']
 
     @validator('backend_cors_origins', pre=True)
     def assemble_cors_origins(cls, v: str | list[str]) -> list[str] | str:
+        ''' Assemble the origins for the CORS. '''
         if isinstance(v, str) and not v.startswith('['):
             return [i.strip() for i in v.split(',')]
         elif isinstance(v, (list, str)):  # pyright: ignore
@@ -44,12 +48,14 @@ class DomainSettings(BaseSettings):
 
 
 class ProjectSettings(BaseSettings):
+    ''' Settings for the project. '''
     name: str
     version: str
     description: str
 
 
 class Settings(BaseSettings):
+    ''' Settings of the application. '''
     db: DatabaseSettings
     domain: DomainSettings
     project: ProjectSettings

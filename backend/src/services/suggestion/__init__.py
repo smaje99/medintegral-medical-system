@@ -1,1 +1,1 @@
-from .suggestion_service import SuggestionService, get_service
+from .suggestion_service import SuggestionService, get_service  # pyright: ignore
