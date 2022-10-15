@@ -1,13 +1,15 @@
-import { useReducer } from 'react';
+import { forwardRef, useImperativeHandle, useReducer } from 'react';
 
 import styles from './BurgerButton.module.scss';
 
-const BurgerButton = ({ className, onEvent }) => {
+const BurgerButton = forwardRef(({ className, onEvent }, ref) => {
     const [isActive, handleBurger] = useReducer((state) => {
         const newState = !state;
         onEvent && onEvent(newState);
         return newState;
     }, false);
+
+    useImperativeHandle(ref, () => ({ handleBurger }), []);
 
     return (
         <div>
@@ -17,6 +19,6 @@ const BurgerButton = ({ className, onEvent }) => {
             ></button>
         </div>
     )
-}
+})
 
 export default BurgerButton;

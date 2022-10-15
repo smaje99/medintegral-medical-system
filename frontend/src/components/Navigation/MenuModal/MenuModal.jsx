@@ -26,7 +26,12 @@ const MenuModal = ({ isOpen, close }) => {
                 ))}
 
                 <li className={styles.item}>
-                    <Button href={routes.login} style="floating" className={styles.login}>
+                    <Button
+                        href={routes.login}
+                        style="floating"
+                        className={styles.login}
+                        onClick={close}
+                    >
                         Iniciar sesión
                     </Button>
                 </li>

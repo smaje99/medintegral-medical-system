@@ -1,5 +1,6 @@
 import Image from 'next/future/image';
 import Link from 'next/link';
+import { useRef } from 'react'
 
 import { MenuModal } from '@Components/Navigation';
 import NavLink from '@Components/NavLink';
@@ -15,15 +16,19 @@ import styles from './Navbar.module.scss';
 import medintegralIcon from '@Icons/medintegral.svg';
 
 const Navbar = () => {
+    const burgerButtonRef = useRef();
+
     const [isOpenMenuModal, openMenuModal, closeMenuModal] = useModal();
 
     const handleMenuModal = (active) => { active ? openMenuModal() : closeMenuModal() };
+
+    const handleCloseMenuModal = () => burgerButtonRef.current.handleBurger();
 
     return (
         <>
             <nav className={styles.navbar}>
                 <Link href={routes.home}>
-                    <a>
+                    <a onClick={isOpenMenuModal && handleCloseMenuModal}>
                         <Image
                             src={medintegralIcon}
                             className={styles.brand}
@@ -52,12 +57,12 @@ const Navbar = () => {
                         </Button>
                     </li>
                     <li className={styles.item}>
-                        <BurgerButton onEvent={handleMenuModal} />
+                        <BurgerButton onEvent={handleMenuModal} ref={burgerButtonRef} />
                     </li>
                 </ul>
             </nav>
 
-            <MenuModal isOpen={isOpenMenuModal} close={closeMenuModal} />
+            <MenuModal isOpen={isOpenMenuModal} close={handleCloseMenuModal} />
         </>
     )
 }
