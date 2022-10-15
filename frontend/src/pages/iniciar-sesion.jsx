@@ -16,38 +16,34 @@ const Login = () => {
     }
 
     return (
-        <div className={styles.container} ref={toggleRef}>
-            <div className={`${styles.user} ${styles.login_box}`}>
-                <div className={styles.image_box}>
-                    <Image
-                        src={stethoscopePic}
-                        className={styles.image}
-                        alt="Estetoscopio | Foto de Jeremy Bishop en Unsplash"
-                        layout="responsive"
-                        priority
-                    />
-                </div>
-                <div className={styles.form_box}>
-                    <h2 className={styles.title}>Iniciar sesión</h2>
-                    <LoginForm />
-                    <section className={styles.forgot}>
-                        <span>¿Olvidaste tu contraseña?</span>
-                        <a href="#" onClick={handleToggleForm}>Recuperar contraseña</a>
-                    </section>
-                </div>
-            </div>
-
-            <div className={`${styles.user} ${styles.recover_box}`}>
-                <div className={styles.image_box}></div>
-                <div className={styles.form_box}>
-                    <h2 className={styles.title}>Recuperar contraseña</h2>
-                    <RecoverPasswordForm />
-                    <section className={styles.forgot}>
-                        <a href="#" onClick={handleToggleForm}>Inicia sesión con tu usuario</a>
-                    </section>
-                </div>
-            </div>
-        </div>
+        <section className={styles.container} ref={toggleRef}>
+            <Image
+                src={stethoscopePic}
+                className={styles.image}
+                alt="Estetoscopio | Foto de Jeremy Bishop en Unsplash"
+                layout="responsive"
+                priority
+            />
+            <section className={`${styles.form_box} ${styles.login_box}`}>
+                <h2 className={styles.title}>Iniciar sesión</h2>
+                <LoginForm />
+                <section className={styles.forgot}>
+                    <span>¿Olvidaste tu contraseña?</span>
+                    <a href="#" onClick={handleToggleForm}>
+                        Recuperar contraseña
+                    </a>
+                </section>
+            </section>
+            <section className={`${styles.form_box} ${styles.recover_box}`}>
+                <h2 className={styles.title}>Recuperar contraseña</h2>
+                <RecoverPasswordForm />
+                <section className={styles.forgot}>
+                    <a href="#" onClick={handleToggleForm}>
+                        Inicia sesión con tu usuario
+                    </a>
+                </section>
+            </section>
+        </section>
     )
 }
 
@@ -57,4 +53,4 @@ Login.getLayout = (page) => (
     </LoginLayout>
 )
 
-export default Login
+export default Login;

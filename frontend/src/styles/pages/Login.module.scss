@@ -1,116 +1,86 @@
+@import '../animations';
 @import '../breakpoints';
 @import '../fonts';
 @import '../mixins';
 @import '../palette';
 
 .container {
-    position: relative;
     width: clamp(36rem, 80vw, 80rem);
     height: clamp(40rem, 75vh, 60rem);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, .5);
-    background-color: $blue-monochromatic;
-    overflow: hidden;
-    transition: all ease-in-out .8s;
+    display: flex;
+    align-items: center;
     margin-bottom: 5rem;
+    background-color: $blue-monochromatic;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, .5);
+    overflow: hidden;
 
-    & .user {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
+    & .image {
+        width: 50%;
         height: 100%;
-        display: flex;
-        align-items: center;
+        display: none;
+        object-fit: cover;
 
-        & .image_box {
-            position: relative;
-            display: none;
-            width: 50%;
-            height: 100%;
-            transition: all ease-in-out .8s;
-
-            @include for-size($m) {
-                display: initial;
-            }
-
-            & .image {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-        }
-
-        & .form_box {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 3.2rem;
-            color: $white;
-            background-color: $blue-monochromatic;
-            padding: 0 4rem;
-            transition: all ease-in-out .8s;
-            user-select: none;
-
-            @include for-size($m) {
-                width: 50%;
-            }
-
-            & .title {
-                font: 600 28pt $title-font;
-                letter-spacing: .2rem;
-                text-align: center;
-            }
-
-            & .forgot {
-                align-items: flex-start;
-                display: grid;
-                justify-content: center;
-
-                > * {
-                    display: inline-block;
-                    font-size: 10pt;
-                    letter-spacing: .1rem;
-                    line-height: 1.5;
-                    text-align: center;
-                }
-
-                > a {
-                    @include non-link;
-
-                    color: $blue;
-                }
-            }
+        @include for-size($m) {
+            display: initial;
         }
     }
 
-    & .recover_box {
-        pointer-events: none;
+    & .form_box {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 3.2rem;
+        color: $white;
+        background-color: $blue-monochromatic;
+        padding: 0 4rem;
+        user-select: none;
+        @include zoomInDown;
 
-        & .form_box {
-            top: 100%;
+        @include for-size($m) {
+            width: 50%;
+        }
+
+        &.recover_box {
+            display: none;
+        }
+
+        & .title {
+            font: 600 28pt $title-font;
+            letter-spacing: .2rem;
+            text-align: center;
+        }
+
+        & .forgot {
+            align-items: flex-start;
+            display: grid;
+            justify-content: center;
+
+            > * {
+                display: inline-block;
+                font-size: 10pt;
+                letter-spacing: .1rem;
+                line-height: 1.5;
+                text-align: center;
+            }
+
+            > a {
+                @include non-link;
+
+                color: $blue;
+            }
         }
     }
 
     &.active {
         & .login_box {
-            & .form_box {
-                top: -100%;
-            }
+            display: none;
         }
 
         & .recover_box {
-            pointer-events: initial;
-
-            & .form_box {
-                top: 0;
-            }
+            display: flex;
         }
     }
 }
