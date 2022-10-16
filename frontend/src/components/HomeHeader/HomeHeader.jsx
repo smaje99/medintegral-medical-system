@@ -17,22 +17,24 @@ const HomeHeader = () => (
             layout="responsive"
             priority
         />
-        <h1 className={styles.title}>
-            <div className={styles.content}>
-                <span className={styles.slice}>
-                    medicina integral
-                </span>
-                <span className={styles.slice}>
-                    del Caquetá ips s.a.s
-                </span>
-            </div>
-        </h1>
-        <span className={styles.text}>
-            ¡Agenda una cita médica con los mejores profesionales en el cuidado de la salud!
-        </span>
-        <Button href={routes.appointment} style="floating" className={styles.button}>
-            Agendar cita
-        </Button>
+        <section className={styles.container}>
+            <h1 className={styles.title}>
+                <div className={styles.content}>
+                    <span className={styles.slice}>
+                        medicina integral
+                    </span>
+                    <span className={styles.slice}>
+                        del Caquetá ips s.a.s
+                    </span>
+                </div>
+            </h1>
+            <span className={styles.text}>
+                ¡Agenda una cita médica con los mejores profesionales en el cuidado de la salud!
+            </span>
+            <Button href={routes.appointment} style="floating" className={styles.button}>
+                Agendar cita
+            </Button>
+        </section>
     </header>
 )
 
