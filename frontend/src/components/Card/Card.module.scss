@@ -16,7 +16,6 @@
     transition: all .4s ease-out;
 
     &:hover {
-        transform: translateY(-2rem);
         box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
     }
 }
