@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@Components/Button';
 
 import styles from './LoginForm.module.scss';
 
-const LoginForm = () => {
+const LoginForm = forwardRef((props, ref) => {
     const { handleSubmit, register, reset } = useForm();
 
     const handleLogin = async (formData) => {}
 
     /* A cleanup function that is called when the form is unmounted. */
     useEffect(() => () => reset(), []);
+
+    useImperativeHandle(ref, () => ({ reset }), []);
 
     return (
         <form
@@ -47,6 +49,6 @@ const LoginForm = () => {
             </Button>
         </form>
     )
-}
+})
 
 export default LoginForm;

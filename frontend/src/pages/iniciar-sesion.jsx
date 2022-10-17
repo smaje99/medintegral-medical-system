@@ -10,9 +10,13 @@ import stethoscopePic from '@Pictures/stethoscope.webp';
 
 const Login = () => {
     const toggleRef = useRef();
+    const loginFormRef = useRef();
+    const recoverPasswordFormRef = useRef();
 
     const handleToggleForm = () => {
         toggleRef.current.classList.toggle(styles.active)
+            ? recoverPasswordFormRef.current.reset()
+            : loginFormRef.current.reset();
     }
 
     return (
@@ -26,7 +30,7 @@ const Login = () => {
             />
             <section className={`${styles.form_box} ${styles.login_box}`}>
                 <h2 className={styles.title}>Iniciar sesión</h2>
-                <LoginForm />
+                <LoginForm ref={loginFormRef} />
                 <section className={styles.forgot}>
                     <span>¿Olvidaste tu contraseña?</span>
                     <a href="#" onClick={handleToggleForm}>
@@ -36,7 +40,7 @@ const Login = () => {
             </section>
             <section className={`${styles.form_box} ${styles.recover_box}`}>
                 <h2 className={styles.title}>Recuperar contraseña</h2>
-                <RecoverPasswordForm />
+                <RecoverPasswordForm ref={recoverPasswordFormRef} />
                 <section className={styles.forgot}>
                     <a href="#" onClick={handleToggleForm}>
                         Inicia sesión con tu usuario

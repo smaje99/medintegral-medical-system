@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@Components/Button';
 
 import styles from './RecoverPasswordForm.module.scss';
 
-const RecoverPasswordForm = () => {
+const RecoverPasswordForm = forwardRef((props, ref) => {
     const { handleSubmit, register, reset } = useForm();
 
     const handleRecoverPassword = async (formData) => {}
 
     /* A cleanup function that is called when the form is unmounted. */
     useEffect(() => () => reset(), []);
+
+    useImperativeHandle(ref, () => ({ reset }), []);
 
     return (
         <form
@@ -39,6 +41,6 @@ const RecoverPasswordForm = () => {
             </Button>
         </form>
     )
-}
+})
 
 export default RecoverPasswordForm;
