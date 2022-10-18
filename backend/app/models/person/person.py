@@ -1,5 +1,8 @@
-from sqlalchemy import Column, Date, Enum, Integer, Text
+from typing import TYPE_CHECKING
+
+from sqlalchemy import Column, Date, Enum, BigInteger, Text
 from sqlalchemy.dialects.postgresql import TIMESTAMP
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from sqlalchemy_utils import EmailType, PhoneNumberType  # pyright: ignore
 
@@ -7,11 +10,15 @@ from app.core.types import BloodType, CivilStatus, DocumentType, Gender, RHFacto
 from app.database.base import Base
 
 
+if TYPE_CHECKING:
+    from app.models.user import User  # pyright: ignore
+
+
 class Person(Base):
     ''' Person model. Registration of personal data of a person in the system. '''
 
     # Identification number of the person according to their identification document.
-    dni = Column(Integer, nullable=False, primary_key=True)
+    dni = Column(BigInteger, nullable=False, primary_key=True)
 
     # Person's name.
     name = Column(Text, nullable=False)
@@ -76,5 +83,8 @@ class Person(Base):
         server_default=func.current_timestamp(),
         onupdate=func.current_timestamp()
     )
+
+    # User relationship one to one.
+    user = relationship('User', uselist=False, back_populates='person')  # type: ignore
 
     __table_args__ = { 'schema': 'person' }
