@@ -1,5 +1,5 @@
-from database.database import engine
-from database import Base  # pyright: ignore
+from app.database.database import engine
+from app.database import Base  # pyright: ignore
 
 
 def init_db():

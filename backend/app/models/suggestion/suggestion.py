@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, String
 from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 from sqlalchemy.sql import expression, func
 
-from database import Base  # pyright: ignore
+from app.database import Base  # pyright: ignore
 
 class Suggestion(Base):  # pyright: ignore
     ''' Suggestion model. Mailbox for anonymous suggestions from company users. '''

@@ -4,10 +4,10 @@ from sqlalchemy import desc, update
 from sqlalchemy.exc import InternalError
 from sqlalchemy.orm import Session
 
-from core.exceptions import PinnedSuggestionException
-from models.suggestion import Suggestion
-from schemas.suggestion import SuggestionCreate, SuggestionUpdate
-from services import BaseService
+from app.core.exceptions import PinnedSuggestionException
+from app.models.suggestion import Suggestion
+from app.schemas.suggestion import SuggestionCreate, SuggestionUpdate
+from app.services import BaseService
 
 # This class is a service that provides CRUD operations for a suggestion model
 class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpdate]):

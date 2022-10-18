@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-import uvicorn  # pyright: ignore
 
-from api.api_v1 import api_router
-from core.config import settings
-from database.event import init_db
+from app.api.api_v1 import api_router
+from app.core.config import settings
+from app.database.event import init_db
 
 
 app = FastAPI(
@@ -30,7 +29,3 @@ def startup():
 
 
 app.include_router(api_router, prefix=settings.domain.api_version)
-
-
-if __name__ == '__main__':
-    uvicorn.run('main:app', reload=True)  # pyright: ignore

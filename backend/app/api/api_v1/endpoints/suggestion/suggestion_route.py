@@ -15,9 +15,9 @@ from starlette.status import (
     HTTP_404_NOT_FOUND
 )
 
-from core.exceptions import PinnedSuggestionException
-from schemas.suggestion import Suggestion, SuggestionCreate
-from services.suggestion import SuggestionService
+from app.core.exceptions import PinnedSuggestionException
+from app.schemas.suggestion import Suggestion, SuggestionCreate
+from app.services.suggestion import SuggestionService
 
 from .suggestion_deps import get_suggestion_service
 

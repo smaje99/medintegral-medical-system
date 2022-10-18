@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from database import Base  # pyright: ignore
+from app.database import Base  # pyright: ignore
 
 
 # Types hinting for the service.

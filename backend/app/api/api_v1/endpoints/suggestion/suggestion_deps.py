@@ -1,7 +1,7 @@
 from typing import Generator
 
-from database import SessionLocal  # pyright: ignore
-from services.suggestion import SuggestionService, get_service
+from app.database import SessionLocal  # pyright: ignore
+from app.services.suggestion import SuggestionService, get_service
 
 
 def get_suggestion_service() -> Generator[SuggestionService, None, None]:

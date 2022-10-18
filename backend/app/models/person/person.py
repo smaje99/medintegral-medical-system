@@ -3,8 +3,8 @@ from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.sql import func
 from sqlalchemy_utils import EmailType, PhoneNumberType  # pyright: ignore
 
-from core.types import BloodType, CivilStatus, DocumentType, Gender, RHFactor
-from database.base import Base
+from app.core.types import BloodType, CivilStatus, DocumentType, Gender, RHFactor
+from app.database.base import Base
 
 
 class Person(Base):

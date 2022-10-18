@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from core.config import settings
+from app.core.config import settings
 
 
 # Creating a connection to the database.
