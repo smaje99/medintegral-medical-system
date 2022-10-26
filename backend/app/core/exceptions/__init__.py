@@ -1,1 +1,1 @@
-from .pinned_suggestion_exception import PinnedSuggestionException  # pyright: ignore
+from .database_exception import DatabaseException  # pyright: ignore

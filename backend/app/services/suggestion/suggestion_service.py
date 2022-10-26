@@ -4,7 +4,7 @@ from sqlalchemy import desc, update
 from sqlalchemy.exc import InternalError
 from sqlalchemy.orm import Session
 
-from app.core.exceptions import PinnedSuggestionException
+from app.core.exceptions import DatabaseException
 from app.models.suggestion import Suggestion
 from app.schemas.suggestion import SuggestionCreate, SuggestionUpdate
 from app.services import BaseService
@@ -42,7 +42,7 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
             pinned (bool): Pinned state for suggestion
 
         Raises:
-            PinnedSuggestionException: There are more than three pinned suggestions.
+            DatabaseException: There are more than three pinned suggestions.
 
         Returns:
             Suggestion: Suggestion with modified pinned.
@@ -55,7 +55,7 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
             self.db.execute(stmt)  # pyright: ignore
             self.db.commit()
         except InternalError as e:
-            raise PinnedSuggestionException(e) from e
+            raise DatabaseException(e) from e
 
         return self.get(id)  # type: ignore
 

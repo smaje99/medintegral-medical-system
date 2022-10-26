@@ -11,7 +11,6 @@ from fastapi import (
 )
 from starlette.status import (
     HTTP_201_CREATED,
-    HTTP_406_NOT_ACCEPTABLE,
     HTTP_404_NOT_FOUND
 )
 
@@ -108,17 +107,9 @@ def modify_pinned(
         Defaults to Depends(get_suggestion_service).
 
     Raises:
-    * HTTPException: HTTP error 406. There are more than three pinned suggestions.
+    * HTTPException: HTTP error 400. There are more than three pinned suggestions.
 
     Returns:
     * Suggestion: Suggestion with modified pinned.
     '''
-    try:
-        suggestion = service.modify_pinned(id, pinned)
-    except PinnedSuggestionException as e:
-        raise HTTPException(
-            status_code=HTTP_406_NOT_ACCEPTABLE,
-            detail=str(e)
-        ) from e
-
-    return suggestion
+    return service.modify_pinned(id, pinned)

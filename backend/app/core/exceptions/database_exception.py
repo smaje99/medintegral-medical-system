@@ -1,13 +1,11 @@
 from sqlalchemy.exc import InternalError
 
 
-class PinnedSuggestionException(Exception):
-    '''Handle the exception raised from the trigger on
-    the amount of suggestion pinned in the database.
-    '''
+class DatabaseException(Exception):
+    ''' Handle the exception raised from the database. '''
 
     def __init__(self, error: InternalError):
-        '''Construct to the Pinned Suggestion Exception.
+        '''Construct to the Database Exception.
 
          Args:
             error (InternalError): origin of the error that occurred
@@ -15,7 +13,7 @@ class PinnedSuggestionException(Exception):
         self.error = error
 
     def __str__(self) -> str:
-        '''Returns the error message raised from the trigger in the database.
+        '''Returns the error message raised from the database.
 
         Returns:
             str: error message

@@ -3,6 +3,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.api.api_v1 import api_router
 from app.core.config import settings
+from app.core.exceptions import DatabaseException
+from app.core.middleware.error_handler import database_exception_handler
 from app.database.event import init_db
 
 
@@ -29,3 +31,5 @@ def startup():
 
 
 app.include_router(api_router, prefix=settings.domain.api_version)
+
+app.add_exception_handler(DatabaseException, database_exception_handler)  # type: ignore
