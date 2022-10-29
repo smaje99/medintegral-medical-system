@@ -54,11 +54,24 @@ class ProjectSettings(BaseSettings):
     description: str
 
 
+class JWTSettings(BaseSettings):
+    ''' Settings for JWT. '''
+    algorithm: str
+    secret_key: str
+    access_token_expire_minutes: int
+
+
+class SecuritySettings(BaseSettings):
+    ''' Settings for the security. '''
+    jwt: JWTSettings
+
+
 class Settings(BaseSettings):
     ''' Settings of the application. '''
     db: DatabaseSettings
     domain: DomainSettings
     project: ProjectSettings
+    security: SecuritySettings
 
     class Config:  # pyright: ignore
         env_file = '.env'
@@ -68,4 +81,4 @@ class Settings(BaseSettings):
         case_sensitive = False
 
 
-settings = Settings()  # pyright: ignore
+settings = Settings()  # type: ignore
