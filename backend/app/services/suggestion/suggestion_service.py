@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.exceptions import DatabaseException
 from app.models.suggestion import Suggestion
-from app.schemas.suggestion import SuggestionCreate, SuggestionUpdate
+from app.schemas.suggestion.suggestion import SuggestionCreate, SuggestionUpdate
 from app.services import BaseService
 
 # This class is a service that provides CRUD operations for a suggestion model
@@ -14,8 +14,12 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
     '''Service that provides CRUD operations for a suggestion model.
 
     Args:
-        BaseService ([Suggestion, SuggestionCreate, SuggestionUpdate]): Models and schemas
+        BaseService ([Suggestion, SuggestionCreate, SuggestionUpdate]): Models and schemas.
     '''
+
+    @classmethod
+    def get_service(cls, db: Session):
+        return cls(model=Suggestion, db=db)
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[Suggestion]:
         '''Retrieves a list of suggestions sorted by creation date.
@@ -25,7 +29,7 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
             limit (int): Number of suggestions within the subset. Defaults to 50.
 
         Returns:
-            list[ModelType]: A list of suggestion subset.
+            list[Suggestion]: A list of suggestion subset.
         '''
         return (self.db
                 .query(self.model)  # pyright: ignore
@@ -58,15 +62,3 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
             raise DatabaseException(e) from e
 
         return self.get(id)  # type: ignore
-
-
-def get_service(db: Session) -> SuggestionService:
-    '''Retrieve a suggestion service instance
-
-    Args:
-        db (Session): Database session to be used by the service
-
-    Returns:
-        SuggestionService: Suggestion service initialized.
-    '''
-    return SuggestionService(model=Suggestion, db=db)

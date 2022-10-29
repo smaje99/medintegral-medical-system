@@ -1,4 +1,6 @@
-from abc import ABC
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
 from typing import Any, Generic, Type, TypeVar
 
 from fastapi.encoders import jsonable_encoder
@@ -34,6 +36,22 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         '''
         self.model: Type[ModelType] = model
         self.db: Session = db
+
+    @classmethod
+    @abstractmethod
+    def get_service(
+        cls: Type[BaseService[ModelType, CreateSchemaType, UpdateSchemaType]],
+        db: Session
+    ) -> BaseService[ModelType, CreateSchemaType, UpdateSchemaType]:
+        '''Retrieve a service instance
+
+        Args:
+            db (Session): Database session to be used by the service.
+
+        Returns:
+            BaseService: Service initialized.
+        '''
+        pass
 
     def get(self, id: Any) -> ModelType | None:
         """Retrieve a record using the given id.
@@ -72,7 +90,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         '''
         # sourcery skip: class-extract-method
         obj_in_data = jsonable_encoder(obj_in)
-        db_obj: ModelType = self.model(**obj_in_data)
+        db_obj: ModelType = self.model(**obj_in_data)  # type: ignore
 
         self.db.add(db_obj)  # pyright: ignore
         self.db.commit()
