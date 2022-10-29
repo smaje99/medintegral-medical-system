@@ -17,7 +17,7 @@ class User(Base):
     # Identification number of the person according to their identification document.
     dni = Column(
         BigInteger,
-        ForeignKey('person.person.dni'),
+        ForeignKey('person.person.dni', onupdate='CASCADE'),
         primary_key=True,
         nullable=False
     )
