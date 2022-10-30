@@ -1,86 +1,58 @@
-import {
-    forwardRef,
-    useEffect,
-    useImperativeHandle,
-    useState
-} from 'react';
-import { useForm } from 'react-hook-form';
-import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
+import { useRouter } from 'next/router';
+import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
-import Button from '@Components/Button';
+import { login, testToken } from '@Services/login.service';
+import { getLocalRememberMe, saveLocalRememberMe } from '@Utils/rememberMe'
+import { getLocalToken, saveLocalToken } from '@Utils/token'
 
-import styles from './LoginForm.module.scss';
+import routes from '@Helpers/routes';
+import getToastConfig from '@Helpers/toast.config';
+
+import LoginFormView from './LoginForm.view';
 
 const LoginForm = forwardRef((props, ref) => {
+    const router = useRouter()
     const { handleSubmit, register, reset } = useForm();
-    const [showPassword, setShowPassword] = useState(false);
 
-    const handleShowPassword = (e) => {
-        e.preventDefault();
-        setShowPassword(!showPassword);
+    const handleLogin = async (formData) => {
+        try {
+            const { data: { access_token: token } } = await login(formData);
+
+            saveLocalToken(token);
+            saveLocalRememberMe(formData.rememberMe);
+            reset();
+            router.push(routes.home);
+        } catch (error) {
+            const { response: { data: { detail } } } = error;
+            toast.error(detail, getToastConfig());
+        }
     }
 
-    const handleLogin = async (formData) => {}
+    const checkRememberMe = async () => {
+        if (getLocalRememberMe()) {
+            try {
+                const token = getLocalToken();
+                await testToken(token);
+                router.push(routes.home);
+            } catch (error) {}
+        }
+    }
 
     /* A cleanup function that is called when the form is unmounted. */
-    useEffect(() => () => reset(), []);
+    useEffect(() => {
+        checkRememberMe()
+
+        return () => reset();
+    }, []);
 
     useImperativeHandle(ref, () => ({ reset }), []);
 
     return (
-        <form
-            className={styles.form}
-            onSubmit={handleSubmit(handleLogin)}
-            autoComplete="on"
-        >
-            <div className={styles.field}>
-                <input
-                    type="text"
-                    id="username"
-                    className={styles.input}
-                    placeholder="Usuario"
-                    autoFocus={true}
-                    required
-                    {...register('username')}
-                />
-            </div>
-            <div className={styles.field}>
-                <input
-                    type={showPassword ? 'text': 'password'}
-                    id="password"
-                    className={styles.input}
-                    placeholder="Contraseña"
-                    required
-                    {...register('password')}
-                />
-                <button
-                    className={styles.show_password}
-                    onClick={handleShowPassword}
-                >
-                    {showPassword ? <BsEyeFill /> : <BsEyeSlashFill />}
-                </button>
-            </div>
-            <label htmlFor="remember-me" className={styles.container}>
-                <input
-                    type="checkbox"
-                    id="remember-me"
-                    className={styles.checkbox}
-                    {...register('rememberMe')}
-                />
-                <span className={styles.text}>
-                    Mantener la sesión iniciada
-                </span>
-            </label>
-
-            <Button
-                type="submit"
-                as="input"
-                style="primary"
-                className={styles.button}
-            >
-                Iniciar sesión
-            </Button>
-        </form>
+        <FormProvider {...{handleSubmit, register, handleLogin}}>
+            <LoginFormView />
+        </FormProvider>
     )
 })
 
