@@ -10,7 +10,8 @@
             "@Icons/*": ["public/assets/icons/*"],
             "@Pictures/*": ["public/assets/pictures/*"],
             "@Services/*": ["src/services/*"],
-            "@Styles/*": ["src/styles/*"]
+            "@Styles/*": ["src/styles/*"],
+            "@Utils/*": ["src/utils/*"]
         }
     },
     "exclude": [
