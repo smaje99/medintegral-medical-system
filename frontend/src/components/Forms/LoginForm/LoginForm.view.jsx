@@ -29,6 +29,7 @@ const LoginFormView = () => {
                     placeholder="Usuario"
                     autoFocus={true}
                     required
+                    autoComplete="username"
                     {...register('username')}
                 />
             </div>
@@ -39,14 +40,15 @@ const LoginFormView = () => {
                     className={styles.input}
                     placeholder="Contraseña"
                     required
+                    autoComplete="current-password"
                     {...register('password')}
                 />
-                <button
+                <div
                     className={styles.show_password}
                     onClick={handleShowPassword}
                 >
                     {showPassword ? <BsEyeFill /> : <BsEyeSlashFill />}
-                </button>
+                </div>
             </div>
             <label htmlFor="remember-me" className={styles.container}>
                 <input

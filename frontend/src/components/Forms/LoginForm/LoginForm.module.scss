@@ -58,7 +58,10 @@
 }
 
 .show_password {
+    display: flex;
+    align-items: center;
     font-size: 11pt;
+    color: $black;
     border-color: transparent;
     background-color: transparent;
 }
