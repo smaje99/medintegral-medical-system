@@ -4,6 +4,7 @@
         "allowSyntheticDefaultImports": false,
         "baseUrl": "./",
         "paths": {
+            "@Auth/*": ["src/auth/*"],
             "@Components/*": ["src/components/*"],
             "@Helpers/*": ["src/helpers/*"],
             "@Hooks/*": ["src/hooks/*"],

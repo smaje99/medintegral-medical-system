@@ -1,5 +1,7 @@
 import { ToastContainer } from 'react-toastify';
 
+import AuthProvider from '@Auth/AuthProvider';
+
 import 'normalize.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '@Styles/globals.scss';
@@ -9,7 +11,9 @@ export default function MyApp({ Component, pageProps }) {
 
     return (
         <>
-            {getLayout(<Component {...pageProps} />)}
+            <AuthProvider>
+                {getLayout(<Component {...pageProps} />)}
+            </AuthProvider>
             <ToastContainer />
         </>
     )
