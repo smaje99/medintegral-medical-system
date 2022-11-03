@@ -1,6 +1,8 @@
 import Image from 'next/future/image';
-import { useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useRef } from 'react';
 
+import useAuth from '@Auth/useAuth';
 import { LoginForm, RecoverPasswordForm } from '@Components/Forms'
 import { LoginLayout } from '@Components/layouts';
 
@@ -12,12 +14,18 @@ const Login = () => {
     const toggleRef = useRef();
     const loginFormRef = useRef();
     const recoverPasswordFormRef = useRef();
+    const { isLoggedIn } = useAuth();
+    const router = useRouter();
 
     const handleToggleForm = () => {
         toggleRef.current.classList.toggle(styles.active)
             ? recoverPasswordFormRef.current.reset()
             : loginFormRef.current.reset();
     }
+
+    useEffect(() => {
+        isLoggedIn() && router.back();
+    }, []);
 
     return (
         <section className={styles.container} ref={toggleRef}>
