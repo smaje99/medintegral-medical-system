@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
     }
 
     const checkRememberMe = async () => {
-        if (getLocalRememberMe) {
+        if (getLocalRememberMe()) {
             try {
                 const token = getLocalToken();
                 const currentUser = await getMe(token);

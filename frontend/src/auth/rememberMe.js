@@ -3,7 +3,7 @@ export const getLocalRememberMe = () => (
 )
 
 export const saveLocalRememberMe = (rememberMe) => {
-    localStorage.setItem('remember-me', rememberMe)
+    localStorage.setItem('remember-me', JSON.stringify(rememberMe))
 }
 
 export const removeLocalRememberMe = () => {

@@ -10,6 +10,7 @@
             "@Hooks/*": ["src/hooks/*"],
             "@Icons/*": ["public/assets/icons/*"],
             "@Pictures/*": ["public/assets/pictures/*"],
+            "@Routers/*": ["src/routers/*"],
             "@Services/*": ["src/services/*"],
             "@Styles/*": ["src/styles/*"],
             "@Utils/*": ["src/utils/*"]
