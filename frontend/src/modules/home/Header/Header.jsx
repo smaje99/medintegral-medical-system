@@ -4,11 +4,11 @@ import Button from '@Components/Button';
 
 import routes from '@Helpers/routes';
 
-import styles from './HomeHeader.module.scss';
+import styles from './Header.module.scss';
 
 import buildingPic from '@Pictures/building.webp';
 
-const HomeHeader = () => (
+const Header = () => (
     <header className={styles.header}>
         <Image
             src={buildingPic}
@@ -38,4 +38,4 @@ const HomeHeader = () => (
     </header>
 )
 
-export default HomeHeader;
+export default Header;

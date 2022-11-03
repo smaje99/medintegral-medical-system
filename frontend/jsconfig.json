@@ -9,6 +9,7 @@
             "@Helpers/*": ["src/helpers/*"],
             "@Hooks/*": ["src/hooks/*"],
             "@Icons/*": ["public/assets/icons/*"],
+            "@Modules/*": ["src/modules/*"],
             "@Pictures/*": ["public/assets/pictures/*"],
             "@Routers/*": ["src/routers/*"],
             "@Services/*": ["src/services/*"],

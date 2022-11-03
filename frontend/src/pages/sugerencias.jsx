@@ -1,7 +1,5 @@
-import { SuggestionForm } from '@Components/Forms';
 import { PublicLayout } from '@Components/layouts';
-
-import styles from '@Styles/pages/Suggestions.module.scss';
+import { Form, styles } from '@Modules/suggestions';
 
 const Suggestions = () => {
     return (
@@ -10,7 +8,7 @@ const Suggestions = () => {
             <span className={styles.paragraph}>
                 Porque nos importa tu opinión creamos este espacio para ti 😎
             </span>
-            <SuggestionForm />
+            <Form />
         </main>
     )
 }

@@ -6,9 +6,9 @@ import { createSuggestion } from '@Services/suggestion.service';
 
 import getToastConfig from '@Helpers/toast.config';
 
-import styles from './SuggestionForm.module.scss';
+import styles from './Form.module.scss';
 
-const SuggestionForm = () => {
+const Form = () => {
     const { register, reset, handleSubmit } = useForm();
 
     const handleFormSubmit = async (formData) => {
@@ -52,4 +52,4 @@ const SuggestionForm = () => {
     )
 }
 
-export default SuggestionForm;
+export default Form;

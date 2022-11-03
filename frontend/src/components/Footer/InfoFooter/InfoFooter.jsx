@@ -2,7 +2,7 @@ import Image from 'next/future/image';
 import { BsFillTelephoneFill, BsFillPhoneFill, BsWhatsapp } from 'react-icons/bs';
 import { FiMail } from 'react-icons/fi';
 
-import styles from './Footer.module.scss';
+import styles from './InfoFooter.module.scss';
 
 import medintegralIcon from '@Icons/medintegral.svg';
 
@@ -13,7 +13,7 @@ const Info = ({ id, title, children }) => (
     </section>
 )
 
-const Footer = () => {
+const InfoFooter = () => {
     return (
         <footer className={styles.footer}>
             <Image
@@ -74,4 +74,4 @@ const Footer = () => {
     )
 }
 
-export default Footer;
+export default InfoFooter;

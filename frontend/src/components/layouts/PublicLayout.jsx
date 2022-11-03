@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
 
-import Footer from '@Components/Footer';
+import { InfoFooter } from '@Components/Footer';
 import { Navbar } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
@@ -25,7 +25,7 @@ const PublicLayout = ({ title, children }) => {
             </Head>
             <Navbar />
             {children}
-            <Footer />
+            <InfoFooter />
         </>
     )
 }

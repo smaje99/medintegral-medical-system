@@ -1,1 +1,3 @@
-export { default } from './Footer';
+import InfoFooter from './InfoFooter';
+
+export { InfoFooter }

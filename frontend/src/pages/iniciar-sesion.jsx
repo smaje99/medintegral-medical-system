@@ -1,11 +1,13 @@
 import Image from 'next/future/image';
 import { useRef } from 'react';
 
-import { LoginForm, RecoverPasswordForm } from '@Components/Forms'
-import { LoginLayout } from '@Components/layouts';
-import LoginRoute from '@Routers/LoginRoute';
-
-import styles from '@Styles/pages/Login.module.scss';
+import {
+    Layout,
+    LoginForm,
+    RecoverPasswordForm,
+    Route,
+    styles
+} from '@Modules/login';
 
 import stethoscopePic from '@Pictures/stethoscope.webp';
 
@@ -53,11 +55,11 @@ const Login = () => {
 }
 
 Login.getLayout = (page) => (
-    <LoginRoute>
-        <LoginLayout>
+    <Route>
+        <Layout>
             {page}
-        </LoginLayout>
-    </LoginRoute>
+        </Layout>
+    </Route>
 )
 
 export default Login;

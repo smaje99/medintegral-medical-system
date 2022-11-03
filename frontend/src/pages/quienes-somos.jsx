@@ -1,21 +1,7 @@
 import { GiCheckMark } from 'react-icons/gi';
 
 import { PublicLayout } from '@Components/layouts';
-
-import styles from '@Styles/pages/About.module.scss';
-
-const ethicalPrinciples = [
-    'Calidad',
-    'Calidez',
-    'Compromiso',
-    'Empatía',
-    'Auto control',
-    'Confidencialidad',
-    'Respeto',
-    'Eficiencia',
-    'Trato digno y humano',
-    'Auto organización'
-]
+import { ethicalPrinciples, styles } from '@Modules/about';
 
 const About = () => {
     return (

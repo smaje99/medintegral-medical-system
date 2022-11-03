@@ -1,8 +1,8 @@
-@import '../animations';
-@import '../breakpoints';
-@import '../fonts';
-@import '../mixins';
-@import '../palette';
+@import '../../styles/animations';
+@import '../../styles/breakpoints';
+@import '../../styles/fonts';
+@import '../../styles/mixins';
+@import '../../styles/palette';
 
 .container {
     width: clamp(36rem, 80vw, 80rem);

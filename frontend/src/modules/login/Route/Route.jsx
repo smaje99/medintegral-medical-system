@@ -4,7 +4,7 @@ import useAuth from '@Auth/useAuth';
 import routes from '@Helpers/routes';
 
 
-const LoginRoute = ({ children }) => {
+const Route = ({ children }) => {
     const router = useRouter();
     const { isLoggedIn } = useAuth();
 
@@ -15,4 +15,4 @@ const LoginRoute = ({ children }) => {
     return children;
 }
 
-export default LoginRoute;
+export default Route;
