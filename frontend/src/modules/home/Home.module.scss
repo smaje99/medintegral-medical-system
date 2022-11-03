@@ -1,8 +1,8 @@
 @import '../../styles/fonts';
 
-.about_us {
+.section {
     width: 80vw;
-    height: 100%;
+    height: clamp(100vh, 100vh, 100%);
     position: sticky;
     display: flex;
     flex-direction: column;
@@ -15,6 +15,7 @@
 .title {
     font: 600 28pt $title-font;
     letter-spacing: .1rem;
+    margin-top: 8rem;
 }
 
 .group {
