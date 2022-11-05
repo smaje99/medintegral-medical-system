@@ -1,0 +1,37 @@
+@import '../../../styles/fonts';
+@import '../../../styles/palette';
+
+.navigation {
+    min-width: 28rem;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 2rem;
+    padding: 1.2rem;
+    background-color: $green-blue-analogous;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: .36rem;
+
+    > hr {
+        width: 100%
+    }
+}
+
+.statement {
+    color: $white;
+    font-size: 14pt;
+    font-weight: 600;
+    letter-spacing: .14rem;
+    text-shadow: 2px 4px 4px rgb(0 0 0 / 50%);
+}
+
+.button {
+    font: 600 12pt Roboto;
+    border-color: transparent;
+}
