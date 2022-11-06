@@ -15,7 +15,8 @@ def create_access_token(
 
     Args:
         subject (TokenIn): Data to encode by the token.
-        expires_delta (timedelta | None, optional): Access token expiration. Defaults to None.
+        expires_delta (timedelta | None, optional): Access token expiration.
+        Defaults to None.
 
     Returns:
         str: JWT token.

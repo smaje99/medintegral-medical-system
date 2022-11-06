@@ -5,7 +5,7 @@ from app.services import BaseService
 
 
 # Service type hinting.
-ServiceType = TypeVar('ServiceType', bound=BaseService)  # type: ignore
+ServiceType = TypeVar('ServiceType', bound=BaseService)  # type: ignore  # pylint: disable=invalid-name  # noqa: E501
 
 
 class ServiceDependency(Generic[ServiceType]):
@@ -18,7 +18,8 @@ class ServiceDependency(Generic[ServiceType]):
         '''Generate and manage of a database session for a given service.
 
         Args:
-            service (Type[ServiceType]): Service to be managed. Must not be initialized.
+            service (Type[ServiceType]): Service to be managed.
+            Must not be initialized.
         '''
         self.service = service
 
@@ -26,12 +27,13 @@ class ServiceDependency(Generic[ServiceType]):
         '''Generate a database session for the given service.
 
         Yields:
-            Generator[ServiceType, None, None]: A service initialized with database session.
+            Generator[ServiceType, None, None]: A service initialized with
+            database session.
         '''
         with SessionLocal() as session:  # pyright: ignore
             try:
                 yield self.service.get_service(session)  # pyright: ignore
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 session.rollback()  # pyright: ignore
             finally:
                 session.close()  # pyright: ignore

@@ -11,9 +11,9 @@ from app.database import Base  # pyright: ignore
 
 
 # Types hinting for the service.
-ModelType = TypeVar('ModelType', bound=Base)
-CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)
-UpdateSchemaType = TypeVar('UpdateSchemaType', bound=BaseModel)
+ModelType = TypeVar('ModelType', bound=Base)  # pylint: disable=invalid-name  # noqa: E501
+CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)  # pylint: disable=invalid-name  # noqa: E501
+UpdateSchemaType = TypeVar('UpdateSchemaType', bound=BaseModel)  # pylint: disable=invalid-name  # noqa: E501
 
 
 class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
@@ -22,10 +22,11 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     Args:
         ABC: This class is abstract, it must not be implemented.
-        Generic ([ModelType, CreateSchemaType, UpdateSchemaType]): Models and schemes
+        Generic ([ModelType, CreateSchemaType, UpdateSchemaType]):
+        Models and schemes
         to be used in the operation of the service.
     '''
-    def __init__(self, model: Type[ModelType], db: Session):
+    def __init__(self, model: Type[ModelType], db: Session):  # pylint: disable=invalid-name  # noqa: E501
         '''
         Base class for all services by default as
         create, update, get, get all and delete.
@@ -35,13 +36,13 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             db (Session): A database session instance.
         '''
         self.model: Type[ModelType] = model
-        self.db: Session = db
+        self.db: Session = db  # pylint: disable=invalid-name
 
     @classmethod
     @abstractmethod
     def get_service(
         cls: Type[BaseService[ModelType, CreateSchemaType, UpdateSchemaType]],
-        db: Session
+        db: Session  # pylint: disable=invalid-name
     ) -> BaseService[ModelType, CreateSchemaType, UpdateSchemaType]:
         '''Retrieve a service instance
 
@@ -51,9 +52,8 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             BaseService: Service initialized.
         '''
-        pass
 
-    def get(self, id: Any) -> ModelType | None:
+    def get(self, id: Any) -> ModelType | None:  # pylint: disable=invalid-name, redefined-builtin  # noqa: E501
         """Retrieve a record using the given id.
 
         Args:
@@ -83,7 +83,8 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         '''Create a new record within the given model.
 
         Args:
-            obj_in (CreateSchemaType): Schema data to be recorded in the given model.
+            obj_in (CreateSchemaType): Schema data to be recorded
+            in the given model.
 
         Returns:
             ModelType: Data recorded in the given model.
@@ -107,9 +108,10 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         '''Update data of a record in the given model.
 
         Args:
-            db_obj (ModelType): Current data recorded in the given model to be updated.
-            obj_in (UpdateSchemaType | dict[str, Any]): Schema data to be updated in
-            the given model.
+            db_obj (ModelType): Current data recorded in the given model
+            to be updated.
+            obj_in (UpdateSchemaType | dict[str, Any]): Schema data
+            to be updated in the given model.
 
         Raises:
             ValueError: The record doesn't exist in the given model.
@@ -131,17 +133,18 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         try:
             self.db.add(db_obj)  # pyright: ignore
-        except Exception as e:
+        except Exception as error:
             raise ValueError(
-                'No se puede actualizar el registro, no existe en la base de datos'
-            ) from e
+                'No se puede actualizar el registro, ' +
+                'no existe en la base de datos'
+            ) from error
 
         self.db.commit()
         self.db.refresh(db_obj)  # pyright: ignore
 
         return db_obj
 
-    def remove(self, id: Any) -> ModelType:
+    def remove(self, id: Any) -> ModelType:  # pylint: disable=invalid-name, redefined-builtin  # noqa: E501
         '''Delete a record in the given model.
 
         Args:

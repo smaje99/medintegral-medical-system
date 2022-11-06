@@ -1,7 +1,10 @@
 from typing import Any
 
 from sqlalchemy import inspect, MetaData
-from sqlalchemy.ext.declarative import as_declarative, declared_attr  # pyright: ignore
+from sqlalchemy.ext.declarative import (
+    as_declarative,  # type: ignore
+    declared_attr
+)
 
 
 # A naming convention for the database constraints.

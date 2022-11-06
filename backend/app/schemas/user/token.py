@@ -5,27 +5,39 @@ from pydantic import BaseModel, Field, validator
 
 
 class Token(BaseModel):
+    ''' Token properties. '''
     access_token: str
     token_type: str
 
 
 class TokenPayloadBase(BaseModel):
+    ''' Shared properties. '''
     iat: float
 
 
 class TokenPayload(TokenPayloadBase):
+    ''' Properties to receive in token. '''
     sub: str | int | UUID | None
     exp: float | None = None
 
     @validator('sub', pre=True)
-    def cast_sub(cls, v: str | UUID) -> str | int | UUID:
-        return int(v) if isinstance(v, str) and v.isnumeric() else v
+    def cast_sub(  # pylint: disable=no-self-argument, missing-function-docstring  # noqa: E501
+        cls, value: str | UUID
+    ) -> str | int | UUID:
+        return (
+            int(value)
+            if isinstance(value, str) and value.isnumeric() else
+            value
+        )
 
 
 class TokenPayloadIn(TokenPayloadBase):
+    ''' Properties to receive on creation. '''
     sub: str | UUID | None = None
     iat: float = Field(default=datetime.now(timezone.utc).timestamp())
 
     @validator('sub', pre=True)
-    def cast_sub(cls, v: str | int | UUID) -> str | UUID:
-        return str(v) if isinstance(v, int) else v
+    def cast_sub(  # pylint: disable=no-self-argument, missing-function-docstring  # noqa: E501
+        cls, value: str | int | UUID
+    ) -> str | UUID:
+        return str(value) if isinstance(value, int) else value

@@ -44,10 +44,10 @@ def read_person(
     * Person: The person with the given DNI.
     '''
     if not (person := service.get(dni)):
-         raise HTTPException(
-             status_code=HTTP_404_NOT_FOUND,
-             detail=f'La persona con la identificación {dni} no existe'
-         )
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f'La persona con la identificación {dni} no existe'
+        )
 
     return person
 
@@ -57,13 +57,15 @@ def read_people(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
     service: PersonService = Depends(get_service),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)  # pyright: ignore  # pylint: disable=unused-argument  # noqa: E501
 ) -> Any:
     '''Retrieve a people list.
 
     Args:
-    * skip (int): Start cut of subset of people via query parameter. Defaults to 0.
-    * limit (int): Number of people within the subset via query parameter. Defaults to 50.
+    * skip (int): Start cut of subset of people via query parameter.
+        Defaults to 0.
+    * limit (int): Number of people within the subset via query parameter.
+        Defaults to 50.
     * service (PersonService): Service with initialized database session.
     * current_user (User): Get the current user in the system.
 
@@ -96,7 +98,7 @@ def update_person(
     dni: int = Path(...),
     person_in: PersonUpdate = Body(...),
     service: PersonService = Depends(get_service),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user)  # pyright: ignore  # pylint: disable=unused-argument  # noqa: E501
 ) -> Any:
     '''Update a person with a given DNI.
 
@@ -113,9 +115,9 @@ def update_person(
     * Person: The Person's data updated.
     '''
     if not (person := service.get(dni)):
-         raise HTTPException(
-             status_code=HTTP_404_NOT_FOUND,
-             detail=f'La persona con la identificación {dni} no existe'
-         )
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f'La persona con la identificación {dni} no existe'
+        )
 
     return service.update(db_obj=person, obj_in=person_in)

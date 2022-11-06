@@ -6,4 +6,4 @@ class BloodType(str, Enum):
     A = 'A'
     B = 'B'
     AB = 'AB'
-    O = 'O'
+    O = 'O'  # noqa: E741

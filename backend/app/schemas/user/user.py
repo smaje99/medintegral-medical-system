@@ -1,35 +1,35 @@
 from pydantic import BaseModel
 
 
-# Shared properties
 class UserBase(BaseModel):
+    ''' Shared properties. '''
     dni: int | None = None
     username: str | None = None
 
 
-# Properties to receive via API on creation
 class UserCreate(UserBase):
+    ''' Properties to receive via API on creation. '''
     dni: int
     password: str
 
 
-# Properties to receive via API on update
 class UserUpdate(UserBase):
+    ''' Properties to receive via API on update. '''
     password: str | None = None
 
 
 class UserInDBBase(UserBase):
+    ''' Shared properties by model stored in database. '''
     dni: int  # type: ignore
 
-    class Config:
+    class Config:  # pylint: disable=missing-class-docstring
         orm_mode = True
 
 
-# Additional properties to return via API
 class User(UserInDBBase):
-    pass
+    ''' Additional properties to return via API. '''
 
 
-# Additional properties stored in the database
 class UserInDB(UserInDBBase):
+    ''' Additional properties stored in the database. '''
     hashed_password: str

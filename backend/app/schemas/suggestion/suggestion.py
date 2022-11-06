@@ -4,41 +4,37 @@ from uuid import UUID
 from pydantic import BaseModel, Field, validator
 
 
-# Shared properties
 class SuggestionBase(BaseModel):
-    pass
+    ''' Shared properties. '''
 
 
-# Properties to receive on suggestion creation
 class SuggestionCreate(SuggestionBase):
+    ''' Properties to receive on suggestion creation. '''
     opinion: str = Field(..., min_length=1, max_length=500)
 
     @validator('opinion', pre=True)
-    def format_opinion(cls, v: str) -> str:
-        return v.lower().strip()
+    def format_opinion(cls, value: str) -> str:  # pylint: disable=no-self-argument missing-function-docstring  # noqa: E501
+        return value.lower().strip()
 
 
-# Properties to receive on suggestion update
 class SuggestionUpdate(SuggestionBase):
-    pass
+    ''' Properties to receive on suggestion update. '''
 
 
-# properties shared by models stored in the database
 class SuggestionInDBBase(SuggestionBase):
+    ''' properties shared by models stored in the database. '''
     id: UUID
     opinion: str
     pinned: bool
     created_at: datetime
 
-    class Config:  # pyright: ignore
+    class Config:  # pyright: ignore  # pylint: disable=missing-class-docstring
         orm_mode = True
 
 
-# Properties to return to client
 class Suggestion(SuggestionInDBBase):
-    pass
+    ''' Properties to return to client. '''
 
 
-# Properties stored in database
 class SuggestionInDB(SuggestionInDBBase):
-    pass
+    ''' Properties stored in database.'''

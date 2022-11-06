@@ -16,10 +16,12 @@ class DatabaseSettings(BaseSettings):
     sqlalchemy_database_uri: PostgresDsn | None = None
 
     @validator('sqlalchemy_database_uri', pre=True)
-    def assemble_db_connection(cls, v: str | None, values: dict[str, Any]) -> Any:
+    def assemble_db_connection(  # pylint: disable=no-self-argument
+        cls, value: str | None, values: dict[str, Any]
+    ) -> str | PostgresDsn:
         ''' Assemble the URI of the database connection. '''
-        if isinstance(v, str):
-            return v
+        if isinstance(value, str):
+            return value
 
         return PostgresDsn.build(
             scheme='postgresql+psycopg2',
@@ -38,13 +40,15 @@ class DomainSettings(BaseSettings):
     backend_cors_origins: str | list[AnyHttpUrl | str] = ['*']
 
     @validator('backend_cors_origins', pre=True)
-    def assemble_cors_origins(cls, v: str | list[str]) -> list[str] | str:
+    def assemble_cors_origins(  # pylint: disable=no-self-argument
+        cls, value: str | list[str]
+    ) -> list[str] | str:
         ''' Assemble the origins for the CORS. '''
-        if isinstance(v, str) and not v.startswith('['):
-            return [i.strip() for i in v.split(',')]
-        elif isinstance(v, (list, str)):  # pyright: ignore
-            return v
-        raise ValueError(v)
+        if isinstance(value, str) and not value.startswith('['):
+            return [i.strip() for i in value.split(',')]
+        if isinstance(value, (list, str)):  # pyright: ignore
+            return value
+        raise ValueError(value)
 
 
 class ProjectSettings(BaseSettings):
@@ -73,7 +77,7 @@ class Settings(BaseSettings):
     project: ProjectSettings
     security: SecuritySettings
 
-    class Config:  # pyright: ignore
+    class Config:  # pyright: ignore  # pylint: disable=[missing-class-docstring, too-few-public-methods]  # noqa: E501
         env_file = '.env'
         env_prefix = ''
         env_nested_delimiter = '__'

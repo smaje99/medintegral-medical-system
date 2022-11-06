@@ -29,7 +29,8 @@ def get_current_user(
     '''Retrieve a user by the given token.
 
     Args:
-        service (UserService, optional): Service with initialized database session.
+        service (UserService, optional): Service with initialized
+        database session.
         token (str, optional): User token to be retrieve.
 
     Raises:

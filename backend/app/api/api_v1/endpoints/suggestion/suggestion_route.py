@@ -25,7 +25,7 @@ router = APIRouter()
 
 @router.get('/{id}', response_model=Suggestion)
 def read_suggestion(
-    id: UUID = Path(...),
+    id: UUID = Path(...),  # pylint: disable=[invalid-name, redefined-builtin]
     service: SuggestionService = Depends(get_service)
 ) -> Any:
     '''Retrieve a suggestion using a given ID,
@@ -42,10 +42,10 @@ def read_suggestion(
     * Suggestion: The suggestion with the given ID.
     '''
     if not (suggestion := service.get(id)):
-         raise HTTPException(
-             status_code=HTTP_404_NOT_FOUND,
-             detail='La sugerencia no existe'
-         )
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail='La sugerencia no existe'
+        )
 
     return suggestion
 
@@ -59,8 +59,10 @@ def read_suggestions(
     '''Retrieve a suggestions list.
 
     Args:
-    * skip (int): Start cut of subset of suggestions via query parameter. Defaults to 0.
-    * limit (int): Number of suggestions within the subset via query parameter. Defaults to 50.
+    * skip (int): Start cut of subset of suggestions via query parameter.
+        Defaults to 0.
+    * limit (int): Number of suggestions within the subset via query parameter.
+        Defaults to 50.
     * service (SuggestionService): Service with initialized database session.
 
     Returns:
@@ -78,7 +80,8 @@ def create_suggestion(
     '''Create a suggestion
 
     Args:
-    * suggestion_in (SuggestionCreate): Creation data for a suggestion via body parameter.
+    * suggestion_in (SuggestionCreate): Creation data for a suggestion via
+        body parameter.
     * service (SuggestionService): Service with initialized database session.
 
     Returns:
@@ -89,7 +92,7 @@ def create_suggestion(
 
 @router.patch('/{id}', response_model=Suggestion)
 def modify_pinned(
-    id: UUID = Path(...),
+    id: UUID = Path(...),  # pylint: disable=[invalid-name, redefined-builtin]
     pinned: bool = Body(...),
     service: SuggestionService = Depends(get_service)
 ) -> Any:
@@ -102,7 +105,8 @@ def modify_pinned(
     * service (SuggestionService): Service with initialized database session.
 
     Raises:
-    * HTTPException: HTTP error 400. There are more than three pinned suggestions.
+    * HTTPException: HTTP error 400. There are more than three
+        pinned suggestions.
 
     Returns:
     * Suggestion: Suggestion with modified pinned.

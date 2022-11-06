@@ -13,14 +13,15 @@ from app.services import BaseService
 
 
 class UserService(BaseService[User, UserCreate, UserUpdate]):
-    '''Service that provides CRUD operations and authentication for a user model.
+    '''Service that provides CRUD operations and authentication
+    for a user model.
 
     Args:
         BaseService ([User, UserCreate, UserUpdate]): Models and schemas.
     '''
 
     @classmethod
-    def get_service(cls, db: Session):
+    def get_service(cls, db: Session):  # pylint: disable=missing-function-docstring, invalid-name  # noqa: E501
         return cls(model=User, db=db)
 
     def get_by_username(self, username: str) -> User | None:
@@ -89,7 +90,11 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             User: User data updated.
         '''
-        update_data = obj_in if isinstance(obj_in, dict) else obj_in.dict(exclude_unset=True)
+        update_data = (
+            obj_in
+            if isinstance(obj_in, dict) else
+            obj_in.dict(exclude_unset=True)
+        )
 
         if update_data['password']:
             hashed_password = get_password_hash(update_data['password'])
@@ -139,7 +144,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             bool: True if the user exists, False otherwise.
         '''
         return (self.db
-                .query(exists().where(User.username == username))  # type: ignore
+                .query(exists().where(User.username == username))  # type: ignore  # noqa: E501
                 .scalar())
 
     def generate_username(self, person: Person) -> str:
@@ -162,6 +167,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
 
             if not self.contains_by_username(new_username):
                 return new_username
-            elif i >= len(prefix):
+            if i >= len(prefix):
                 i = 1
                 postfix = unidecode(person.surname).lower().replace(' ', '')

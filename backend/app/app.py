@@ -18,7 +18,9 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(origin) for origin in settings.domain.backend_cors_origins],
+    allow_origins=[
+        str(origin) for origin in settings.domain.backend_cors_origins
+    ],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
@@ -27,9 +29,13 @@ app.add_middleware(
 
 @app.on_event('startup')  # pyright: ignore
 def startup():
+    ''' Startup event handler. '''
     init_db()
 
 
 app.include_router(api_router, prefix=settings.domain.api_version)
 
-app.add_exception_handler(DatabaseException, database_exception_handler)  # type: ignore
+app.add_exception_handler(  # type: ignore
+    DatabaseException,
+    database_exception_handler
+)

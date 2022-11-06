@@ -6,18 +6,26 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from sqlalchemy_utils import EmailType, PhoneNumberType  # pyright: ignore
 
-from app.core.types import BloodType, CivilStatus, DocumentType, Gender, RHFactor
+from app.core.types import (
+    BloodType,
+    CivilStatus,
+    DocumentType,
+    Gender,
+    RHFactor
+)
 from app.database.base import Base
 
 
 if TYPE_CHECKING:
-    from app.models.user import User  # pyright: ignore
+    from ..user.user import User  # pyright: ignore  # noqa: F401
 
 
 class Person(Base):
-    ''' Person model. Registration of personal data of a person in the system. '''
+    '''Person model. Registration of personal data of a person in the system.
+    '''
 
-    # Identification number of the person according to their identification document.
+    # Identification number of the person according
+    # to their identification document.
     dni = Column(BigInteger, nullable=False, primary_key=True)
 
     # Person's name.
@@ -37,7 +45,10 @@ class Person(Base):
 
     # Person's gender.
     gender = Column(
-        Enum(Gender, values_callable=lambda obj: [e.value for e in obj]),  # pyright: ignore
+        Enum(
+            Gender,
+            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
+        ),
         nullable=False
     )
 
@@ -46,7 +57,10 @@ class Person(Base):
 
     # Type of person's identification document.
     document_type = Column(
-        Enum(DocumentType, values_callable=lambda obj: [e.value for e in obj]),  # pyright: ignore
+        Enum(
+            DocumentType,
+            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
+        ),
         nullable=False
     )
 
@@ -55,7 +69,10 @@ class Person(Base):
 
     # Person's RH blood factor.
     rh_factor = Column(
-        Enum(RHFactor, values_callable=lambda obj: [e.value for e in obj])  # pyright: ignore
+        Enum(
+            RHFactor,
+            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
+        )
     )
 
     # Ethnicity to which  the person belongs if any.
@@ -66,7 +83,10 @@ class Person(Base):
 
     # Person's civil status.
     civil_status = Column(
-        Enum(CivilStatus, values_callable=lambda obj: [e.value for e in obj])  # pyright: ignore
+        Enum(
+            CivilStatus,
+            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
+        )
     )
 
     # Date of creation of the person's record in the system.
@@ -85,6 +105,10 @@ class Person(Base):
     )
 
     # User relationship one to one.
-    user = relationship('User', uselist=False, back_populates='person')  # type: ignore
+    user = relationship(  # type: ignore
+        'User',
+        uselist=False,
+        back_populates='person'
+    )
 
-    __table_args__ = { 'schema': 'person' }
+    __table_args__ = {'schema': 'person'}

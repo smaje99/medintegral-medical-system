@@ -1,6 +1,10 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import (
+    APIRouter,
+    Depends,
+    HTTPException
+)
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.status import (
     HTTP_400_BAD_REQUEST,
@@ -49,22 +53,24 @@ def login(
             username=form_data.username,
             password=form_data.password
         )
-    except IncorrectCredentialsException as e:
+    except IncorrectCredentialsException as error:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
-            detail=str(e),
-            headers={ 'WWW-Authenticate': 'Bearer' }
-        ) from e
+            detail=str(error),
+            headers={'WWW-Authenticate': 'Bearer'}
+        ) from error
 
     if not service.is_active(user):  # type: ignore
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
             detail='Usuario inactivo',
-            headers={ 'WWW-Authenticate': 'Bearer' }
+            headers={'WWW-Authenticate': 'Bearer'}
         )
 
     return Token(
-        access_token=create_access_token(TokenPayloadIn(sub=user.dni)),  # type: ignore
+        access_token=create_access_token(
+            TokenPayloadIn(sub=user.dni)  # type: ignore
+        ),
         token_type='bearer'
     )
 

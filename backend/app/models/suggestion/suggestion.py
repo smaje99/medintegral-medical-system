@@ -4,8 +4,10 @@ from sqlalchemy.sql import expression, func
 
 from app.database import Base  # pyright: ignore
 
-class Suggestion(Base):  # pyright: ignore
-    ''' Suggestion model. Mailbox for anonymous suggestions from company users. '''
+
+class Suggestion(Base):
+    '''Suggestion model. Mailbox for anonymous suggestions from company users.
+    '''
 
     # Suggestion ID.
     id = Column(
@@ -22,6 +24,9 @@ class Suggestion(Base):  # pyright: ignore
     pinned = Column(Boolean, server_default=expression.false(), index=True)
 
     # Creation of the suggestion record in the system.
-    created_at = Column(TIMESTAMP(timezone=True), server_default=func.current_timestamp())
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        server_default=func.current_timestamp()
+    )
 
-    __table_args__ = { 'schema': 'suggestion' }
+    __table_args__ = {'schema': 'suggestion'}

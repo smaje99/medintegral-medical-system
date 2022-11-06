@@ -6,19 +6,26 @@ from sqlalchemy.orm import Session
 
 from app.core.exceptions import DatabaseException
 from app.models.suggestion import Suggestion
-from app.schemas.suggestion.suggestion import SuggestionCreate, SuggestionUpdate
+from app.schemas.suggestion.suggestion import (
+    SuggestionCreate,
+    SuggestionUpdate
+)
 from app.services import BaseService
 
+
 # This class is a service that provides CRUD operations for a suggestion model
-class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpdate]):
+class SuggestionService(
+    BaseService[Suggestion, SuggestionCreate, SuggestionUpdate]
+):
     '''Service that provides CRUD operations for a suggestion model.
 
     Args:
-        BaseService ([Suggestion, SuggestionCreate, SuggestionUpdate]): Models and schemas.
+        BaseService ([Suggestion, SuggestionCreate, SuggestionUpdate]):
+        Models and schemas.
     '''
 
     @classmethod
-    def get_service(cls, db: Session):
+    def get_service(cls, db: Session):  # pylint: disable=missing-function-docstring, invalid-name  # noqa: E501
         return cls(model=Suggestion, db=db)
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[Suggestion]:
@@ -26,7 +33,8 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
 
         Args:
             skip (int): Start cut of subset of suggestions. Defaults to 0.
-            limit (int): Number of suggestions within the subset. Defaults to 50.
+            limit (int): Number of suggestions within the subset.
+            Defaults to 50.
 
         Returns:
             list[Suggestion]: A list of suggestion subset.
@@ -37,7 +45,7 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
                 .slice(skip, limit)
                 .all())
 
-    def modify_pinned(self, id: UUID, pinned: bool) -> Suggestion:
+    def modify_pinned(self, id: UUID, pinned: bool) -> Suggestion:  # pylint: disable=invalid-name, redefined-builtin  # noqa: E501
         '''Modify the pinning of a suggestion given an ID.
         There can only be three pinned suggestions.
 
@@ -58,7 +66,7 @@ class SuggestionService(BaseService[Suggestion, SuggestionCreate, SuggestionUpda
         try:
             self.db.execute(stmt)  # pyright: ignore
             self.db.commit()
-        except InternalError as e:
-            raise DatabaseException(e) from e
+        except InternalError as error:
+            raise DatabaseException(error) from error
 
         return self.get(id)  # type: ignore
