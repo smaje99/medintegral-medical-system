@@ -3,6 +3,7 @@ from uuid import UUID
 from sqlalchemy import desc, update
 from sqlalchemy.exc import InternalError
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import expression
 
 from app.core.exceptions import DatabaseException
 from app.models.suggestion import Suggestion
@@ -43,6 +44,18 @@ class SuggestionService(
                 .query(self.model)  # pyright: ignore
                 .order_by(desc(self.model.created_at))
                 .slice(skip, limit)
+                .all())
+
+    def get_all_pinned(self) -> list[Suggestion]:
+        '''Retrieves a list of pinned suggestions sorted by creation date.
+
+        Returns:
+            list[Suggestion]: A list of pinned suggestions.
+        '''
+        return (self.db
+                .query(self.model)
+                .filter(self.model.pinned == expression.true())
+                .order_by(desc(self.model.created_at))
                 .all())
 
     def modify_pinned(self, id: UUID, pinned: bool) -> Suggestion:  # pylint: disable=invalid-name, redefined-builtin  # noqa: E501
