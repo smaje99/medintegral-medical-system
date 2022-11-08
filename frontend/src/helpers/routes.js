@@ -1,13 +1,14 @@
 const routes = {
     home: '/',
-    appointment: '/citas',
-    services: '/servicios',
+    appointment: '/appointment',
+    services: '/services',
     aboutUs: '/#sobre-nosotros',
-    login: '/iniciar-sesion',
-    about: '/quienes-somos',
-    bulletin: '/boletin',
-    socialParticipation: '/participacion-social',
-    suggestions: '/sugerencias'
+    login: '/login',
+    about: '/about',
+    bulletin: '/bulletin',
+    socialParticipation: '/social-participation',
+    suggestions: '/suggestions',
+    dashboard: '/dashboard'
 }
 
 export default routes;

@@ -24,7 +24,7 @@ const NavigationProtected = () => {
                     {getGreetings(hour)}
                 </span>
                 <span className={styles.statement}>
-                    {user.username}
+                    {user?.username}
                 </span>
                 <hr />
             </section>

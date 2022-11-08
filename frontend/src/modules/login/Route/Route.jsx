@@ -9,7 +9,7 @@ const Route = ({ children }) => {
     const { isLoggedIn } = useAuth();
 
     if (isLoggedIn()) {
-        router.push(routes.home);
+        router.push(routes.dashboard);
     }
 
     return children;

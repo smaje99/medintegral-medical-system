@@ -15,7 +15,7 @@ const LoginForm = forwardRef((props, ref) => {
 
     const handleLogin = async (formData) => {
         try {
-            await login(formData, routes.home);
+            await login(formData, routes.dashboard);
         } catch (error) {
             error?.response?.data?.detail &&
                 toast.error(error.response.data.detail, getToastConfig());
