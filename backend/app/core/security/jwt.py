@@ -57,3 +57,45 @@ def verify_token(token: str) -> TokenPayload | None:
         return TokenPayload(**payload)
     except (JWTError, ValidationError):
         return None
+
+
+def generate_password_reset_token(email: str) -> str:
+    '''Generate a new JWT encoded for password reset token.
+
+    Args:
+        email (str): Data to encode.
+
+    Returns:
+        str: JWT password reset token.
+    '''
+    delta = timedelta(hours=settings.email.reset_token_expire_hours)
+    now = datetime.now(timezone.utc)
+    expires = now + delta
+    exp = expires.timestamp()
+
+    return jwt.encode(
+        {'exp': exp, 'nbf': now, 'sub': email},
+        settings.security.jwt.secret_key,
+        algorithm=settings.security.jwt.algorithm
+    )
+
+
+def verify_password_reset_token(token: str) -> str | None:
+    '''Verify a JWT password reset token.
+
+    Args:
+        token (str): the token to verify.
+
+    Returns:
+        str | None: Token subject.
+    '''
+    try:
+        decoded_token = jwt.decode(
+            token,
+            settings.security.jwt.secret_key,
+            algorithms=[settings.security.jwt.algorithm]
+        )
+
+        return decoded_token.get('sub')
+    except JWTError:
+        return None

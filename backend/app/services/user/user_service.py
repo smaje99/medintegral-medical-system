@@ -99,7 +99,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         if update_data['password']:
             hashed_password = get_password_hash(update_data['password'])
             del update_data['password']
-            update_data['password_hash'] = hashed_password
+            update_data['hashed_password'] = hashed_password
 
         return super().update(db_obj=db_obj, obj_in=update_data)
 
@@ -170,3 +170,18 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             if i >= len(prefix):
                 i = 1
                 postfix = unidecode(person.surname).lower().replace(' ', '')
+
+    def update_password(self, *, db_user: User, new_password: str):
+        '''Update an user's password.
+
+        Args:
+            db_user (User): User recorded.
+            new_password (str): New user's password.
+        '''
+        user_in = UserUpdate(**db_user._asdict())  # pyright: ignore
+        user_in.password = new_password
+
+        self.update(
+            db_obj=db_user,
+            obj_in=user_in
+        )

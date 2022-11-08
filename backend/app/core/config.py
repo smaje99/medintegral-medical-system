@@ -1,6 +1,12 @@
 from typing import Any
 
-from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator
+from pydantic import (
+    AnyHttpUrl,
+    BaseSettings,
+    EmailStr,
+    PostgresDsn,
+    validator
+)
 
 
 class DatabaseSettings(BaseSettings):
@@ -36,6 +42,7 @@ class DatabaseSettings(BaseSettings):
 class DomainSettings(BaseSettings):
     ''' Settings for the domain. '''
     api_version: str
+    server_host: str
 
     backend_cors_origins: str | list[AnyHttpUrl | str] = ['*']
 
@@ -70,12 +77,33 @@ class SecuritySettings(BaseSettings):
     jwt: JWTSettings
 
 
+class SMTPSettings(BaseSettings):
+    ''' Settings for SMTP. '''
+    tls: bool
+    port: int | None = None
+    host: str | None = None
+    user: str | None = None
+    password: str | None = None
+
+
+class EmailSettings(BaseSettings):
+    ''' Settings for the email. '''
+    smtp: SMTPSettings
+
+    from_name: str | None = None
+    from_email: EmailStr | None = None
+
+    reset_token_expire_hours: int
+    templates_dir: str = 'email-template/build'
+
+
 class Settings(BaseSettings):
     ''' Settings of the application. '''
     db: DatabaseSettings
     domain: DomainSettings
     project: ProjectSettings
     security: SecuritySettings
+    email: EmailSettings
 
     class Config:  # pyright: ignore  # pylint: disable=[missing-class-docstring, too-few-public-methods]  # noqa: E501
         env_file = '.env'
