@@ -5,22 +5,22 @@ import { Navbar } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
-const Layout = ({ children }) => {
+const NavigationLayout = ({ title, children }) => {
     /** Add login class to the root element. */
     useEffect(() => {
         const rootElement = document.getElementById('__next');
 
-        rootElement.classList.add(styles.login);
+        rootElement.classList.add(styles.navigation);
 
         return () => {
-            rootElement.classList.remove(styles.login)
+            rootElement.classList.remove(styles.navigation)
         };
     }, [])
 
     return (
         <>
             <Head>
-                <title>Inicio de sesión | Medintegral IPS SAS</title>
+                <title>{title} | Medintegral IPS SAS</title>
             </Head>
             <Navbar />
             <main>
@@ -30,4 +30,4 @@ const Layout = ({ children }) => {
     )
 }
 
-export default Layout;
+export default NavigationLayout;

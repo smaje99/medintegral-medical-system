@@ -1,4 +1,9 @@
-import ProtectedLayout from './ProtectedLayout'
+import NavigationLayout from './NavigationLayout'
+import ProtectedLayout from './ProtectedLayout';
 import PublicLayout from './PublicLayout';
 
-export { ProtectedLayout, PublicLayout };
+export {
+    NavigationLayout,
+    ProtectedLayout,
+    PublicLayout
+};

@@ -41,3 +41,20 @@
         }
     }
 }
+
+.navigation {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    > main {
+        flex: 1;
+        height: max-content;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        margin: 10rem auto auto auto;
+    }
+}

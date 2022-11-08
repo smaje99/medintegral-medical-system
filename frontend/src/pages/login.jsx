@@ -1,8 +1,8 @@
 import Image from 'next/future/image';
 import { useRef } from 'react';
 
+import { NavigationLayout } from '@Components/layouts';
 import {
-    Layout,
     LoginForm,
     RecoverPasswordForm,
     Route,
@@ -56,9 +56,9 @@ const Login = () => {
 
 Login.getLayout = (page) => (
     <Route>
-        <Layout>
+        <NavigationLayout title="Iniciar sesión">
             {page}
-        </Layout>
+        </NavigationLayout>
     </Route>
 )
 
