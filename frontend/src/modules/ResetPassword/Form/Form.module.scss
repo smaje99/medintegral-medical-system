@@ -1,0 +1,48 @@
+@import '../../../styles/palette';
+
+.form {
+    width: 100%;
+    height: max-content;
+    display: grid;
+    gap: 1.6rem;
+    grid-template-columns: 1fr;
+}
+
+.field {
+    flex: 1;
+    display: flex;
+    padding: 1rem;
+    border-radius: 1.2rem;
+    background-color: $blue-light-shade;
+}
+
+.input {
+    flex: 1;
+    display: inline-block;
+    font-size: 12pt;
+    letter-spacing: 0.1rem;
+    color: $black;
+    background-color: transparent;
+    border-color: transparent;
+    outline: 0;
+
+    &::placeholder {
+        color: #333;
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+        transition: all 0s 10800s;
+    }
+}
+
+.show_password {
+    display: flex;
+    align-items: center;
+    font-size: 11pt;
+    color: $black;
+    border-color: transparent;
+    background-color: transparent;
+}

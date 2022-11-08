@@ -23,3 +23,7 @@ export const login = async ({ username, password }) => {
 export const testToken = async (token) => {
     return axios.post(`${baseURL}/login/test-token`, {}, authHeaders(token))
 }
+
+export const resetPassword = async ({ token, new_password }) => {
+    return axios.patch(`${baseURL}/reset-password`, { token, new_password });
+}
