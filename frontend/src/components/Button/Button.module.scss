@@ -59,7 +59,7 @@
     &:hover {
         transition: box-shadow 400ms;
         box-shadow:
-            3px 3px 10px rgba($green-complementary, .5),
-            -3px -3px 10px rgba($green-complementary, .5);
+            3px 3px 25px rgba($green-complementary, .75),
+            -3px -3px 25px rgba($green-complementary, .75);
     }
 }
