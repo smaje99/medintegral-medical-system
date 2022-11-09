@@ -27,3 +27,7 @@ export const testToken = async (token) => {
 export const resetPassword = async ({ token, new_password }) => {
     return axios.patch(`${baseURL}/reset-password`, { token, new_password });
 }
+
+export const passwordRecovery = async ({ email }) => {
+    return axios.post(`${baseURL}/password-recovery/${email}`, {});
+}
