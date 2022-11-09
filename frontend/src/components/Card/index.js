@@ -1,1 +1,3 @@
-export { default } from './Card';
+import ContentCard from './ContentCard';
+
+export { ContentCard };

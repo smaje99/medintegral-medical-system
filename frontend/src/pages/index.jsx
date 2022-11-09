@@ -1,4 +1,4 @@
-import Card from '@Components/Card';
+import { ContentCard } from '@Components/Card';
 import {
     items,
     Layout,
@@ -12,7 +12,7 @@ const Home = () => (
             <h2 className={styles.title}>Sobre nosotros</h2>
             <section className={styles.group}>
                 {items.map((item) => (
-                    <Card key={item.title} {...item} />
+                    <ContentCard key={item.title} {...item} />
                 ))}
             </section>
         </section>

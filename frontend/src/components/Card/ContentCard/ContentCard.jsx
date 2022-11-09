@@ -1,8 +1,8 @@
 import Button from '@Components/Button';
 
-import styles from './Card.module.scss';
+import styles from './ContentCard.module.scss';
 
-const Card = ({ title, content, route }) => {
+const ContentCard = ({ title, content, route }) => {
     return (
         <section className={styles.card}>
             <h3 className={styles.title}>{title}</h3>
@@ -14,4 +14,4 @@ const Card = ({ title, content, route }) => {
     )
 }
 
-export default Card;
+export default ContentCard;
