@@ -7,3 +7,7 @@ export const createSuggestion = async ({ opinion }) => {
     const { data } = await axios.post(baseURL, { opinion });
     return data;
 }
+
+export const getAllPinnedSuggestions = async () => {
+    return axios.get(`${baseURL}?pinned=true`)
+}

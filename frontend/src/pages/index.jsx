@@ -1,13 +1,15 @@
 import {
     AboutUs,
     Layout,
-    Maps
+    Maps,
+    TellUs
 } from '@Modules/home';
 
 const Home = () => (
     <>
         <AboutUs />
         <Maps />
+        <TellUs />
     </>
 )
 
