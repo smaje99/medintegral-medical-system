@@ -1,33 +1,14 @@
-import axios from 'axios';
+import api from '@Api/login.api';
 
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = NEXT_PUBLIC_API
+export const login = async ({ username, password }) => api.login(username, password);
 
-const authHeaders = (token) => ({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+export const testToken = async (token) => api.testToken(token);
 
-/**
- * TODO: Encrypt password
- */
-export const login = async ({ username, password }) => {
-    const params = new URLSearchParams();
-    params.append('username', username);
-    params.append('password', password);
+export const resetPassword = async ({ token, newPassword }) => (
+    api.resetPassword({
+        token,
+        new_password: newPassword
+    })
+)
 
-    return axios.post(`${baseURL}/login/access-token`, params);
-}
-
-export const testToken = async (token) => {
-    return axios.post(`${baseURL}/login/test-token`, {}, authHeaders(token))
-}
-
-export const resetPassword = async ({ token, new_password }) => {
-    return axios.patch(`${baseURL}/reset-password`, { token, new_password });
-}
-
-export const passwordRecovery = async ({ email }) => {
-    return axios.post(`${baseURL}/password-recovery/${email}`, {});
-}
+export const passwordRecovery = async (email) => api.passwordRecovery(email);
