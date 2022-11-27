@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import routes from '@Helpers/routes';
 import { login } from '@Services/login.service';
+import { getMe } from '@Services/user.service';
 
 const options = {
     debug: true,
@@ -15,18 +16,13 @@ const options = {
                 password: { label: 'Password', type: 'password' }
             },
             async authorize(credentials) {
-                console.log(credentials);
                 try {
-                    const data = await login({
-                        username: credentials.username,
-                        password: credentials.password
-                    });
-                    const user = data.data;
+                    const token = await login(credentials);
+                    const user = await getMe(token.access_token);
 
-                    return user;
+                    return { user, token };
                 } catch (error) {
-                    const message = error?.response?.data?.detail;
-                    throw message ? new Error(message) : error;
+                    throw error;
                 }
             }
         })
@@ -34,12 +30,14 @@ const options = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.accessToken = user.access_token;
+                token.accessToken = user.token.access_token;
+                token.user = user.user;
             }
             return token;
         },
         async session({ session, token }) {
             session.accessToken = token.accessToken;
+            session.user = token.user;
             return session;
         }
     },

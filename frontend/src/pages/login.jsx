@@ -1,11 +1,10 @@
 import Image from 'next/future/image';
 import { useRef } from 'react';
 
-import { NavigationLayout } from '@Components/layouts';
+import { AuthLayout } from '@Components/layouts';
 import {
     LoginForm,
     RecoverPasswordForm,
-    Route,
     styles
 } from '@Modules/login';
 
@@ -55,11 +54,9 @@ const Login = () => {
 }
 
 Login.getLayout = (page) => (
-    <Route>
-        <NavigationLayout title="Iniciar sesión">
-            {page}
-        </NavigationLayout>
-    </Route>
+    <AuthLayout title="Iniciar sesión">
+        {page}
+    </AuthLayout>
 )
 
 export default Login;

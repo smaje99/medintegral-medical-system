@@ -1,7 +1,7 @@
 import Image from 'next/future/image';
 
 import { ProtectedLayout } from '@Components/layouts';
-import { Route, styles } from '@Modules/Dashboard';
+import { styles } from '@Modules/Dashboard';
 
 import medintegralIcon from '@Icons/medintegral.svg';
 
@@ -18,11 +18,11 @@ const Dashboard = () => (
 )
 
 Dashboard.getLayout = (page) => (
-    <Route>
-        <ProtectedLayout title="Dashboard">
-            {page}
-        </ProtectedLayout>
-    </Route>
+    <ProtectedLayout title="Dashboard">
+        {page}
+    </ProtectedLayout>
 )
+
+Dashboard.auth = true;
 
 export default Dashboard

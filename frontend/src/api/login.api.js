@@ -18,7 +18,7 @@ export default {
         return axios.post(`${baseURL}/login/access-token`, params);
     },
     async testToken(token) {
-        return axios.post(`${baseURL}/login/test-token`, {}, headers);
+        return axios.post(`${baseURL}/login/test-token`, {}, headers(token));
     },
     async resetPassword({ token, new_password }) {
         return axios.patch(`${baseURL}/reset-password`, { token, new_password });

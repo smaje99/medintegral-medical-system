@@ -1,9 +1,9 @@
-import NavigationLayout from './NavigationLayout'
+import AuthLayout from './AuthLayout'
 import ProtectedLayout from './ProtectedLayout';
 import PublicLayout from './PublicLayout';
 
 export {
-    NavigationLayout,
+    AuthLayout,
     ProtectedLayout,
     PublicLayout
 };
