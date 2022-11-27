@@ -1,5 +1,7 @@
 import Image from 'next/future/image';
-import { useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 
 import { AuthLayout } from '@Components/layouts';
 import {
@@ -8,6 +10,8 @@ import {
     styles
 } from '@Modules/login';
 
+import getToastConfig from '@Helpers/toast.config';
+
 import stethoscopePic from '@Pictures/stethoscope.webp';
 
 const Login = () => {
@@ -15,11 +19,26 @@ const Login = () => {
     const loginFormRef = useRef();
     const recoverPasswordFormRef = useRef();
 
+    const router = useRouter();
+
     const handleToggleForm = () => {
         toggleRef.current.classList.toggle(styles.active)
             ? recoverPasswordFormRef.current.reset()
             : loginFormRef.current.reset();
     }
+
+    const handleError = () => {
+        const error = router.query?.error;
+
+        if (error && error === 'SessionRequired') {
+            toast.warning(
+                'Debe de iniciar sesión primero para poder acceder',
+                getToastConfig()
+            )
+        }
+    }
+
+    useEffect(handleError, [router]);
 
     return (
         <section className={styles.container} ref={toggleRef}>
