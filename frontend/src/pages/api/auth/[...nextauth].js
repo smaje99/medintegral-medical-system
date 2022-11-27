@@ -13,14 +13,16 @@ const options = {
             name: 'Login',
             credentials: {
                 username: { label: 'Username', type: 'text' },
-                password: { label: 'Password', type: 'password' }
+                password: { label: 'Password', type: 'password' },
+                rememberMe: { label: 'Remember Me', type: 'checkbox' }
             },
             async authorize(credentials) {
                 try {
                     const token = await login(credentials);
                     const user = await getMe(token.access_token);
+                    const { rememberMe } = credentials;
 
-                    return { user, token };
+                    return { user, token, rememberMe };
                 } catch (error) {
                     throw error;
                 }
@@ -32,12 +34,14 @@ const options = {
             if (user) {
                 token.accessToken = user.token.access_token;
                 token.user = user.user;
+                token.rememberMe = user.rememberMe;
             }
             return token;
         },
         async session({ session, token }) {
             session.accessToken = token.accessToken;
             session.user = token.user;
+            session.rememberMe = token.rememberMe;
             return session;
         }
     },

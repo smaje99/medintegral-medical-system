@@ -3,10 +3,11 @@ import { useFormContext } from 'react-hook-form';
 import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
 
 import Button from '@Components/Button';
+import { Spinner } from '@Components/loaders';
 
 import styles from './LoginForm.module.scss';
 
-const LoginFormView = () => {
+const LoginFormView = ({ loading }) => {
     const [showPassword, setShowPassword] = useState(false);
     const { handleSubmit, register, handleLogin } = useFormContext();
 
@@ -62,14 +63,14 @@ const LoginFormView = () => {
                 </span>
             </label>
 
-            <Button
+            {loading ? <Spinner /> : <Button
                 type="submit"
                 as="input"
                 style="primary"
                 className={styles.button}
             >
                 Iniciar sesión
-            </Button>
+            </Button>}
         </form>
     )
 }

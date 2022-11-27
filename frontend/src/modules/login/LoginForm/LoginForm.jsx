@@ -1,5 +1,11 @@
+import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react'
-import { forwardRef, useEffect, useImperativeHandle } from 'react';
+import {
+    forwardRef,
+    useEffect,
+    useImperativeHandle,
+    useState
+} from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -10,15 +16,28 @@ import LoginFormView from './LoginForm.view';
 
 const LoginForm = forwardRef((props, ref) => {
     const { handleSubmit, register, reset } = useForm();
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    const handleError = (error) => {
+        setLoading(false);
+        console.log({error})
+        toast.error(error, getToastConfig());
+    }
 
     const handleLogin = async (formData) => {
+        setLoading(true);
         const res = await signIn('credentials', {
-            username: formData.username,
-            password: formData.password,
-            callbackUrl: routes.dashboard,
+            ...formData,
+            callbackUrl: router.query?.callbackUrl ?? routes.dashboard,
             redirect: false
         });
-        console.log(res?.error)
+
+        if (res?.error) {
+            handleError(res.error);
+        } else if (res.url) {
+            router.push(res.url);
+        }
     }
 
     /* A cleanup function that is called when the form is unmounted. */
@@ -28,7 +47,7 @@ const LoginForm = forwardRef((props, ref) => {
 
     return (
         <FormProvider {...{handleSubmit, register, handleLogin}}>
-            <LoginFormView />
+            <LoginFormView loading={loading} />
         </FormProvider>
     )
 })

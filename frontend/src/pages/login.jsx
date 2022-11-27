@@ -1,27 +1,16 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { useSession } from 'next-auth/react';
 
 import { AuthLayout } from '@Components/layouts';
 import { LoginView } from '@Modules/login';
 
-import getToastConfig from '@Helpers/toast.config';
+import routes from '@Helpers/routes';
 
 const Login = () => {
     const router = useRouter();
+    const { data: session } = useSession();
 
-    const handleError = () => {
-        const error = router.query?.error;
-
-        if (error && error === 'SessionRequired') {
-            toast.warning(
-                'Debe de iniciar sesión primero para poder acceder',
-                getToastConfig()
-            )
-        }
-    }
-
-    useEffect(handleError, [router]);
+    if (session) router.push(routes.dashboard);
 
     return <LoginView />
 }

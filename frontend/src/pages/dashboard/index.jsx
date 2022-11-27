@@ -23,6 +23,4 @@ Dashboard.getLayout = (page) => (
     </ProtectedLayout>
 )
 
-Dashboard.auth = true;
-
 export default Dashboard

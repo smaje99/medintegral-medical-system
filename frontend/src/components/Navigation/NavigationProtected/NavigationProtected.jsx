@@ -1,5 +1,4 @@
-import { signOut, useSession } from 'next-auth/react'
-import { useEffect } from 'react';
+import { signOut, useSession } from 'next-auth/react';
 
 import Button from '@Components/Button';
 import useGreetings from '@Hooks/useGreetings';
@@ -11,8 +10,6 @@ import styles from './NavigationProtected.module.scss'
 const NavigationProtected = () => {
     const greetings = useGreetings();
     const { data: session } = useSession();
-
-    useEffect(() => console.log(session), [])
 
     return (
         <nav className={styles.navigation}>
