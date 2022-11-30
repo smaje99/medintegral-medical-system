@@ -18,3 +18,7 @@
 
     @include spin;
 }
+
+.full {
+    height: calc(100vh - 60px);
+}
