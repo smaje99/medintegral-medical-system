@@ -2,7 +2,6 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import exists
-from unidecode import unidecode
 
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import get_password_hash, verify_password
@@ -146,30 +145,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         return (self.db
                 .query(exists().where(User.username == username))  # type: ignore  # noqa: E501
                 .scalar())
-
-    def generate_username(self, person: Person) -> str:
-        '''Generate a username available in the database.
-        The username is generated from the name and surname of the person.
-
-        Args:
-            person (Person): Person to whom the username should be generated.
-
-        Returns:
-            str: A new username for the given person.
-        '''
-        prefix = unidecode(person.name).lower().replace(' ', '')
-        postfix = unidecode(person.surname.split()[0]).lower()
-
-        i = 1
-
-        while True:
-            new_username = f'{prefix[:i]}.{postfix}'
-
-            if not self.contains_by_username(new_username):
-                return new_username
-            if i >= len(prefix):
-                i = 1
-                postfix = unidecode(person.surname).lower().replace(' ', '')
 
     def update_password(self, *, db_user: User, new_password: str):
         '''Update an user's password.
