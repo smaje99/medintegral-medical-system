@@ -1,65 +1,29 @@
-import Image from 'next/future/image';
-import { useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
-import { NavigationLayout } from '@Components/layouts';
-import {
-    LoginForm,
-    RecoverPasswordForm,
-    Route,
-    styles
-} from '@Modules/login';
+import { AuthLayout } from '@Components/layouts';
+import { Spinner } from '@Components/loaders';
+import { LoginView } from '@Modules/login';
 
-import stethoscopePic from '@Pictures/stethoscope.webp';
+import routes from '@Helpers/routes';
 
 const Login = () => {
-    const toggleRef = useRef();
-    const loginFormRef = useRef();
-    const recoverPasswordFormRef = useRef();
+    const router = useRouter();
+    const { data: session, status } = useSession();
 
-    const handleToggleForm = () => {
-        toggleRef.current.classList.toggle(styles.active)
-            ? recoverPasswordFormRef.current.reset()
-            : loginFormRef.current.reset();
+    if (status === 'unauthenticated') {
+        return <LoginView />
     }
 
-    return (
-        <section className={styles.container} ref={toggleRef}>
-            <Image
-                src={stethoscopePic}
-                className={styles.image}
-                alt="Estetoscopio | Foto de Jeremy Bishop en Unsplash"
-                layout="responsive"
-                priority
-            />
-            <section className={`${styles.form_box} ${styles.login_box}`}>
-                <h2 className={styles.title}>Iniciar sesión</h2>
-                <LoginForm ref={loginFormRef} />
-                <section className={styles.forgot}>
-                    <span>¿Olvidaste tu contraseña?</span>
-                    <a href="#" onClick={handleToggleForm}>
-                        Recuperar contraseña
-                    </a>
-                </section>
-            </section>
-            <section className={`${styles.form_box} ${styles.recover_box}`}>
-                <h2 className={styles.title}>Recuperar contraseña</h2>
-                <RecoverPasswordForm ref={recoverPasswordFormRef} />
-                <section className={styles.forgot}>
-                    <a href="#" onClick={handleToggleForm}>
-                        Inicia sesión con tu usuario
-                    </a>
-                </section>
-            </section>
-        </section>
-    )
+    if (session) router.push(routes.dashboard);
+
+    return <Spinner full />
 }
 
 Login.getLayout = (page) => (
-    <Route>
-        <NavigationLayout title="Iniciar sesión">
-            {page}
-        </NavigationLayout>
-    </Route>
+    <AuthLayout title="Iniciar sesión">
+        {page}
+    </AuthLayout>
 )
 
 export default Login;

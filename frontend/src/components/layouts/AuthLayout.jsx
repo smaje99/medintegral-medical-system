@@ -5,15 +5,15 @@ import { Navbar } from '@Components/Navigation';
 
 import styles from './Layout.module.scss';
 
-const NavigationLayout = ({ title, children }) => {
-    /** Add login class to the root element. */
+const AuthLayout = ({ title, children }) => {
+    /** Add auth class to the root element. */
     useEffect(() => {
         const rootElement = document.getElementById('__next');
 
-        rootElement.classList.add(styles.navigation);
+        rootElement.classList.add(styles.auth);
 
         return () => {
-            rootElement.classList.remove(styles.navigation)
+            rootElement.classList.remove(styles.auth);
         };
     }, [])
 
@@ -30,4 +30,4 @@ const NavigationLayout = ({ title, children }) => {
     )
 }
 
-export default NavigationLayout;
+export default AuthLayout;

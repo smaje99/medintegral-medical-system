@@ -1,15 +1,11 @@
-import axios from 'axios';
-
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = `${NEXT_PUBLIC_API}/user`;
-
-const authHeaders = (token) => ({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+import api from '@Api/user.api';
 
 export const getMe = async (token) => {
-    const { data } = await axios.get(`${baseURL}/me`, authHeaders(token));
-    return data;
+    try {
+        const response = await api.getMe(token);
+        return response.data;
+    } catch (error) {
+        const message = error?.response?.data?.detail;
+        throw message ? new Error(message) : error;
+    }
 }

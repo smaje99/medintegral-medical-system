@@ -1,40 +1,34 @@
-import useAuth from '@Auth/useAuth';
+import { signOut, useSession } from 'next-auth/react';
+
 import Button from '@Components/Button';
+import useGreetings from '@Hooks/useGreetings';
+
+import routes from '@Helpers/routes';
 
 import styles from './NavigationProtected.module.scss'
 
-function getGreetings(hour) {
-    if (hour < 12) {
-        return 'Buenos días';
-    } else if (hour >= 18) {
-        return 'Buenas noches';
-    } else {
-        return 'Buenas tardes';
-    }
-}
-
 const NavigationProtected = () => {
-    const { user, logout } = useAuth();
-    const hour = new Date(Date.now()).getHours();
+    const greetings = useGreetings();
+    const { data: session } = useSession();
 
     return (
         <nav className={styles.navigation}>
             <section className={styles.section}>
                 <span className={styles.statement}>
-                    {getGreetings(hour)}
+                    {greetings}
                 </span>
                 <span className={styles.statement}>
-                    {user?.username}
+                    {session?.user?.username}
                 </span>
                 <hr />
             </section>
             <ul className={styles.nav}>
-                
+
             </ul>
             <Button
                 as="button"
                 style="floating"
-                onClick={logout}
+                onClick={() => signOut({ callbackUrl: routes.login })}
                 className={styles.button}
             >
                 Cerrar sesión

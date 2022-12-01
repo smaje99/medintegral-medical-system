@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { NavigationLayout } from '@Components/layouts'
+import { AuthLayout } from '@Components/layouts'
 import { Form, styles } from '@Modules/ResetPassword';
 
 const ResetPassword = () => {
@@ -15,9 +15,9 @@ const ResetPassword = () => {
 }
 
 ResetPassword.getLayout = (page) => (
-    <NavigationLayout title="Restablecer contraseña">
+    <AuthLayout title="Restablecer contraseña">
         {page}
-    </NavigationLayout>
+    </AuthLayout>
 )
 
 export default ResetPassword;

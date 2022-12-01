@@ -48,7 +48,6 @@ const RecoverPasswordForm = forwardRef((props, ref) => {
                 id="email"
                 className={styles.input}
                 placeholder="Correo electrónico"
-                autoFocus={true}
                 required
                 {...register('email')}
             />
