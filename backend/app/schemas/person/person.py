@@ -39,7 +39,7 @@ class PersonUpdate(PersonBase):
 
 
 class PersonInDBBase(PersonBase):
-    ''' properties shared by models stored in the database. '''
+    ''' Properties shared by models stored in the database. '''
     created_at: datetime
     modified_at: datetime
 
@@ -60,3 +60,25 @@ class Person(PersonInDBBase):
 
 class PersonInDB(PersonInDBBase):
     ''' Additional properties stored in database. '''
+
+
+class PersonInUser(BaseModel):
+    ''' Properties to return via user API. '''
+    dni: int
+    name: str
+    surname: str
+    email: EmailStr
+    phone: str
+    gender: Gender
+    created_at: datetime
+    modified_at: datetime
+
+    @validator('phone', pre=True)
+    def get_phone_number(  # pylint: disable=no-self-argument, missing-function-docstring  # noqa: E501
+        cls,
+        value: str | PhoneNumber
+    ) -> str:
+        return value.e164 if isinstance(value, PhoneNumber) else value
+
+    class Config:  # pylint: disable=missing-class-docstring
+        orm_mode = True

@@ -24,7 +24,7 @@ class User(Base):
     )
 
     # User identifier name.
-    username = Column(Text, nullable=False, unique=True)
+    username = Column(Text, unique=True)
 
     # Encrypted user password.
     hashed_password = Column(Text, nullable=False)
@@ -37,6 +37,10 @@ class User(Base):
     )
 
     # Person relationship one to one
-    person = relationship('Person', back_populates='user')  # type: ignore
+    person = relationship(  # type: ignore
+        'Person',
+        back_populates='user',
+        lazy='joined'
+    )
 
     __table_args__ = {'schema': 'user'}

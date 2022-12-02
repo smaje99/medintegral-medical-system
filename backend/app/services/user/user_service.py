@@ -63,7 +63,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         '''
         db_obj = User(  # pyright: ignore
             dni=obj_in.dni,
-            username=obj_in.username,
             hashed_password=get_password_hash(obj_in.password)
         )
 

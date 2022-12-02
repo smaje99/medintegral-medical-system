@@ -1,10 +1,11 @@
 from pydantic import BaseModel
 
+from app.schemas.person.person import PersonInUser
+
 
 class UserBase(BaseModel):
     ''' Shared properties. '''
     dni: int | None = None
-    username: str | None = None
 
 
 class UserCreate(UserBase):
@@ -21,6 +22,8 @@ class UserUpdate(UserBase):
 class UserInDBBase(UserBase):
     ''' Shared properties by model stored in database. '''
     dni: int  # type: ignore
+    username: str
+    is_active: bool
 
     class Config:  # pylint: disable=missing-class-docstring
         orm_mode = True
@@ -28,6 +31,7 @@ class UserInDBBase(UserBase):
 
 class User(UserInDBBase):
     ''' Additional properties to return via API. '''
+    person: PersonInUser
 
 
 class UserInDB(UserInDBBase):
