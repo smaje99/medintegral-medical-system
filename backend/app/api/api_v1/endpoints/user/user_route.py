@@ -44,7 +44,7 @@ def create_user(
     user_service: UserService = Depends(get_user_service),
     role_service: RoleService = Depends(get_role_service)
 ) -> Any:
-    '''Create an user.
+    '''Create an user and notify the user's email address.
 
     Args:
     * dni (int): Identification number of the person to create an user.
@@ -68,5 +68,7 @@ def create_user(
         password=str(person.dni),
         role_id=role_id
     )
+    user = user_service.create(user_in)
+    user_service.send_new_account_email(user)
 
-    return user_service.create(user_in)
+    return user

@@ -3,6 +3,8 @@ from typing import Any
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import exists
 
+from app.core.config import settings
+from app.core.email import send_new_account_email
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import get_password_hash, verify_password
 from app.models.person import Person
@@ -159,3 +161,17 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             db_obj=db_user,
             obj_in=user_in
         )
+
+    def send_new_account_email(self, *, user: User):
+        '''Send a new account email to the given user.
+        This is if the system supports it.
+
+        Args:
+            user (User): User to send the email to.
+        '''
+        if settings.email.emails_enabled:
+            send_new_account_email(
+                email_to=user.person.email,
+                username=user.username,
+                password=user.password
+            )
