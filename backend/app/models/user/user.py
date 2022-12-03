@@ -1,6 +1,13 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, Column, ForeignKey, BigInteger, Text
+from sqlalchemy import (
+    Boolean,
+    Column,
+    ForeignKey,
+    BigInteger,
+    Text
+)
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression
 
@@ -9,6 +16,7 @@ from app.database.base import Base
 
 if TYPE_CHECKING:
     from ..person.person import Person  # pyright: ignore  # noqa: F401
+    from .role import Role  # pyright: ignore  # noqa: F401
 
 
 class User(Base):
@@ -36,11 +44,24 @@ class User(Base):
         server_default=expression.true()
     )
 
+    # Role ID
+    role_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey('user.role.id')
+    )
+
     # Person relationship one to one
     person = relationship(  # type: ignore
         'Person',
         back_populates='user',
         lazy='joined'
     )
+
+    # Role relationship many to one.
+    role = relationship(
+        'Role',
+        back_populates='users',
+        lazy='joined'
+    )  # type: ignore
 
     __table_args__ = {'schema': 'user'}

@@ -1,6 +1,9 @@
+from uuid import UUID
+
 from pydantic import BaseModel
 
 from app.schemas.person.person import PersonInUser
+from app.schemas.user.role import Role
 
 
 class UserBase(BaseModel):
@@ -12,11 +15,13 @@ class UserCreate(UserBase):
     ''' Properties to receive via API on creation. '''
     dni: int
     password: str
+    role_id: UUID
 
 
 class UserUpdate(UserBase):
     ''' Properties to receive via API on update. '''
     password: str | None = None
+    role_id: UUID | None = None
 
 
 class UserInDBBase(UserBase):
@@ -32,6 +37,7 @@ class UserInDBBase(UserBase):
 class User(UserInDBBase):
     ''' Additional properties to return via API. '''
     person: PersonInUser
+    role: Role
 
 
 class UserInDB(UserInDBBase):
