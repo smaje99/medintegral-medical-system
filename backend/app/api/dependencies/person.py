@@ -58,7 +58,7 @@ def get_person_if_no_user_exists(
     Returns:
         Person: Person data.
     '''
-    if service.get(person.dni):
+    if service.contains(person.dni):
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
             detail='El usuario ya existe en el sistema'

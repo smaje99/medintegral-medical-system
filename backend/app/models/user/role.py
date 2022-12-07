@@ -23,10 +23,13 @@ class Role(Base):
         server_default=func.uuid_generate_v4()
     )
 
-    # Role name many to one.
+    # Role name.
     name = Column(Text, nullable=False, unique=True)
 
-    # User relationship name.
-    users = relationship('User', back_populates='role')  # type: ignore
+    # User relationship many to one.
+    users: list['User'] = relationship(  # type: ignore
+        'User',
+        back_populates='role'
+    )
 
     __table_args__ = {'schema': 'user'}

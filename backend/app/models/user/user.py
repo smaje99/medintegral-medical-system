@@ -7,9 +7,9 @@ from sqlalchemy import (
     BigInteger,
     Text
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import TIMESTAMP, UUID
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import expression
+from sqlalchemy.sql import expression, func
 
 from app.database.base import Base
 
@@ -47,7 +47,23 @@ class User(Base):
     # Role ID
     role_id = Column(
         UUID(as_uuid=True),
-        ForeignKey('user.role.id')
+        ForeignKey('user.role.id'),
+        nullable=False
+    )
+
+    # Date of creation of the user's record in the system.
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=func.current_timestamp()
+    )
+
+    # Date of the last modification to an user's registration data.
+    modified_at = Column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp()
     )
 
     # Person relationship one to one
@@ -58,10 +74,10 @@ class User(Base):
     )
 
     # Role relationship many to one.
-    role = relationship(
+    role: 'Role' = relationship(  # type: ignore
         'Role',
         back_populates='users',
         lazy='joined'
-    )  # type: ignore
+    )
 
     __table_args__ = {'schema': 'user'}
