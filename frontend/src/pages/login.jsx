@@ -15,7 +15,7 @@ const Login = () => {
         return <LoginView />
     }
 
-    if (session) router.push(routes.dashboard);
+    if (session) router.push(routes.dashboard());
 
     return <Spinner full />
 }

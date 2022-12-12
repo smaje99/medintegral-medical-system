@@ -1,4 +1,5 @@
 @import '../../../styles/fonts';
+@import '../../../styles/mixins';
 @import '../../../styles/palette';
 
 .navigation {
@@ -34,4 +35,20 @@
 .button {
     font: 600 12pt Roboto;
     border-color: transparent;
+}
+
+.nav {
+    @include non-list;
+}
+
+.link {
+    @include non-link;
+    font: 600 12pt Roboto;
+    position: relative;
+    display: inline-block;
+    color: $white;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.08em;
+    transition: all .3s ease 0s;
+
 }
