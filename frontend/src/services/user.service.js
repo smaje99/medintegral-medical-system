@@ -9,3 +9,13 @@ export const getMe = async (token) => {
         throw message ? new Error(message) : error;
     }
 }
+
+export const createUser = async ({ dni, role_id, token }) => {
+    try {
+        const response = await api.create({ dni, role_id, token });
+        return response.data;
+    } catch (error) {
+        const message = error?.response?.data?.detail;
+        throw message ? new Error(message) : error;
+    }
+}

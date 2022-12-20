@@ -21,7 +21,6 @@ const LoginForm = forwardRef((props, ref) => {
 
     const handleError = (error) => {
         setLoading(false);
-        console.log({error})
         toast.error(error, getToastConfig());
     }
 
@@ -29,7 +28,7 @@ const LoginForm = forwardRef((props, ref) => {
         setLoading(true);
         const res = await signIn('credentials', {
             ...formData,
-            callbackUrl: router.query?.callbackUrl ?? routes.dashboard,
+            callbackUrl: router.query?.callbackUrl ?? routes.dashboard(),
             redirect: false
         });
 

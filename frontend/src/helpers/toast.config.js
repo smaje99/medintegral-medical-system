@@ -10,3 +10,9 @@ export default function getToastConfig(position = toast.POSITION.BOTTOM_RIGHT) {
         theme: "dark"
     }
 }
+
+export const getToastUpdateConfig = {
+    isLoading: false,
+    autoClose: 8000,
+    closeButton: null
+}

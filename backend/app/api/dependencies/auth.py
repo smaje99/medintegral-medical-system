@@ -1,3 +1,5 @@
+from typing import Callable
+
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from starlette.status import (
@@ -8,8 +10,10 @@ from starlette.status import (
 
 from app.core.config import settings
 from app.core.security.jwt import verify_token
+from app.core.types import PermissionAction
 from app.api.dependencies.services import ServiceDependency
 from app.models.user import User
+from app.schemas.user.user import User as UserSchema
 from app.services.user import UserService
 
 
@@ -61,7 +65,7 @@ def get_current_active_user(
     current_user: User = Depends(get_current_user),
     service: UserService = Depends(get_service)
 ) -> User:
-    '''Check if a user is active and returns it.
+    '''Check if the current user is active and returns it.
     Otherwise raise an exception.
 
     Args:
@@ -81,3 +85,65 @@ def get_current_active_user(
         )
 
     return current_user
+
+
+def get_current_user_with_role(role: str) -> Callable[[], User]:
+    '''Check if the current user has a role and returns it.
+    Otherwise raise an exception.
+
+    Args:
+        role (str): Role to check on the current user.
+
+    Raises:
+        HTTPException: HTTP 401. Unauthorized user.
+
+    Returns:
+        Callable[[], User]: Current user.
+    '''
+    def wrapper(
+        current_user: User = Depends(get_current_active_user)
+    ) -> User:
+        if role != current_user.role.name:
+            raise HTTPException(
+                status_code=HTTP_401_UNAUTHORIZED,
+                detail='Usuario no autorizado'
+            )
+
+        return current_user
+    return wrapper
+
+
+def get_current_user_with_permissions(
+    permission: str, actions: set[PermissionAction]
+) -> Callable[[], User]:
+    '''Check if the current user has a permission ans its
+    actions and returns it. Otherwise raise an exception.
+
+    Args:
+        permission (str): Permission to check on the current user.
+        actions (set[PermissionAction]): Permission actions to be
+        checked on the current user.
+
+    Raises:
+        HTTPException: HTTP 401. Unauthorized user.
+
+    Returns:
+        Callable[[], User]: Current user.
+    '''
+    def wrapper(
+        current_user: User = Depends(get_current_active_user)
+    ) -> User:
+        user = UserSchema.from_orm(current_user)
+        user_actions = set(user.permissions.get(permission, {})) | actions
+
+        if (
+            permission not in user.permissions
+            or len(user_actions) != len(user.permissions.get(permission))
+        ):
+            raise HTTPException(
+                status_code=HTTP_401_UNAUTHORIZED,
+                detail='Usuario no autorizado'
+            )
+
+        return current_user
+    return wrapper

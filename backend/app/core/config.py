@@ -93,6 +93,8 @@ class EmailSettings(BaseSettings):
     from_name: str | None = None
     from_email: EmailStr | None = None
 
+    emails_enabled: bool = False
+
     reset_token_expire_hours: int
     templates_dir: str = 'email-template/build'
 

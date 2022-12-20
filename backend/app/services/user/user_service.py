@@ -1,13 +1,22 @@
 from typing import Any
+from uuid import UUID
 
-from sqlalchemy.orm import Session
-from sqlalchemy.sql import exists
-from unidecode import unidecode
+from sqlalchemy.orm import lazyload, Session
+from sqlalchemy.sql.expression import select, true
+from sqlalchemy.sql.functions import array_agg
 
+from app.core.config import settings
+from app.core.email import send_new_account_email
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import get_password_hash, verify_password
 from app.models.person import Person
-from app.models.user import User
+from app.models.user import (
+    Permission,
+    RolePermission,
+    UserPermission,
+    User
+)
+from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.user import UserCreate, UserUpdate
 from app.services import BaseService
 
@@ -35,6 +44,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         '''
         return (self.db  # pyright: ignore
                 .query(User)
+                .options(lazyload(User.person), lazyload(User.role))
                 .filter(User.username == username)  # type: ignore
                 .first())
 
@@ -64,8 +74,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         '''
         db_obj = User(  # pyright: ignore
             dni=obj_in.dni,
-            username=obj_in.username,
-            hashed_password=get_password_hash(obj_in.password)
+            hashed_password=get_password_hash(obj_in.password),
+            role_id=obj_in.role_id
         )
 
         self.db.add(db_obj)  # type: ignore
@@ -134,6 +144,20 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         '''
         return user.is_active
 
+    def contains(self, user_id: int) -> bool:
+        '''Checks if the user model contains the given id.
+
+        Args:
+            user_id (int): The ID of the user to check for.
+
+        Returns:
+            bool: True if the user exists, False otherwise.
+        '''
+        query = self.db.query(User).filter(User.dni == user_id)
+        return (self.db
+                .query(query.exists())
+                .scalar())
+
     def contains_by_username(self, username: str) -> bool:
         '''Checks if the user model contains the given username.
 
@@ -143,33 +167,10 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             bool: True if the user exists, False otherwise.
         '''
+        query = self.db.query(User).filter(User.username == username)
         return (self.db
-                .query(exists().where(User.username == username))  # type: ignore  # noqa: E501
+                .query(query.exists())
                 .scalar())
-
-    def generate_username(self, person: Person) -> str:
-        '''Generate a username available in the database.
-        The username is generated from the name and surname of the person.
-
-        Args:
-            person (Person): Person to whom the username should be generated.
-
-        Returns:
-            str: A new username for the given person.
-        '''
-        prefix = unidecode(person.name).lower().replace(' ', '')
-        postfix = unidecode(person.surname.split()[0]).lower()
-
-        i = 1
-
-        while True:
-            new_username = f'{prefix[:i]}.{postfix}'
-
-            if not self.contains_by_username(new_username):
-                return new_username
-            if i >= len(prefix):
-                i = 1
-                postfix = unidecode(person.surname).lower().replace(' ', '')
 
     def update_password(self, *, db_user: User, new_password: str):
         '''Update an user's password.
@@ -184,4 +185,93 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         self.update(
             db_obj=db_user,
             obj_in=user_in
+        )
+
+    def send_new_account_email(self, *, user: User):
+        '''Send a new account email to the given user.
+        This is if the system supports it.
+
+        Args:
+            user (User): User to send the email to.
+        '''
+        if settings.email.emails_enabled:
+            send_new_account_email(
+                email_to=user.person.email,
+                username=user.username,
+                password=user.password
+            )
+
+    def get(self, id: int) -> User | None:  # pylint: disable=C0103, C0116, W0622  # noqa: E501
+        user = super().get(id)
+        user.permissions = self.get_permissions_for_user(user=user)
+
+        return user
+
+    def get_permissions_for_user(
+        self, *, user: User
+    ) -> list[PermissionInUser]:
+        '''List of permissions of a user and its role.
+
+        Args:
+            user (User): User to retrieve permissions for.
+
+        Returns:
+            list[PermissionInUser]: List of permissions.
+        '''
+        role_subquery = self.__get_permissions_from(
+            RolePermission,
+            with_id=user.role.id
+        )
+
+        user_subquery = self.__get_permissions_from(
+            UserPermission,
+            with_id=user.dni
+        )
+
+        permissions_subquery = (
+            role_subquery
+            .union(user_subquery)
+            .alias('permissions')
+        )
+
+        actions_agg = array_agg(
+            permissions_subquery.c.action
+        ).label('actions')
+
+        return self.db.execute(
+            select(permissions_subquery.c.name, actions_agg)
+            .distinct()
+            .group_by(permissions_subquery.c.name)
+        ).all()
+
+    def __get_permissions_from(
+        self,
+        model: RolePermission | UserPermission,
+        *,
+        with_id: int | UUID
+    ):
+        '''Query to fetch the permissions and actions
+        of the given role or user.
+
+        Args:
+            model (RolePermission | UserPermission):
+            Role or user permissions model.
+            with_id (int | UUID): Role or user ID.
+
+        Returns:
+            subquery: Permissions query.
+        '''
+        return (
+            select(Permission.name, model.action)  # type: ignore
+            .join(
+                Permission,
+                model.permission_id == Permission.id,
+                isouter=True
+            )
+            .filter(
+                model.role_id == with_id
+                if model.__name__ == 'RolePermission' else
+                model.user_id == with_id
+            )
+            .filter(model.is_active == true())
         )

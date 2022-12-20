@@ -5,6 +5,7 @@ create database medintegral_medical_system;
 
 -- configurations
 create extension if not exists "uuid-ossp";
+create extension if not exists "unaccent";
 
 
 -- schemas
