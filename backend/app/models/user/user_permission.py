@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     Column,
     Enum,
-    ForeignKey,
-    Integer
+    ForeignKey
 )
 from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 from sqlalchemy.orm import relationship
@@ -33,7 +33,7 @@ class UserPermission(Base):
 
     # User ID
     user_id = Column(
-        Integer,
+        BigInteger,
         ForeignKey('user.user.dni'),
         nullable=False
     )
