@@ -1,0 +1,26 @@
+@import '@Styles/fonts';
+@import '@Styles/mixins';
+
+.bar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.title {
+    font: 600 22pt $title-font;
+    line-height: 1;
+    letter-spacing: .2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav {
+    @include non-list;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.2rem;
+}

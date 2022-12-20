@@ -2,6 +2,7 @@ import { SessionProvider } from 'next-auth/react'
 import { ToastContainer } from 'react-toastify';
 
 import 'normalize.css';
+import 'react-phone-input-2/lib/style.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import '@Styles/globals.scss';
 

@@ -13,4 +13,7 @@ export default {
     async getMe(token) {
         return axios.get(`${baseURL}/user/me`, headers(token));
     },
+    async create({ dni, role_id, token }) {
+        return axios.post(`${baseURL}/user/`, { dni, role_id }, headers(token));
+    }
 }

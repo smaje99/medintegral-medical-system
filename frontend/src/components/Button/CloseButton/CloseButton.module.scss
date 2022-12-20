@@ -1,0 +1,43 @@
+@import '../../../styles/palette';
+
+
+.content {
+    position: absolute;
+    right: 2rem;
+}
+
+.button {
+    position: relative;
+    border: none;
+    background: transparent;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 3rem;
+        height: .4rem;
+        background-color: $blue-light-shade;
+        border-radius: .5rem;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+        transition: all .1s ease-in-out .07s;
+        cursor: pointer;
+    }
+
+    &::before {
+        transform: rotate(45deg);
+    }
+
+    &::after {
+        transform: rotate(-45deg);
+    }
+
+    &:hover {
+        &::before,
+        &::after {
+            background-color: $green-complementary;
+        }
+    }
+}

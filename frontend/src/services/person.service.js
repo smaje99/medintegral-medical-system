@@ -1,8 +1,8 @@
-import api from '@Api/user.api';
+import api from '@Api/person.api';
 
-export const getMe = async (token) => {
+export const getPerson = async (dni) => {
     try {
-        const response = await api.getMe(token);
+        const response = await api.get(dni);
         return response.data;
     } catch (error) {
         const message = error?.response?.data?.detail;
@@ -10,9 +10,9 @@ export const getMe = async (token) => {
     }
 }
 
-export const createUser = async ({ dni, role_id, token }) => {
+export const createPerson = async (personObj) => {
     try {
-        const response = await api.create({ dni, role_id, token });
+        const response = await api.create(personObj)
         return response.data;
     } catch (error) {
         const message = error?.response?.data?.detail;
