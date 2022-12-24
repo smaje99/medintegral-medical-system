@@ -1,0 +1,45 @@
+import Image from 'next/future/image';
+
+import Button from '@Components/Button';
+
+import routes from '@Helpers/routes';
+
+import styles from './Header.module.scss';
+
+import buildingPic from '@Pictures/building.webp';
+
+const Header = () => (
+    <header className={styles.header}>
+        <Image
+            src={buildingPic}
+            className={styles.image}
+            alt="Edificio de Medintegral I.P.S S.A.S"
+            priority
+        />
+        <section className={styles.container}>
+            <h1 className={styles.title}>
+                <div className={styles.content}>
+                    <span className={styles.slice}>
+                        medicina integral
+                    </span>
+                    <span className={styles.slice}>
+                        del Caquetá ips s.a.s
+                    </span>
+                </div>
+            </h1>
+            <span className={styles.text}>
+                ¡Agenda una cita médica con los mejores profesionales en el cuidado de la salud!
+            </span>
+            <Button
+                as='a'
+                href={routes.appointment}
+                stylesFor="floating"
+                className={styles.button}
+            >
+                Agendar cita
+            </Button>
+        </section>
+    </header>
+)
+
+export default Header;
