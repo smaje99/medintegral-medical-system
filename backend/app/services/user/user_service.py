@@ -202,8 +202,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             )
 
     def get(self, id: int) -> User | None:  # pylint: disable=C0103, C0116, W0622  # noqa: E501
-        user = super().get(id)
-        user.permissions = self.get_permissions_for_user(user=user)
+        if (user := super().get(id)):
+            user.permissions = self.get_permissions_for_user(user=user)
 
         return user
 

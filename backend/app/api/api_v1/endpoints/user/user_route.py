@@ -5,9 +5,14 @@ from fastapi import (
     APIRouter,
     Body,
     Depends,
-    HTTPException
+    HTTPException,
+    Path
 )
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from starlette.status import (
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND
+)
 
 from app.api.dependencies.auth import (
     get_current_active_user,
@@ -81,5 +86,37 @@ def create_user(
 
     user = user_service.create(user_in)
     user_service.send_new_account_email(user=user)
+
+    return user
+
+
+@router.get('/{dni}', response_model=User)
+def read_user(
+    dni: int = Path(...),
+    current_user: User = Depends(
+        get_current_user_with_permissions('usuarios', {PermissionAction.read})
+    ),
+    user_service: UserService = Depends(get_user_service)
+) -> Any:
+    '''Retrieve a user by a given DNI.
+    If the given DNI doesn't exist, raise an error.
+
+    Args:
+    * dni (int): DNI given to retrieve the user via a path parameter.
+
+    Raises:
+    * HTTPException: HTTP error 404. User not found.
+
+    Returns:
+    * Any: The user with the given DNI.
+    '''
+    if dni == current_user.dni:
+        return current_user
+
+    if not (user := user_service.get(dni)):
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail='El usuario no existe'
+        )
 
     return user
