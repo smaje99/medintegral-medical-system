@@ -41,7 +41,7 @@ class UserInDBBase(UserBase):
 
 class User(UserInDBBase):
     ''' Additional properties to return via API. '''
-    role: str
+    role: Role
     person: PersonInUser
     permissions: dict[str, list[PermissionAction]] | None
 
@@ -50,10 +50,6 @@ class User(UserInDBBase):
         cls, value: list[PermissionInUser]
     ) -> dict[str, list[PermissionAction]]:
         return {p.name: p.actions for p in value}
-
-    @validator('role', pre=True)
-    def get_role(cls, value: Role) -> str:  # pylint: disable=C0116, E0213
-        return value.name
 
 
 class UserInDB(UserInDBBase):

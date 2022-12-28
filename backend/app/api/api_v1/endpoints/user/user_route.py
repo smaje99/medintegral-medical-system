@@ -6,7 +6,8 @@ from fastapi import (
     Body,
     Depends,
     HTTPException,
-    Path
+    Path,
+    Query
 )
 from starlette.status import (
     HTTP_201_CREATED,
@@ -120,3 +121,26 @@ def read_user(
         )
 
     return user
+
+
+@router.get('/', response_model=list[User])
+def read_users(
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=50),
+    current_user: User = Depends(  # pylint: disable=W0613
+        get_current_user_with_permissions('usuarios', {PermissionAction.read})
+    ),
+    service: UserService = Depends(get_user_service)
+) -> Any:
+    '''Retrieve a list of users.
+
+    Args:
+    * skip (int): Start cut of subset of users via query parameter.
+        Defaults to 0.
+    * limit (int): Number of users within the subset via query parameter.
+        Defaults to 50.
+
+    Returns:
+    * list[Person]: Specified subset of users.
+    '''
+    return service.get_all(skip=skip, limit=limit)

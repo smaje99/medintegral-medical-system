@@ -2,7 +2,7 @@ from typing import Any
 from uuid import UUID
 
 from sqlalchemy.orm import lazyload, Session
-from sqlalchemy.sql.expression import select, true
+from sqlalchemy.sql.expression import asc, select, true
 from sqlalchemy.sql.functions import array_agg
 
 from app.core.config import settings
@@ -275,3 +275,12 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             )
             .filter(model.is_active == true())
         )
+
+    def get_all(self, *, skip: int = 0, limit: int = 50) -> list[User]:  # pylint: disable=C0116  # noqa: E501
+        return (self.db
+                .query(User)
+                .filter(User.is_active == true())
+                .order_by(asc(User.username))
+                .order_by(asc(User.created_at))
+                .slice(skip, limit)
+                .all())
