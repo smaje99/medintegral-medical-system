@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { toast, UpdateOptions } from 'react-toastify';
 
 import styles from '@Styles/toast.module.scss';
 
@@ -11,8 +11,12 @@ export default function getToastConfig(position = toast.POSITION.BOTTOM_RIGHT) {
     } as const;
 }
 
-export const getToastUpdateConfig = {
+export const getToastUpdateConfig = (
+    type: UpdateOptions['type'], rest?: UpdateOptions
+): UpdateOptions => ({
+    type,
     isLoading: false,
     autoClose: 8000,
-    closeButton: null
-} as const;
+    closeButton: null,
+    ...rest
+} as const);

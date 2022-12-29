@@ -5,6 +5,7 @@ import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 
 import { CloseButton } from '@Components/Button';
+import { Modal } from '@Components/Modal';
 import getToastConfig, { getToastUpdateConfig } from '@Helpers/toast.config';
 import { getPerson, createPerson } from '@Services/person.service';
 import { createUser } from '@Services/user.service';
@@ -74,30 +75,23 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
             handleClose();
             toast.update(idToast, {
                 render: `EL usuario ${user.username} ha sido creado`,
-                type: 'success',
-                delay: 200,
-                ...getToastUpdateConfig
+                ...getToastUpdateConfig('success', { delay: 200 })
             });
         } catch (error) {
             toast.update(idToast, {
                 render: error.message ?? 'EL usuario no pudo crearse',
-                type: 'error',
-                ...getToastUpdateConfig
-            })
+                ...getToastUpdateConfig('error')
+            });
         }
     }
 
     return (
-        <ReactModal
+        <Modal
             isOpen={isOpen}
+            close={handleClose}
             contentLabel="Modal para crear usuarios"
-            className={styles.modal}
-            overlayClassName={styles.overlay}
-            ariaHideApp={false}
-            onRequestClose={handleClose}
             shouldCloseOnEsc={false}
         >
-            <CloseButton onEvent={handleClose} />
             <FormProvider {...formMethods}>
                 <CreateFormView
                     isPersonLoading={isPersonLoading}
@@ -108,7 +102,7 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
                     roles={data.roles}
                 />
             </FormProvider>
-        </ReactModal>
+        </Modal>
     )
 }
 
