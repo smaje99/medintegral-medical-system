@@ -47,6 +47,25 @@ def read_user_me(
     return current_user
 
 
+@router.get('/search', response_model=list[User])
+def search_user_by_dni(
+    dni: int = Query(...),
+    current_user: User = Depends(  # pylint: disable=W0613
+        get_current_user_with_permissions('usuarios', {PermissionAction.read})
+    ),
+    service: UserService = Depends(get_user_service)
+) -> Any:
+    '''Search for users by a given DNI.
+
+    Args:
+    * dni (str): DNI given to retrieve the users matching this one.
+
+    Returns:
+    * list[User]: List of users who start their DNI with the given.
+    '''
+    return service.search_by_dni(dni)
+
+
 @router.post('/', response_model=User, status_code=HTTP_201_CREATED)
 def create_user(
     current_user: User = Depends(  # pylint: disable=W0613
@@ -109,7 +128,7 @@ def read_user(
     * HTTPException: HTTP error 404. User not found.
 
     Returns:
-    * Any: The user with the given DNI.
+    * User: The user with the given DNI.
     '''
     if dni == current_user.dni:
         return current_user

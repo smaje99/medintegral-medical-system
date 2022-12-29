@@ -2,8 +2,15 @@ from typing import Any
 from uuid import UUID
 
 from sqlalchemy.orm import lazyload, Session
-from sqlalchemy.sql.expression import asc, select, true
+from sqlalchemy.sql.expression import (
+    asc,
+    cast,
+    or_,
+    select,
+    true
+)
 from sqlalchemy.sql.functions import array_agg
+from sqlalchemy.sql.sqltypes import Text
 
 from app.core.config import settings
 from app.core.email import send_new_account_email
@@ -283,4 +290,22 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
                 .order_by(asc(User.username))
                 .order_by(asc(User.created_at))
                 .slice(skip, limit)
+                .all())
+
+    def search_by_dni(self, dni: int) -> list[User]:
+        '''Search for users by a given DNI.
+
+        Args:
+            dni (int): DNI given for the search.
+
+        Returns:
+            list[User]: List of users who start their DNI with the given.
+        '''
+        return (self.db
+                .query(User)
+                .filter(or_(User.dni == dni,
+                            cast(User.dni, Text).startswith(str(dni))))
+                .order_by(asc(User.dni))
+                .order_by(asc(User.username))
+                .order_by(asc(User.created_at))
                 .all())
