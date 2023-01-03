@@ -13,7 +13,7 @@ from app.core.security.jwt import verify_token
 from app.core.types import PermissionAction
 from app.api.dependencies.services import ServiceDependency
 from app.models.user import User
-from app.schemas.user.user import User as UserSchema
+from app.schemas.user.user import UserInSession
 from app.services.user import UserService
 
 
@@ -51,7 +51,7 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"}
         )
 
-    if not (user := service.get(id=payload.sub)):
+    if not (user := service.get(dni=payload.sub)):
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND,
             detail='Usuario no encontrado',
@@ -133,7 +133,7 @@ def get_current_user_with_permissions(
     def wrapper(
         current_user: User = Depends(get_current_active_user)
     ) -> User:
-        user = UserSchema.from_orm(current_user)
+        user = UserInSession.from_orm(current_user)
         user_actions = set(user.permissions.get(permission, {})) | actions
 
         if (

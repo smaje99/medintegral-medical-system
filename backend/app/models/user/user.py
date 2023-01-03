@@ -67,7 +67,7 @@ class User(Base):
     )
 
     # Person relationship one to one
-    person = relationship(  # type: ignore
+    person: 'Person' = relationship(
         'Person',
         back_populates='user',
         lazy='joined'

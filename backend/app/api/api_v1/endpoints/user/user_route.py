@@ -23,7 +23,7 @@ from app.api.dependencies.person import get_person_if_no_user_exists
 from app.core.types import PermissionAction
 from app.models.user import User as UserModel
 from app.schemas.person.person import Person
-from app.schemas.user.user import User, UserCreate
+from app.schemas.user.user import User, UserCreate, UserInSession
 from app.services.user import UserService, RoleService
 
 from .user_deps import get_user_service, get_role_service
@@ -32,7 +32,7 @@ from .user_deps import get_user_service, get_role_service
 router = APIRouter()
 
 
-@router.get('/me', response_model=User)
+@router.get('/me', response_model=UserInSession)
 def read_user_me(
     current_user: UserModel = Depends(get_current_active_user)
 ) -> Any:

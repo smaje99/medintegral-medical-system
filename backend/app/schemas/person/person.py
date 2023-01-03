@@ -56,13 +56,26 @@ class PersonInDBBase(PersonBase):
 
 class Person(PersonInDBBase):
     ''' Additional properties to return via API. '''
+    age: str | None
+
+    @validator('age', pre=True)
+    def translate_age_into_spanish(  # pylint: disable=no-self-argument, missing-function-docstring  # noqa: E501
+        cls, value: str
+    ) -> str:  # sourcery skip: instance-method-first-arg-name
+        return (value
+                .replace('years', 'años')
+                .replace('mons', 'meses')
+                .replace('days', 'días')
+                .replace('year', 'año')
+                .replace('mon', 'mes')
+                .replace('day', 'día'))
 
 
 class PersonInDB(PersonInDBBase):
     ''' Additional properties stored in database. '''
 
 
-class PersonInUser(BaseModel):
+class PersonInUserSession(BaseModel):
     ''' Properties to return via user API. '''
     dni: int
     name: str
