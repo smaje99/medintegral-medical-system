@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import type { Message } from '@Types/message';
 import type { Token } from '@Types/user/token';
-import type { User } from '@Types/user/user';
+import type { UserInSession } from '@Types/user/user';
 
 const { NEXT_PUBLIC_API } = process.env;
 const baseURL = NEXT_PUBLIC_API;
@@ -22,7 +22,7 @@ export default {
         return axios.post<Token>(`${baseURL}/login/access-token`, params);
     },
     async testToken(token: string) {
-        return axios.post<User>(`${baseURL}/login/test-token`, {}, headers(token));
+        return axios.post<UserInSession>(`${baseURL}/login/test-token`, {}, headers(token));
     },
     async resetPassword(token: string, new_password: string) {
         return axios.patch<Message>(`${baseURL}/reset-password`, {

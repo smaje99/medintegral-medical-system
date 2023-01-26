@@ -1,10 +1,7 @@
 import { useRouter } from 'next/router';
-import { signIn } from 'next-auth/react'
+import { signIn } from 'next-auth/react';
 import {
-    forwardRef,
-    useEffect,
-    useImperativeHandle,
-    useState
+    forwardRef, useEffect, useImperativeHandle
 } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -18,15 +15,12 @@ import type { LoginFormValues } from '../Login.types';
 const LoginForm = forwardRef((props, ref) => {
     const formMethods = useForm<LoginFormValues>();
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
 
     const handleError = (error: string) => {
-        setLoading(false);
         toast.error(error, getToastConfig());
     }
 
     const handleLogin = async (formData: LoginFormValues) => {
-        setLoading(true);
         const res = await signIn('credentials', {
             ...formData,
             callbackUrl: router.query?.callbackUrl as string ?? routes.dashboard.home,
@@ -47,7 +41,7 @@ const LoginForm = forwardRef((props, ref) => {
 
     return (
         <FormProvider {...formMethods}>
-            <LoginFormView loading={loading} handleLogin={handleLogin} />
+            <LoginFormView handleLogin={handleLogin} />
         </FormProvider>
     )
 })

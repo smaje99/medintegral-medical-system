@@ -1,9 +1,11 @@
 import type { Person } from '@Types/person';
 import type { Role } from "@Types/user/role";
+import { User } from '@Types/user/user';
 
 export interface DataProps {
     data: {
         roles: { data: Role[]; error: Error; };
+        users: { data: User[]; error: Error; };
     };
 }
 

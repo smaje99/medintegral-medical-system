@@ -1,7 +1,6 @@
 import { UserLogin } from '@Types/user/user';
 
 export interface LoginFormViewProps {
-    readonly loading: boolean;
     readonly handleLogin: (formData: LoginFormValues) => Promise<void>;
 }
 

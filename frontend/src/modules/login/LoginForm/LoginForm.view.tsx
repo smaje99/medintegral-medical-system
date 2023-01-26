@@ -9,9 +9,11 @@ import type { LoginFormValues, LoginFormViewProps } from '../Login.types';
 
 import styles from './LoginForm.module.scss';
 
-const LoginFormView = ({ loading, handleLogin }: LoginFormViewProps) => {
+const LoginFormView = ({ handleLogin }: LoginFormViewProps) => {
     const [showPassword, handleShowPassword] = useReducer((state: boolean) => !state, false);
-    const { handleSubmit, register } = useFormContext<LoginFormValues>();
+    const {
+        handleSubmit, register, formState: { isSubmitting }
+    } = useFormContext<LoginFormValues>();
 
     return (
         <form
@@ -60,7 +62,7 @@ const LoginFormView = ({ loading, handleLogin }: LoginFormViewProps) => {
                 </span>
             </label>
 
-            {loading ? <Spinner /> : <Button
+            {isSubmitting ? <Spinner /> : <Button
                 as="input"
                 type="submit"
                 stylesFor="primary"

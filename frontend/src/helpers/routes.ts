@@ -10,7 +10,8 @@ const routes = {
     suggestions: '/suggestions',
     dashboard: {
         home: '/dashboard',
-        users: '/dashboard/users'
+        users: '/dashboard/users',
+        user: dni => `/dashboard/users/${dni}`
     } as const
 } as const;
 
