@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import { getToken } from 'next-auth/jwt';
 
 import { ProtectedLayout } from '@Components/layouts';

@@ -1,15 +1,16 @@
 
 import { useMemo } from 'react';
-import { createColumnHelper, ColumnDef, filterFns } from '@tanstack/react-table';
+import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
 
 import { Table as TableTemplate } from '@Components/Table';
-import { IndeterminateCheckbox } from '@Components/Input';
+// import { IndeterminateCheckbox } from '@Components/Input';
 import { fuzzySort } from '@Components/Table/filters';
 
 import type { TableProps, UserDataForTable } from './Table.types';
 import IdentificationCell from '../IdentificationCell';
 
 import styles from './Table.module.scss';
+import { Badge } from '@Components/Badge';
 
 const columnHelper = createColumnHelper<UserDataForTable>();
 
@@ -52,17 +53,17 @@ const Table = ({ users }: TableProps) => {
         columnHelper.accessor('username', {
             header: 'Usuario',
             cell: info => (
-                <span className={`${styles["badge"]} ${styles["badge-user"]}`}>
+                <Badge color="green" className={styles["badge-user"]}>
                     {info.getValue()}
-                </span>
+                </Badge>
             )
         }),
         columnHelper.accessor('role', {
             header: 'Rol',
             cell: info => (
-                <span className={`${styles["badge"]} ${styles["badge-role"]}`}>
+                <Badge color="green-blue" className={styles["badge-role"]}>
                     {info.getValue()}
-                </span>
+                </Badge>
             )
         }),
         columnHelper.accessor('email', {

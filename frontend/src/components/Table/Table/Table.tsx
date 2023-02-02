@@ -14,7 +14,7 @@ import {
 } from '@tanstack/react-table';
 
 import { TableProps } from './Table.types';
-import { Filter, fuzzyFilter, startWithFilter } from './filters';
+import { Filter, fuzzyFilter, startWithFilter } from '../filters';
 
 import styles from './Table.module.scss';
 

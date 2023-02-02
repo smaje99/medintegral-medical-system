@@ -35,3 +35,18 @@
         transform: rotate(360deg);
     }
 }
+
+@mixin slideInRight {
+    animation: slideInRight 250ms;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+    }
+}

@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 
 import { DebouncedInput } from '@Components/Input';
 
-import { FilterProps } from '../Table.types';
+import { FilterProps } from '../Table/Table.types';
 
-import styles from '../Table.module.scss';
+import styles from '../Table/Table.module.scss';
 
 function Filter({ column, table }: FilterProps) {
     const firstValue = table

@@ -48,3 +48,18 @@ export const getAllOfUsers = async(
         throw error;
     }
 }
+
+export const getUser = async (
+    dni: User['dni'], token: Token['access_token']
+): Promise<User> => {
+    try {
+        const response = await api.get(dni, token);
+        return response.data;
+    } catch (error) {
+        if (isAxiosError<APIError>(error) && error.response) {
+            throw new Error(error.response.data.detail);
+        }
+
+        throw error;
+    }
+}

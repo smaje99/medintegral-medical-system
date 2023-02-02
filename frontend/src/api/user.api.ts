@@ -21,5 +21,8 @@ export default {
     },
     async getAll(skip: number, limit: number, token: Token['access_token']) {
         return axios.get<User[]>(`${baseURL}/user/?skip=${skip}&limit=${limit}`, headers(token));
+    },
+    async get(dni: User['dni'], token: Token['access_token']) {
+        return axios.get<User>(`${baseURL}/user/${dni}`, headers(token));
     }
 }
