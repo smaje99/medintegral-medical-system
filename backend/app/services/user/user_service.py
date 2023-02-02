@@ -212,8 +212,24 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
     def get(self, dni: int) -> User | None:  # pylint: disable=C0103, C0116, W0622  # noqa: E501
         if (user := super().get(dni)):
             user.permissions = self.get_permissions_for_user(user=user)
+            user.person.age = self.get_age_for_user(user=user)
 
         return user
+
+    def get_age_for_user(self, *, user: User) -> str:
+        '''Calculates the age of a given user.
+
+        Args:
+            user (User): Given user.
+
+        Returns:
+            str: User's age.
+        '''
+        return (self.db.query(
+                    cast(func.age(Person.birthdate), Text).label('age')
+               )
+                .filter(Person.dni == user.dni)
+                .scalar())
 
     def get_permissions_for_user(
         self, *, user: User
@@ -285,33 +301,12 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         )
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[User]:  # pylint: disable=C0116  # noqa: E501
-        users = (self.db.query(
-                    User, cast(func.age(Person.birthdate), Text).label('age')
-                )
-                 .join(User.person, full=True)
-                 .filter(User.is_active == true())
-                 .order_by(asc(User.username))
-                 .order_by(asc(User.created_at))
-                 .slice(skip, limit)
-                 .all())
-
-        return [self.__convert_to_user_with_age(user) for user in users]
-
-    def __convert_to_user_with_age(self, record) -> User:
-        '''Converts a calculated record from the database to a User,
-        in addition to add the 'age' property included in the record
-        to the 'person' property contained in User.
-
-        Args:
-            record((User: User, age: str)): Calculated record to convert.
-
-        Returns:
-            User: User with the 'age' property added within 'person' property.
-        '''
-        user = record.User
-        user.person.age = record.age
-
-        return user
+        return (self.db.query(User)
+                .filter(User.is_active == true())
+                .order_by(asc(User.username))
+                .order_by(asc(User.created_at))
+                .slice(skip, limit)
+                .all())
 
     def search_by_dni(self, dni: int) -> list[User]:
         '''Search for users by a given DNI.
