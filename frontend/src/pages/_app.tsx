@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'normalize.css';
 import 'react-phone-input-2/lib/style.css';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-tabs/style/react-tabs.css';
 import '@Styles/globals.scss';
 
 export default function NextApp({ Component, pageProps }: AppProps) {

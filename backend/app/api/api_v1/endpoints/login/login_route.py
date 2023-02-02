@@ -27,7 +27,7 @@ from app.core.security.jwt import (
 from app.models.user import User as UserModel
 from app.schemas.common.message import Message
 from app.schemas.user.token import Token, TokenPayloadIn
-from app.schemas.user.user import User
+from app.schemas.user.user import UserInSession
 from app.services.user import UserService
 
 from .login_deps import get_service
@@ -86,7 +86,7 @@ def login(
     )
 
 
-@router.post('/login/test-token', response_model=User)
+@router.post('/login/test-token', response_model=UserInSession)
 def test_token(current_user: UserModel = Depends(get_current_user)) -> Any:
     '''Test access token of a user.
 

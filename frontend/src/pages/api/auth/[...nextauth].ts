@@ -7,7 +7,7 @@ import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import routes from '@Helpers/routes';
 import { login } from '@Services/login.service';
 import { getMe } from '@Services/user.service';
-import type { User } from '@Types/user/user';
+import type { UserInSession } from '@Types/user/user';
 import type { Token } from '@Types/user/token';
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
@@ -37,7 +37,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                             username: credentials.username,
                             password: credentials.password
                         });
-                        const user: User = await getMe(token.access_token);
+                        const user: UserInSession = await getMe(token.access_token);
 
                         return { user, token };
                     } catch (error) {

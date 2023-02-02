@@ -105,7 +105,7 @@ class Person(Base):
     )
 
     # User relationship one to one.
-    user = relationship(  # type: ignore
+    user: 'User' = relationship(  # type: ignore
         'User',
         uselist=False,
         back_populates='person'

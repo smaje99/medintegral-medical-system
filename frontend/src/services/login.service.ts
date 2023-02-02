@@ -3,7 +3,7 @@ import api from '@Api/login.api';
 import type { APIError } from '@Types/error';
 import type { Message } from '@Types/message';
 import type { Token } from '@Types/user/token';
-import type { User, UserLogin } from '@Types/user/user';
+import type { User, UserInSession, UserLogin } from '@Types/user/user';
 
 import { isAxiosError } from '@Utils/axios-error';
 
@@ -22,7 +22,7 @@ export const login = async (credentials: UserLogin): Promise<Token> => {
     }
 }
 
-export const testToken = async (token: string): Promise<User> => {
+export const testToken = async (token: Token['access_token']): Promise<UserInSession> => {
     try {
         const response = await api.testToken(token);
         return response.data;
@@ -36,7 +36,7 @@ export const testToken = async (token: string): Promise<User> => {
 }
 
 export const resetPassword = async (
-    token: string, newPassword: string
+    token: Token['access_token'], newPassword: string
 ): Promise<Message> => {
     try {
         const response = await api.resetPassword(
@@ -53,7 +53,7 @@ export const resetPassword = async (
     }
 }
 
-export const passwordRecovery = async (email: string): Promise<Message> => {
+export const passwordRecovery = async (email: User['person']['email']): Promise<Message> => {
     try {
         const response = await api.passwordRecovery(email);
         return response.data;

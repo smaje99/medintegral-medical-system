@@ -4,7 +4,7 @@ from uuid import UUID
 from pydantic import BaseModel, validator
 
 from app.core.types import PermissionAction
-from app.schemas.person.person import PersonInUser
+from app.schemas.person.person import Person, PersonInUserSession
 from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.role import Role
 
@@ -41,8 +41,19 @@ class UserInDBBase(UserBase):
 
 class User(UserInDBBase):
     ''' Additional properties to return via API. '''
+    role: Role
+    person: Person
+
+
+class UserInDB(UserInDBBase):
+    ''' Additional properties stored in the database. '''
+    hashed_password: str
+
+
+class UserInSession(UserInDBBase):
+    ''' Additional properties for user session and returning via API. '''
     role: str
-    person: PersonInUser
+    person: PersonInUserSession
     permissions: dict[str, list[PermissionAction]] | None
 
     @validator('permissions', pre=True)
@@ -54,8 +65,3 @@ class User(UserInDBBase):
     @validator('role', pre=True)
     def get_role(cls, value: Role) -> str:  # pylint: disable=C0116, E0213
         return value.name
-
-
-class UserInDB(UserInDBBase):
-    ''' Additional properties stored in the database. '''
-    hashed_password: str

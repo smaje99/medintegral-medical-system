@@ -6,6 +6,7 @@ export interface Person {
     readonly email: string;
     readonly phone: string;
     readonly gender: 'masculino' | 'femenino';
+    readonly age?: string;
     readonly birthdate: Date;
     readonly document_type: 'R.C.' | 'T.I.' | 'C.C.' | 'C.E.';
     readonly blood_type?: 'A' | 'B' | 'AB' | 'O';
@@ -17,7 +18,7 @@ export interface Person {
     readonly modified_at: Date;
 }
 
-export type PersonInUser = Pick<
+export type PersonInUserSession = Pick<
     Person,
     'dni'
     | 'name'
@@ -29,4 +30,4 @@ export type PersonInUser = Pick<
     | 'modified_at'
 >
 
-export type PersonCreate = Omit<Person, 'created_at' | 'modified_at'>
+export type PersonCreate = Omit<Person, 'created_at' | 'modified_at' | 'age'>

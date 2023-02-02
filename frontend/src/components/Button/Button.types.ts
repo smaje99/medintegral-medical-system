@@ -3,7 +3,7 @@ export interface ButtonProps extends React.HTMLProps<
 > {
     as: 'a' | 'button' | 'input';
     className?: string;
-    stylesFor: 'primary' | 'secondary' | 'floating' | 'icon';
+    stylesFor: 'primary' | 'secondary' | 'floating' | 'icon' | 'cell';
     children: React.ReactNode;
 }
 

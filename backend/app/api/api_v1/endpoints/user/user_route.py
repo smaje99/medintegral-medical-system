@@ -5,9 +5,15 @@ from fastapi import (
     APIRouter,
     Body,
     Depends,
-    HTTPException
+    HTTPException,
+    Path,
+    Query
 )
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from starlette.status import (
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND
+)
 
 from app.api.dependencies.auth import (
     get_current_active_user,
@@ -17,7 +23,7 @@ from app.api.dependencies.person import get_person_if_no_user_exists
 from app.core.types import PermissionAction
 from app.models.user import User as UserModel
 from app.schemas.person.person import Person
-from app.schemas.user.user import User, UserCreate
+from app.schemas.user.user import User, UserCreate, UserInSession
 from app.services.user import UserService, RoleService
 
 from .user_deps import get_user_service, get_role_service
@@ -26,7 +32,7 @@ from .user_deps import get_user_service, get_role_service
 router = APIRouter()
 
 
-@router.get('/me', response_model=User)
+@router.get('/me', response_model=UserInSession)
 def read_user_me(
     current_user: UserModel = Depends(get_current_active_user)
 ) -> Any:
@@ -39,6 +45,25 @@ def read_user_me(
     * User: Current user.
     '''
     return current_user
+
+
+@router.get('/search', response_model=list[User])
+def search_user_by_dni(
+    dni: int = Query(...),
+    current_user: User = Depends(  # pylint: disable=W0613
+        get_current_user_with_permissions('usuarios', {PermissionAction.read})
+    ),
+    service: UserService = Depends(get_user_service)
+) -> Any:
+    '''Search for users by a given DNI.
+
+    Args:
+    * dni (str): DNI given to retrieve the users matching this one.
+
+    Returns:
+    * list[User]: List of users who start their DNI with the given.
+    '''
+    return service.search_by_dni(dni)
 
 
 @router.post('/', response_model=User, status_code=HTTP_201_CREATED)
@@ -83,3 +108,58 @@ def create_user(
     user_service.send_new_account_email(user=user)
 
     return user
+
+
+@router.get('/{dni}', response_model=User)
+def read_user(
+    dni: int = Path(...),
+    current_user: User = Depends(
+        get_current_user_with_permissions('usuarios', {PermissionAction.read})
+    ),
+    user_service: UserService = Depends(get_user_service)
+) -> Any:
+    '''Retrieve a user by a given DNI.
+    If the given DNI doesn't exist, raise an error.
+
+    Args:
+    * dni (int): DNI given to retrieve the user via a path parameter.
+
+    Raises:
+    * HTTPException: HTTP error 404. User not found.
+
+    Returns:
+    * User: The user with the given DNI.
+    '''
+    if dni == current_user.dni:
+        return current_user
+
+    if not (user := user_service.get(dni)):
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail='El usuario no existe'
+        )
+
+    return user
+
+
+@router.get('/', response_model=list[User])
+def read_users(
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=50),
+    current_user: User = Depends(  # pylint: disable=W0613
+        get_current_user_with_permissions('usuarios', {PermissionAction.read})
+    ),
+    service: UserService = Depends(get_user_service)
+) -> Any:
+    '''Retrieve a list of users.
+
+    Args:
+    * skip (int): Start cut of subset of users via query parameter.
+        Defaults to 0.
+    * limit (int): Number of users within the subset via query parameter.
+        Defaults to 50.
+
+    Returns:
+    * list[Person]: Specified subset of users.
+    '''
+    return service.get_all(skip=skip, limit=limit)

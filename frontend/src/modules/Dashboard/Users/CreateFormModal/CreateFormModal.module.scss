@@ -2,40 +2,6 @@
 @import '../../../../styles/palette';
 
 
-.overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(255, 255, 255, .75);
-
-    display: grid;
-    place-content: center;
-}
-
-.modal {
-    position: relative;
-    width: clamp(40rem, 40rem, 90vw);
-    border: 1px solid rgb(204, 204, 204);
-    background-color: $blue-monochromatic;
-    overflow: auto;
-    border-radius: 4px;
-    outline: 0;
-    padding: 2rem;
-    margin: 4rem 0;
-
-    &::-webkit-scrollbar {
-        width: 1rem;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: $blue-light-shade;
-        border-radius: 1rem;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-}
-
 .title {
     color: $white;
     font: 600 22pt $title-font;
@@ -61,42 +27,10 @@
     grid-template-columns: 1fr;
 }
 
-.content {
-    display: grid;
-    gap: .1rem;
-    grid-template-columns: 1fr;
-}
-
-.field {
-    display: flex;
-    justify-content: flex-start;
-    align-items:center;
-    gap: .4rem;
-    padding: 1rem;
-    border-radius: 1.2rem;
-    background-color: $blue-light-shade;
-}
-
-.text,
 .input,
 .select,
 .input_select {
     font-size: 12pt;
-}
-
-.text {
-    color: $white;
-    margin-left: .8rem;
-
-    &[data-obligatory=yes] {
-        &:after {
-            content: '*';
-            font-size: 14pt;
-            font-weight: bold;
-            color: $green-complementary;
-            margin-left: 0.25rem;
-        }
-    }
 }
 
 .input,
