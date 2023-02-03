@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import {
     BsFillCalendar2EventFill,
@@ -19,6 +18,8 @@ import {
 } from '@Components/Button';
 import { InformationTable } from '@Components/Table';
 import type { User } from '@Types/user/user';
+import { addDays, dateWithFormat, relativeDateToNow } from '@Utils/date';
+import { formatPhone } from '@Utils/phone';
 
 import type { PersonalDataProps } from '../User.types';
 
@@ -72,9 +73,7 @@ const PersonalData = ({ user }: PersonalDataProps) => {
             header: () => <><FaMapMarkerAlt /> Dirección</>,
             cell: info => (
                 <>
-                    <span>
-                        {info.getValue() ?? 'Información no disponible'}
-                    </span>
+                    <span>{info.getValue()}</span>
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                     </div>
@@ -97,11 +96,7 @@ const PersonalData = ({ user }: PersonalDataProps) => {
             header: () => <><BsFillTelephoneFill /> Celular</>,
             cell: info => (
                 <>
-                    <span>
-                        {info.getValue()
-                            .replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4')
-                        }
-                    </span>
+                    <span>{formatPhone(info.getValue())}</span>
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                         <TelButton number={info.getValue()} />
@@ -137,9 +132,7 @@ const PersonalData = ({ user }: PersonalDataProps) => {
         columnHelper.accessor('person.birthdate', {
             header: () => <><BsFillCalendar2EventFill /> Fecha de nacimiento</>,
             cell: info => {
-                const birthdate = dayjs(new Date(info.getValue()).toDateString())
-                    .add(1, 'day')
-                    .format('DD/MM/YYYY');
+                const birthdate = dateWithFormat(addDays(info.getValue(), 1));
 
                 return (
                     <>
@@ -151,28 +144,27 @@ const PersonalData = ({ user }: PersonalDataProps) => {
                 )
             }
         }),
-        columnHelper.accessor('person', {
+        columnHelper.accessor('person.blood_type', {
             header: () => <><MdBloodtype /> Grupo Sanguíneo</>,
-            cell: info => (
-                <>
-                    <span>
-                        {`${info.getValue().blood_type}${info.getValue().rh_factor}`}
-                    </span>
-                    <div role="toolbar">
-                        <CopyButton
-                            textToCopy={`${info.getValue().blood_type}${info.getValue().rh_factor}`}
-                        />
-                    </div>
-                </>
-            )
+            cell: info => {
+                const rhFactor = (info.row.getValue('person') as User['person']).rh_factor;
+                const blood = `${info.getValue()}${rhFactor}`;
+
+                return (
+                    <>
+                        <span>{blood}</span>
+                        <div role="toolbar">
+                            <CopyButton textToCopy={blood} />
+                        </div>
+                    </>
+                )
+            }
         }),
         columnHelper.accessor('person.ethnicity', {
             header: () => <><BsPersonBoundingBox /> Etnia</>,
             cell: info => (
                 <>
-                    <span>
-                        {info.getValue() ?? 'Información no disponible'}
-                    </span>
+                    <span>{info.getValue()}</span>
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                     </div>
@@ -183,9 +175,7 @@ const PersonalData = ({ user }: PersonalDataProps) => {
             header: () => <><MdWork /> Ocupación</>,
             cell: info => (
                 <>
-                    <span>
-                        {info.getValue() ?? 'Información no disponible'}
-                    </span>
+                    <span>{info.getValue()}</span>
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                     </div>
@@ -204,78 +194,24 @@ const PersonalData = ({ user }: PersonalDataProps) => {
             )
         }),
         columnHelper.accessor('person.created_at', {
-            header: () => <><BsFillCalendar2PlusFill /> Creado en</>,
-            cell: info => {
-                const createdAt = dayjs(new Date(info.getValue()).toDateString())
-                    .add(1, 'day')
-                    .format('DD/MM/YYYY');
-
-                return (
-                    <>
-                        <span>{createdAt}</span>
-                        <div role="toolbar">
-                            <CopyButton textToCopy={createdAt} />
-                        </div>
-                    </>
-                )
-            }
+            header: () => <><BsFillCalendar2PlusFill /> Creado</>,
+            cell: info => relativeDateToNow(info.getValue())
         }),
         columnHelper.accessor('person.modified_at', {
-            header: () => <><BsFillCalendar2MinusFill /> Modificado en</>,
-            cell: info => {
-                const modifiedAt = dayjs(new Date(info.getValue()).toDateString())
-                    .add(1, 'day')
-                    .format('DD/MM/YYYY');
-
-                return (
-                    <>
-                        <span>{modifiedAt}</span>
-                        <div role="toolbar">
-                            <CopyButton textToCopy={modifiedAt} />
-                        </div>
-                    </>
-                )
-            }
+            header: () => <><BsFillCalendar2MinusFill /> Modificado</>,
+            cell: info => relativeDateToNow(info.getValue())
         }),
         columnHelper.accessor('created_at', {
-            header: () => <><BsFillCalendar2PlusFill /> Usuario creado en</>,
-            cell: info => {
-                const createdAt = dayjs(new Date(info.getValue()).toDateString())
-                    .add(1, 'day')
-                    .format('DD/MM/YYYY');
-
-                return (
-                    <>
-                        <span>{createdAt}</span>
-                        <div role="toolbar">
-                            <CopyButton textToCopy={createdAt} />
-                        </div>
-                    </>
-                )
-            }
+            header: () => <><BsFillCalendar2PlusFill /> Usuario creado</>,
+            cell: info => relativeDateToNow(info.getValue())
         }),
         columnHelper.accessor('modified_at', {
-            header: () => <><BsFillCalendar2MinusFill /> Usuario modificado en</>,
-            cell: info => {
-                const modifiedAt = dayjs(new Date(info.getValue()).toDateString())
-                    .add(1, 'day')
-                    .format('DD/MM/YYYY');
-
-                return (
-                    <>
-                        <span>{modifiedAt}</span>
-                        <div role="toolbar">
-                            <CopyButton textToCopy={modifiedAt} />
-                        </div>
-                    </>
-                )
-            }
+            header: () => <><BsFillCalendar2MinusFill /> Usuario modificado</>,
+            cell: info => relativeDateToNow(info.getValue())
         })
-    ]), [user]);
+    ]), []);
 
-    return (
-        <InformationTable<User> {...{ data: [user.data], columns }} />
-    )
+    return <InformationTable<User> {...{ data: [user.data], columns }} />
 }
 
 export default PersonalData;

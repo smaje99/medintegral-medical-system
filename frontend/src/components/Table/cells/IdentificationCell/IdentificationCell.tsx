@@ -1,20 +1,22 @@
 import Link from 'next/link';
 import { BsInfoSquareFill } from 'react-icons/bs';
 
-import routes from '@Helpers/routes';
+import { IdentificationCellProps } from './IdentificationCell.types';
 
 import styles from './IdentificationCell.module.scss';
 
-function IdentificationCell({ value }: { value: string }) {
+function IdentificationCell({ href, title, children }: IdentificationCellProps) {
     return (
         <div className={styles["cell"]}>
             <span className={styles["identification"]}>
-                {Intl.NumberFormat('es-CO').format(parseInt(value))}
+                {Intl.NumberFormat('es-CO').format(
+                    parseInt(children.toString())
+                )}
             </span>
-            <Link href={routes.dashboard.user(value)}>
+            <Link href={href}>
                 <a
                     className={styles["button-link"]}
-                    title="ver información general del usuario"
+                    title={title}
                 >
                     <BsInfoSquareFill /> Ver
                 </a>

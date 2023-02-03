@@ -30,7 +30,14 @@ function InformationTable<D extends object = {}>(
                         )}
                     </th>
                     <td key={cell.id} className={styles["cell"]}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {cell.getValue()
+                            ? flexRender(cell.column.columnDef.cell, cell.getContext())
+                            : (
+                                <span className={styles["no-content"]}>
+                                    Información no existente
+                                </span>
+                            )
+                        }
                     </td>
                 </tr>
             ))}

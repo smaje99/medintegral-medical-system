@@ -1,21 +1,25 @@
-
 import { useMemo } from 'react';
 import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
 
+import { Badge } from '@Components/Badge';
+import {
+    CopyButton, EmailButton, TelButton, WhatsAppButton
+} from '@Components/Button';
+import { IndeterminateCheckbox } from '@Components/Input';
 import { Table as TableTemplate } from '@Components/Table';
-// import { IndeterminateCheckbox } from '@Components/Input';
+import { IdentificationCell } from '@Components/Table/cells';
 import { fuzzySort } from '@Components/Table/filters';
+import routes from '@Helpers/routes';
+import { formatPhone } from '@Utils/phone';
 
 import type { TableProps, UserDataForTable } from './Table.types';
-import IdentificationCell from '../IdentificationCell';
 
 import styles from './Table.module.scss';
-import { Badge } from '@Components/Badge';
 
 const columnHelper = createColumnHelper<UserDataForTable>();
 
 const Table = ({ users }: TableProps) => {
-    const columns = useMemo<ColumnDef<UserDataForTable>[]>(() => ([/*
+    const columns = useMemo<ColumnDef<UserDataForTable>[]>(() => ([
         {
             id: 'select',
             header: ({ table }) => (
@@ -34,31 +38,59 @@ const Table = ({ users }: TableProps) => {
                     }} />
                 </div>
             )
-        }, */
+        },
         columnHelper.accessor('dni', {
             header: 'Identificación',
-            cell: info => <IdentificationCell value={info.getValue()} />,
+            cell: info => (
+                <IdentificationCell
+                    href={routes.dashboard.user(info.getValue())}
+                    title="ver información general del usuario"
+                >
+                    {info.getValue()}
+                </IdentificationCell>
+            ),
             filterFn: 'startWith'
         }),
-        columnHelper.accessor('name', {
+        columnHelper.accessor('person.name', {
             header: 'Nombres',
+            cell: info => (
+                <>
+                    <span>{info.getValue()}</span>
+                    <div role="toolbar">
+                        <CopyButton textToCopy={info.getValue()} />
+                    </div>
+                </>
+            ),
             filterFn: 'fuzzy',
             sortingFn: fuzzySort
         }),
-        columnHelper.accessor('surname', {
+        columnHelper.accessor('person.surname', {
             header: 'Apellidos',
             filterFn: 'fuzzy',
+            cell: info => (
+                <>
+                    <span>{info.getValue()}</span>
+                    <div role="toolbar">
+                        <CopyButton textToCopy={info.getValue()} />
+                    </div>
+                </>
+            ),
             sortingFn: fuzzySort
         }),
         columnHelper.accessor('username', {
             header: 'Usuario',
             cell: info => (
-                <Badge color="green" className={styles["badge-user"]}>
-                    {info.getValue()}
-                </Badge>
+                <>
+                    <Badge color="green" className={styles["badge-user"]}>
+                        {info.getValue()}
+                    </Badge>
+                    <div role="toolbar">
+                        <CopyButton textToCopy={info.getValue()} />
+                    </div>
+                </>
             )
         }),
-        columnHelper.accessor('role', {
+        columnHelper.accessor('role.name', {
             header: 'Rol',
             cell: info => (
                 <Badge color="green-blue" className={styles["badge-role"]}>
@@ -66,30 +98,41 @@ const Table = ({ users }: TableProps) => {
                 </Badge>
             )
         }),
-        columnHelper.accessor('email', {
+        columnHelper.accessor('person.email', {
             header: 'Correo electrónico',
+            cell: info => (
+                <>
+                    <span>{info.getValue()}</span>
+                    <div role="toolbar">
+                        <CopyButton textToCopy={info.getValue()} />
+                        <EmailButton email={info.getValue()} />
+                    </div>
+                </>
+            ),
             filterFn: 'fuzzy',
             sortingFn: fuzzySort
         }),
-        columnHelper.accessor('phone', {
+        columnHelper.accessor('person.phone', {
             header: 'Celular',
             cell: info => (
-                info.getValue()
-                    .replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4')
-            )
+                <>
+                    <span>{formatPhone(info.getValue())}</span>
+                    <div role="toolbar">
+                        <CopyButton textToCopy={info.getValue()} />
+                        <TelButton number={info.getValue()} />
+                        <WhatsAppButton number={info.getValue()} />
+                    </div>
+                </>
+            ),
         })
     ]), []);
 
-    const data = useMemo(() => (
-        users.data?.map(user => ({
-            dni: user.dni.toString(),
-            username: user.username,
-            name: user.person.name,
-            surname: user.person.surname,
-            role: user.role.name,
-            email: user.person.email,
-            phone: user.person.phone
-        } as UserDataForTable))
+    const data = useMemo<UserDataForTable[]>(() => (
+        users.data?.map(user => {
+            const { dni, ...rest } = user;
+
+            return { dni: dni.toString(), ...rest }
+        })
     ), [users]);
 
     return <TableTemplate<UserDataForTable> {...{ columns, data }} />

@@ -11,6 +11,7 @@ import {
 } from '@Components/Button';
 import { InformationTable } from '@Components/Table';
 import type { User } from '@Types/user/user';
+import { formatPhone } from '@Utils/phone';
 
 import type { ProfileMainDataProps } from '../User.types';
 
@@ -75,11 +76,7 @@ const ProfileMainData = ({ user }: ProfileMainDataProps) => {
             header: () => <><BsFillTelephoneFill /> Celular</>,
             cell: info => (
                 <>
-                    <span>
-                        {info.getValue()
-                            .replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4')
-                        }
-                    </span>
+                    <span>{formatPhone(info.getValue())}</span>
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                         <TelButton number={info.getValue()} />
@@ -88,11 +85,9 @@ const ProfileMainData = ({ user }: ProfileMainDataProps) => {
                 </>
             )
         })
-    ]), [user]);
+    ]), []);
 
-    return (
-        <InformationTable<User> {...{ data: [user.data], columns }} />
-    )
+    return <InformationTable<User> {...{ data: [user.data], columns }} />
 }
 
 export default ProfileMainData;

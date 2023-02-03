@@ -1,3 +1,4 @@
+@import '../../../styles/animations';
 @import '../../../styles/palette';
 @import '../../../styles/fonts';
 
@@ -68,13 +69,42 @@
 }
 
 .cell {
+    position: relative;
+
     font: 300 10pt $body-font;
     padding: 1.6rem .2rem;
     transition: .3s all ease;
+    overflow-x: hidden;
 
-    &::selection {
+    & > :first-child::selection {
         font-weight: 600;
         color: white;
         background-color: $blue-monochromatic;
+    }
+
+    & div[role=toolbar] {
+        position: absolute;
+        top: 25%;
+        right: 5px;
+        z-index: 1;
+        visibility: hidden;
+
+        display: inline-flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: .6rem;
+
+        & > * {
+            visibility: hidden;
+        }
+    }
+
+    &:hover div[role=toolbar] {
+        @include slideInRight;
+        visibility: visible;
+
+        & > * {
+            visibility: visible;
+        }
     }
 }

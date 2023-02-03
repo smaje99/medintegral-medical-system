@@ -4,8 +4,8 @@
 
 .badge {
     &-user::selection {
-        color: white;
-        background-color: $green-monochromatic;
+        color: white !important;
+        background-color: $green-monochromatic !important;
     }
 
     &-role {
