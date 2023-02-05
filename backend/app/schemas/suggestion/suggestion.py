@@ -1,10 +1,11 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field, validator
+from fastapi_camelcase import CamelModel
+from pydantic import Field, validator
 
 
-class SuggestionBase(BaseModel):
+class SuggestionBase(CamelModel):
     ''' Shared properties. '''
 
 

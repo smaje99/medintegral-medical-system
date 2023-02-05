@@ -1,16 +1,17 @@
 from datetime import datetime, timezone
 from uuid import UUID
 
-from pydantic import BaseModel, Field, validator
+from fastapi_camelcase import CamelModel
+from pydantic import Field, validator
 
 
-class Token(BaseModel):
+class Token(CamelModel):
     ''' Token properties. '''
     access_token: str
     token_type: str
 
 
-class TokenPayloadBase(BaseModel):
+class TokenPayloadBase(CamelModel):
     ''' Shared properties. '''
     iat: float
 

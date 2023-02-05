@@ -1,11 +1,12 @@
 from uuid import UUID
 
-from pydantic import BaseModel, validator
+from fastapi_camelcase import CamelModel
+from pydantic import validator
 
 from app.core.types import PermissionAction
 
 
-class PermissionBase(BaseModel):
+class PermissionBase(CamelModel):
     ''' Shared properties. '''
     name: str
 
@@ -34,7 +35,7 @@ class PermissionInDB(PermissionInDBBase):
     ''' Additional properties stored in the database. '''
 
 
-class PermissionInUser(BaseModel):
+class PermissionInUser(CamelModel):
     ''' Properties to return via user API. '''
     name: str
     actions: list[PermissionAction]

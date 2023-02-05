@@ -1,9 +1,9 @@
 from uuid import UUID
 
-from pydantic import BaseModel
+from fastapi_camelcase import CamelModel
 
 
-class RoleBase(BaseModel):
+class RoleBase(CamelModel):
     ''' Shared properties. '''
     name: str
 

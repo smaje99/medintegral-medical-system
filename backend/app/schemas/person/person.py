@@ -1,6 +1,7 @@
 from datetime import date, datetime
 
-from pydantic import BaseModel, EmailStr, validator
+from fastapi_camelcase import CamelModel
+from pydantic import EmailStr, validator
 from sqlalchemy_utils import PhoneNumber  # pyright: ignore
 
 from app.core.types import (
@@ -12,7 +13,7 @@ from app.core.types import (
 )
 
 
-class PersonBase(BaseModel):
+class PersonBase(CamelModel):
     ''' Shared properties. '''
     dni: int
     name: str
@@ -75,7 +76,7 @@ class PersonInDB(PersonInDBBase):
     ''' Additional properties stored in database. '''
 
 
-class PersonInUserSession(BaseModel):
+class PersonInUserSession(CamelModel):
     ''' Properties to return via user API. '''
     dni: int
     name: str

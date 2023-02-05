@@ -46,10 +46,6 @@ def login(
     Authenticate a user's credentials for logging
     into the system using a token.
 
-    Args:
-    * service (UserService): Service with initialized database session.
-    * form_data (OAuth2PasswordRequestForm): User's credentials.
-
     Raises:
     * HTTPException: HTTP 400. Incorrect credentials.
     * HTTPException: HTTP 401. User isn't active.
@@ -89,9 +85,6 @@ def login(
 @router.post('/login/test-token', response_model=UserInSession)
 def test_token(current_user: UserModel = Depends(get_current_user)) -> Any:
     '''Test access token of a user.
-
-    Args:
-        current_user (UserModel): Get the current user in the system.
 
     Returns:
         User: Current user.
@@ -133,14 +126,14 @@ def recover_password(
 @router.patch('/reset-password', response_model=Message)
 def reset_password(
     token: str = Body(...),
-    new_password: str = Body(...),
+    new_password: str = Body(..., alias='newPassword'),
     service: UserService = Depends(get_service)
 ) -> Any:
     '''Reset an user's password.
 
     Args:
     * token (str): Token to reset password.
-    * new_password (str): New user's password.
+    * newPassword (str): New user's password.
 
     Raises:
     * HTTPException: HTTP 403. Token invalid.

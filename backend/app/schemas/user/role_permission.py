@@ -1,12 +1,12 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel
+from fastapi_camelcase import CamelModel
 
 from app.core.types import PermissionAction
 
 
-class RolePermissionBase(BaseModel):
+class RolePermissionBase(CamelModel):
     ''' Shared properties. '''
     role_id: UUID
     permission_id: UUID

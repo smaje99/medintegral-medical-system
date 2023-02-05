@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from fastapi_camelcase import CamelModel
 
 
-class Message(BaseModel):
+class Message(CamelModel):
     ''' Message schema. '''
     message: str

@@ -38,9 +38,6 @@ def read_user_me(
 ) -> Any:
     '''Retrieve the current user.
 
-    Args:
-    * current_user (UserModel): Get the current user
-
     Returns:
     * User: Current user.
     '''
@@ -75,7 +72,7 @@ def create_user(
         )
     ),
     person: Person = Depends(get_person_if_no_user_exists),
-    role_id: UUID = Body(...),
+    role_id: UUID = Body(..., alias='roleId'),
     role_service: RoleService = Depends(get_role_service),
     user_service: UserService = Depends(get_user_service)
 ) -> Any:
@@ -83,7 +80,7 @@ def create_user(
 
     Args:
     * dni (int): Identification number of the person to create an user.
-    * role_id (UUID): Role ID to be assigned to the user.
+    * roleId (UUID): Role ID to be assigned to the user.
 
     Raises:
     * HTTPException: HTTP 400. Person doesn't exist.

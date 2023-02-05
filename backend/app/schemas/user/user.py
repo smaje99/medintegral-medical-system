@@ -1,6 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
+from fastapi_camelcase import CamelModel
 from pydantic import BaseModel, validator
 
 from app.core.types import PermissionAction
@@ -9,7 +10,7 @@ from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.role import Role
 
 
-class UserBase(BaseModel):
+class UserBase(CamelModel):
     ''' Shared properties. '''
     dni: int | None = None
 
