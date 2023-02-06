@@ -1,18 +1,7 @@
-from typing import Any
 from uuid import UUID
 
-from fastapi import (
-    APIRouter,
-    Body,
-    Depends,
-    HTTPException,
-    Path,
-    Query
-)
-from starlette.status import (
-    HTTP_201_CREATED,
-    HTTP_404_NOT_FOUND
-)
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
+from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND
 
 from app.schemas.suggestion.suggestion import Suggestion, SuggestionCreate
 from app.services.suggestion import SuggestionService
@@ -23,11 +12,11 @@ from .suggestion_deps import get_service
 router = APIRouter()
 
 
-@router.get('/{id}', response_model=Suggestion)
+@router.get('/{id}')
 def read_suggestion(
     id: UUID = Path(...),  # pylint: disable=[invalid-name, redefined-builtin]
-    service: SuggestionService = Depends(get_service)
-) -> Any:
+    service: SuggestionService = Depends(get_service),
+) -> Suggestion:
     '''Retrieve a suggestion using a given ID,
     if the given ID doesn't exist then raise a error.
 
@@ -42,20 +31,19 @@ def read_suggestion(
     '''
     if not (suggestion := service.get(id)):
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND,
-            detail='La sugerencia no existe'
+            status_code=HTTP_404_NOT_FOUND, detail='La sugerencia no existe'
         )
 
-    return suggestion
+    return suggestion  # type: ignore
 
 
-@router.get('/', response_model=list[Suggestion])
+@router.get('/')
 def read_suggestions(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
     pinned: bool = Query(default=False),
-    service: SuggestionService = Depends(get_service)
-) -> Any:
+    service: SuggestionService = Depends(get_service),
+) -> list[Suggestion]:
     '''Retrieve a suggestions list.
 
     Args:
@@ -70,16 +58,16 @@ def read_suggestions(
     * list[Suggestion]: Specified subset of suggestions.
     '''
     if pinned:
-        return service.get_all_pinned()
+        return service.get_all_pinned()  # type: ignore
 
-    return service.get_all(skip=skip, limit=limit)
+    return service.get_all(skip=skip, limit=limit)  # type: ignore
 
 
-@router.post('/', response_model=Suggestion, status_code=HTTP_201_CREATED)
+@router.post('/', status_code=HTTP_201_CREATED)
 def create_suggestion(
     suggestion_in: SuggestionCreate = Body(...),
-    service: SuggestionService = Depends(get_service)
-) -> Any:
+    service: SuggestionService = Depends(get_service),
+) -> Suggestion:
     '''Create a suggestion
 
     Args:
@@ -89,15 +77,17 @@ def create_suggestion(
     Returns:
     * Suggestion: The Suggestion's data created.
     '''
-    return service.create(suggestion_in)
+    return service.create(suggestion_in)  # type: ignore
 
 
-@router.patch('/{id}', response_model=Suggestion)
+@router.patch(
+    '/{id}',
+)
 def modify_pinned(
-    id: UUID = Path(...),  # pylint: disable=[invalid-name, redefined-builtin]
+    id: UUID = Path(...),  # pylint: disable=C0103, W0622
     pinned: bool = Body(...),
-    service: SuggestionService = Depends(get_service)
-) -> Any:
+    service: SuggestionService = Depends(get_service),
+) -> Suggestion:
     '''Modify the pinning of a suggestion given an ID.
     There can only be three pinned suggestions.
 
@@ -112,4 +102,4 @@ def modify_pinned(
     Returns:
     * Suggestion: Suggestion with modified pinned.
     '''
-    return service.modify_pinned(id, pinned)
+    return service.modify_pinned(id, pinned)  # type: ignore

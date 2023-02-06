@@ -1,1 +1,1 @@
-from .suggestion import Suggestion  # pyright: ignore  # noqa: F401
+from .suggestion import Suggestion  # noqa: F401

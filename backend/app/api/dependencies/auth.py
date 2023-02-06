@@ -2,11 +2,7 @@ from typing import Callable
 
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from starlette.status import (
-    HTTP_401_UNAUTHORIZED,
-    HTTP_403_FORBIDDEN,
-    HTTP_404_NOT_FOUND
-)
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 from app.core.config import settings
 from app.core.security.jwt import verify_token
@@ -27,14 +23,12 @@ get_service = ServiceDependency(UserService)
 
 
 def get_current_user(
-    service: UserService = Depends(get_service),
-    token: str = Depends(reusable_oauth2)
+    service: UserService = Depends(get_service), token: str = Depends(reusable_oauth2)
 ) -> User:
     '''Retrieve a user by the given token.
 
     Args:
-        service (UserService, optional): Service with initialized
-        database session.
+        service (UserService, optional): Service with initialized database session.
         token (str, optional): User token to be retrieve.
 
     Raises:
@@ -48,14 +42,14 @@ def get_current_user(
         raise HTTPException(
             status_code=HTTP_403_FORBIDDEN,
             detail='No se puede validar las credenciales',
-            headers={"WWW-Authenticate": "Bearer"}
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not (user := service.get(dni=payload.sub)):
+    if not (user := service.get(id=payload.sub)):  # type: ignore
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND,
             detail='Usuario no encontrado',
-            headers={"WWW-Authenticate": "Bearer"}
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
     return user
@@ -63,7 +57,7 @@ def get_current_user(
 
 def get_current_active_user(
     current_user: User = Depends(get_current_user),
-    service: UserService = Depends(get_service)
+    service: UserService = Depends(get_service),
 ) -> User:
     '''Check if the current user is active and returns it.
     Otherwise raise an exception.
@@ -79,10 +73,7 @@ def get_current_active_user(
         User: Current user.
     '''
     if not service.is_active(current_user):
-        raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
-            detail='Usuario inactivo'
-        )
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail='Usuario inactivo')
 
     return current_user
 
@@ -100,16 +91,15 @@ def get_current_user_with_role(role: str) -> Callable[[], User]:
     Returns:
         Callable[[], User]: Current user.
     '''
-    def wrapper(
-        current_user: User = Depends(get_current_active_user)
-    ) -> User:
+
+    def wrapper(current_user: User = Depends(get_current_active_user)) -> User:
         if role != current_user.role.name:
             raise HTTPException(
-                status_code=HTTP_401_UNAUTHORIZED,
-                detail='Usuario no autorizado'
+                status_code=HTTP_401_UNAUTHORIZED, detail='Usuario no autorizado'
             )
 
         return current_user
+
     return wrapper
 
 
@@ -130,20 +120,18 @@ def get_current_user_with_permissions(
     Returns:
         Callable[[], User]: Current user.
     '''
-    def wrapper(
-        current_user: User = Depends(get_current_active_user)
-    ) -> User:
+
+    def wrapper(current_user: User = Depends(get_current_active_user)) -> User:
         user = UserInSession.from_orm(current_user)
         user_actions = set(user.permissions.get(permission, {})) | actions
 
-        if (
-            permission not in user.permissions
-            or len(user_actions) != len(user.permissions.get(permission))
+        if permission not in user.permissions or len(user_actions) != len(
+            user.permissions.get(permission)
         ):
             raise HTTPException(
-                status_code=HTTP_401_UNAUTHORIZED,
-                detail='Usuario no autorizado'
+                status_code=HTTP_401_UNAUTHORIZED, detail='Usuario no autorizado'
             )
 
         return current_user
+
     return wrapper

@@ -1,8 +1,4 @@
-from fastapi import (
-    Body,
-    Depends,
-    HTTPException
-)
+from fastapi import Body, Depends, HTTPException
 from starlette.status import HTTP_400_BAD_REQUEST
 
 from app.api.dependencies.services import ServiceDependency
@@ -18,8 +14,7 @@ get_user_service = ServiceDependency(UserService)
 
 
 def get_person(
-    dni: int = Body(...),
-    service: PersonService = Depends(get_person_service)
+    dni: int = Body(...), service: PersonService = Depends(get_person_service)
 ) -> Person:
     '''Get a person if exists in the system.
 
@@ -35,16 +30,14 @@ def get_person(
     '''
     if not (person := service.get(dni)):
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST,
-            detail='La persona no existe en el sistema'
+            status_code=HTTP_400_BAD_REQUEST, detail='La persona no existe en el sistema'
         )
 
     return person
 
 
 def get_person_if_no_user_exists(
-    person: Person = Depends(get_person),
-    service: UserService = Depends(get_user_service)
+    person: Person = Depends(get_person), service: UserService = Depends(get_user_service)
 ) -> Person:
     '''Get a person if the user doesn't exist.
 
@@ -60,8 +53,7 @@ def get_person_if_no_user_exists(
     '''
     if service.contains(person.dni):
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST,
-            detail='El usuario ya existe en el sistema'
+            status_code=HTTP_400_BAD_REQUEST, detail='El usuario ya existe en el sistema'
         )
 
     return person

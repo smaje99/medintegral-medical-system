@@ -1,1 +1,1 @@
-from .user_route import router  # pyright: ignore  # noqa: F401
+from .user_route import router  # noqa: F401

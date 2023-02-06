@@ -6,14 +6,14 @@ from app.database.base import Base
 
 
 class Permission(Base):
-    ''' Permission model. Records of permissions in the system.'''
+    '''Permission model. Records of permissions in the system.'''
 
     # Permission ID.
     id = Column(
         UUID(as_uuid=True),
         primary_key=True,
         nullable=False,
-        server_default=func.uuid_generate_v4()
+        server_default=func.uuid_generate_v4(),
     )
 
     # Permission name.

@@ -1,2 +1,2 @@
-from .database import SessionLocal  # pyright: ignore  # noqa: F401
-from .base import Base  # pyright: ignore  # noqa: F401
+from .database import SessionLocal  # noqa: F401
+from .base import Base  # noqa: F401

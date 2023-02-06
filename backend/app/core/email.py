@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Any
 
-from emails import Message  # type: ignore
-from emails.template import JinjaTemplate  # type: ignore
+from emails import Message
+from emails.template import JinjaTemplate
 
 from app.core.config import settings
 
@@ -11,7 +11,7 @@ def send_email(
     email_to: str,
     subject_template: str = '',
     html_template: str = '',
-    environment: dict[str, Any] | None = None
+    environment: dict[str, Any] | None = None,
 ):
     '''Send an email with Jinja2 Template.
 
@@ -25,13 +25,10 @@ def send_email(
     message = Message(
         subject=JinjaTemplate(subject_template),
         html=JinjaTemplate(html_template),
-        mail_from=(settings.email.from_name, settings.email.from_email)
+        mail_from=(settings.email.from_name, settings.email.from_email),
     )
 
-    smtp_options = {
-        'host': settings.email.smtp.host,
-        'port': settings.email.smtp.port
-    }
+    smtp_options = {'host': settings.email.smtp.host, 'port': settings.email.smtp.port}
 
     if settings.email.smtp.tls:
         smtp_options['tls'] = True
@@ -42,11 +39,7 @@ def send_email(
     if settings.email.smtp.password:
         smtp_options['password'] = settings.email.smtp.password
 
-    message.send(  # type: ignore
-        to=email_to,
-        render=environment or {},
-        smtp=smtp_options
-    )
+    message.send(to=email_to, render=environment or {}, smtp=smtp_options)  # type: ignore
 
 
 def get_email_template(template_name: str) -> str:
@@ -59,8 +52,7 @@ def get_email_template(template_name: str) -> str:
         str: Email template in format HTML.
     '''
     with open(
-        Path(settings.email.templates_dir) / f'{template_name}.html',
-        encoding='utf-8'
+        Path(settings.email.templates_dir) / f'{template_name}.html', encoding='utf-8'
     ) as file:
         return file.read()
 
@@ -75,7 +67,7 @@ def send_test_email(email_to: str):
         email_to=email_to,
         subject_template='Test email - Medintegral IPS SAS',
         html_template=get_email_template('test_email'),
-        environment={'email': email_to}
+        environment={'email': email_to},
     )
 
 
@@ -97,8 +89,8 @@ def send_reset_password_email(email_to: str, username: str, token: str):
             'username': username,
             'email': email_to,
             'valid_hours': settings.email.reset_token_expire_hours,
-            'link': f'{server_host}/recuperar-contraseña?token={token}'
-        }
+            'link': f'{server_host}/recuperar-contraseña?token={token}',
+        },
     )
 
 
@@ -117,6 +109,6 @@ def send_new_account_email(email_to: str, username: str, password: str):
         environment={
             'username': username,
             'password': password,
-            'link': settings.domain.server_host
-        }
+            'link': settings.domain.server_host,
+        },
     )

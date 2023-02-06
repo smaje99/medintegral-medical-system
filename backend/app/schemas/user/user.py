@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi_camelcase import CamelModel
-from pydantic import BaseModel, validator
+from pydantic import validator
 
 from app.core.types import PermissionAction
 from app.schemas.person.person import Person, PersonInUserSession
@@ -11,48 +11,55 @@ from app.schemas.user.role import Role
 
 
 class UserBase(CamelModel):
-    ''' Shared properties. '''
+    '''Shared properties.'''
+
     dni: int | None = None
 
 
 class UserCreate(UserBase):
-    ''' Properties to receive via API on creation. '''
+    '''Properties to receive via API on creation.'''
+
     dni: int
     password: str
     role_id: UUID
 
 
 class UserUpdate(UserBase):
-    ''' Properties to receive via API on update. '''
+    '''Properties to receive via API on update.'''
+
     password: str | None = None
     role_id: UUID | None = None
 
 
 class UserInDBBase(UserBase):
-    ''' Shared properties by model stored in database. '''
+    '''Shared properties by model stored in database.'''
+
     dni: int
     username: str
     is_active: bool
     created_at: datetime
     modified_at: datetime
 
-    class Config:  # pylint: disable=missing-class-docstring
+    class Config:  # pylint: disable=C0115
         orm_mode = True
 
 
 class User(UserInDBBase):
-    ''' Additional properties to return via API. '''
+    '''Additional properties to return via API.'''
+
     role: Role
     person: Person
 
 
 class UserInDB(UserInDBBase):
-    ''' Additional properties stored in the database. '''
+    '''Additional properties stored in the database.'''
+
     hashed_password: str
 
 
 class UserInSession(UserInDBBase):
-    ''' Additional properties for user session and returning via API. '''
+    '''Additional properties for user session and returning via API.'''
+
     role: str
     person: PersonInUserSession
     permissions: dict[str, list[PermissionAction]] | None

@@ -13,9 +13,10 @@ class RoleService(BaseService[Role, RoleCreate, RoleUpdate]):
     Args:
         BaseService([Role, RoleCreate, RoleUpdate]): Models and schemas.
     '''
+
     @classmethod
-    def get_service(cls, db: Session):  # pylint: disable=missing-function-docstring, invalid-name  # noqa: E501
-        return cls(model=Role, db=db)
+    def get_service(cls, database: Session):
+        return cls(model=Role, database=database)
 
     def contains(self, role_id: UUID) -> bool:
         '''Checks if the role model contains the given id.
@@ -26,7 +27,5 @@ class RoleService(BaseService[Role, RoleCreate, RoleUpdate]):
         Returns:
             bool: True if the role exists, False otherwise.
         '''
-        query = self.db.query(Role).filter(Role.id == role_id)
-        return (self.db
-                .query(query.exists())
-                .scalar())
+        query = self.database.query(Role).filter(Role.id == role_id)
+        return self.database.query(query.exists()).scalar()

@@ -1,5 +1,5 @@
 class IncorrectCredentialsException(Exception):
-    ''' Handler the exception for incorrect credentials. '''
+    '''Handler the exception for incorrect credentials.'''
 
     def __init__(self, message: str):
         '''Construct for the Incorrect Credentials Exception.

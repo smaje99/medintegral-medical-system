@@ -1,1 +1,1 @@
-from .base_service import BaseService  # pyright: ignore  # noqa: F401
+from .base_service import BaseService  # noqa: F401

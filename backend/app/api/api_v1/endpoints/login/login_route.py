@@ -1,19 +1,11 @@
-from typing import Any
-
-from fastapi import (
-    APIRouter,
-    Body,
-    Depends,
-    HTTPException,
-    Path
-)
+from fastapi import APIRouter, Body, Depends, HTTPException, Path
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from starlette.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
     HTTP_403_FORBIDDEN,
-    HTTP_404_NOT_FOUND
+    HTTP_404_NOT_FOUND,
 )
 
 from app.api.dependencies.auth import get_current_user
@@ -22,7 +14,7 @@ from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.jwt import (
     create_access_token,
     generate_password_reset_token,
-    verify_password_reset_token
+    verify_password_reset_token,
 )
 from app.models.user import User as UserModel
 from app.schemas.common.message import Message
@@ -36,11 +28,11 @@ from .login_deps import get_service
 router = APIRouter()
 
 
-@router.post('/login/access-token', response_model=Token)
+@router.post('/login/access-token')
 def login(
     service: UserService = Depends(get_service),
-    form_data: OAuth2PasswordRequestForm = Depends()
-) -> Any:
+    form_data: OAuth2PasswordRequestForm = Depends(),
+) -> Token:
     '''OAuth2 compatible token login.
 
     Authenticate a user's credentials for logging
@@ -57,46 +49,42 @@ def login(
     '''
     try:
         user = service.authenticate(
-            username=form_data.username,
-            password=form_data.password
+            username=form_data.username, password=form_data.password
         )
     except IncorrectCredentialsException as error:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
             detail=str(error),
-            headers={'WWW-Authenticate': 'Bearer'}
+            headers={'WWW-Authenticate': 'Bearer'},
         ) from error
 
-    if not service.is_active(user):  # type: ignore
+    if not service.is_active(user):
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
             detail='Usuario inactivo',
-            headers={'WWW-Authenticate': 'Bearer'}
+            headers={'WWW-Authenticate': 'Bearer'},
         )
 
     return Token(
-        access_token=create_access_token(
-            TokenPayloadIn(sub=user.dni)  # type: ignore
-        ),
-        token_type='bearer'
+        access_token=create_access_token(TokenPayloadIn(sub=user.dni)),
+        token_type='bearer',
     )
 
 
-@router.post('/login/test-token', response_model=UserInSession)
-def test_token(current_user: UserModel = Depends(get_current_user)) -> Any:
+@router.post('/login/test-token')
+def test_token(current_user: UserModel = Depends(get_current_user)) -> UserInSession:
     '''Test access token of a user.
 
     Returns:
         User: Current user.
     '''
-    return current_user
+    return current_user  # type: ignore
 
 
-@router.post('/password-recovery/{email}', response_model=Message)
+@router.post('/password-recovery/{email}')
 def recover_password(
-    email: EmailStr = Path(...),
-    service: UserService = Depends(get_service)
-) -> Any:
+    email: EmailStr = Path(...), service: UserService = Depends(get_service)
+) -> Message:
     '''Password recovery via user's email.
 
     Args:
@@ -108,27 +96,25 @@ def recover_password(
     if not (user := service.get_by_email(email)):
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND,
-            detail='El usuario con este correo electrónico no existe'
+            detail='El usuario con este correo electrónico no existe',
         )
 
     password_reset_token = generate_password_reset_token(email=email)
     send_reset_password_email(
-        email_to=user.person.email,  # type: ignore
-        username=user.username,
-        token=password_reset_token
+        email_to=user.person.email,
+        username=user.username or '',
+        token=password_reset_token,
     )
 
-    return Message(
-        message='Se envío el correo electrónico para recuperar la contraseña'
-    )
+    return Message(message='Se envío el correo electrónico para recuperar la contraseña')
 
 
-@router.patch('/reset-password', response_model=Message)
+@router.patch('/reset-password')
 def reset_password(
     token: str = Body(...),
     new_password: str = Body(..., alias='newPassword'),
-    service: UserService = Depends(get_service)
-) -> Any:
+    service: UserService = Depends(get_service),
+) -> Message:
     '''Reset an user's password.
 
     Args:
@@ -144,25 +130,20 @@ def reset_password(
     * Message: Info message.
     '''
     if not (email := verify_password_reset_token(token)):
-        raise HTTPException(
-            status_code=HTTP_403_FORBIDDEN,
-            detail='Token invalido'
-        )
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail='Token invalido')
 
     if not (user := service.get_by_email(email)):
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND,
-            detail='El usuario con este correo electrónico no existe'
+            detail='El usuario con este correo electrónico no existe',
         )
 
     if not service.is_active(user):
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
-            detail='El usuario con este correo electrónico está inactivo'
+            detail='El usuario con este correo electrónico está inactivo',
         )
 
     service.update_password(db_user=user, new_password=new_password)
 
-    return Message(
-        message='Contraseña actualizada correctamente'
-    )
+    return Message(message='Contraseña actualizada correctamente')

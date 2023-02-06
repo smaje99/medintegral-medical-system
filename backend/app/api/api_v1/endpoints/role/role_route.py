@@ -1,14 +1,6 @@
-from typing import Any
 from uuid import UUID
 
-from fastapi import (
-    APIRouter,
-    Body,
-    Depends,
-    HTTPException,
-    Path,
-    Query
-)
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
 from starlette.status import HTTP_404_NOT_FOUND
 
 from app.schemas.user.role import Role, RoleCreate, RoleUpdate
@@ -20,11 +12,10 @@ from .role_deps import get_service
 router = APIRouter()
 
 
-@router.get('/{role_id}', response_model=Role)
+@router.get('/{role_id}')
 def read_role(
-    role_id: UUID = Path(...),
-    service: RoleService = Depends(get_service)
-) -> Any:
+    role_id: UUID = Path(...), service: RoleService = Depends(get_service)
+) -> Role:
     '''Retrieve a role by a given ID.
     if the ID doesn't exist then raise a error.
 
@@ -39,19 +30,18 @@ def read_role(
     '''
     if not (role := service.get(role_id)):
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND,
-            detail='El rol no existe en el sistema'
+            status_code=HTTP_404_NOT_FOUND, detail='El rol no existe en el sistema'
         )
 
-    return role
+    return role  # type: ignore
 
 
-@router.get('/', response_model=list[Role])
+@router.get('/')
 def read_roles(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
-    service: RoleService = Depends(get_service)
-) -> Any:
+    service: RoleService = Depends(get_service),
+) -> list[Role]:
     '''Retrieve a list of roles.
 
     Args:
@@ -61,14 +51,13 @@ def read_roles(
     Returns:
     * list[Role]: Specified subset of roles.
     '''
-    return service.get_all(skip=skip, limit=limit)
+    return service.get_all(skip=skip, limit=limit)  # type: ignore
 
 
-@router.post('/', response_model=Role)
+@router.post('/')
 def create_role(
-    role_in: RoleCreate = Body(...),
-    service: RoleService = Depends(get_service)
-) -> Any:
+    role_in: RoleCreate = Body(...), service: RoleService = Depends(get_service)
+) -> Role:
     '''Create a role.
 
     Args:
@@ -77,15 +66,15 @@ def create_role(
     Returns:
         Role: The Role's data created
     '''
-    return service.create(role_in)
+    return service.create(role_in)  # type: ignore
 
 
-@router.put('/{role_id}', response_model=Role)
+@router.put('/{role_id}')
 def update_role(
     role_id: UUID = Path(...),
     role_in: RoleUpdate = Body(...),
-    service: RoleService = Depends(get_service)
-) -> Any:
+    service: RoleService = Depends(get_service),
+) -> Role:
     '''Update a role with a given ID.
 
     Args:
@@ -100,8 +89,7 @@ def update_role(
     '''
     if not (role := service.get(role_id)):
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND,
-            detail='El rol no existe en el sistema'
+            status_code=HTTP_404_NOT_FOUND, detail='El rol no existe en el sistema'
         )
 
-    return service.update(db_obj=role, obj_in=role_in)
+    return service.update(db_obj=role, obj_in=role_in)  # type: ignore

@@ -34,7 +34,7 @@ def create_access_token(
     return jwt.encode(
         payload,
         settings.security.jwt.secret_key,
-        algorithm=settings.security.jwt.algorithm
+        algorithm=settings.security.jwt.algorithm,
     )
 
 
@@ -51,7 +51,7 @@ def verify_token(token: str) -> TokenPayload | None:
         payload: dict[str, Any] = jwt.decode(
             token,
             settings.security.jwt.secret_key,
-            algorithms=[settings.security.jwt.algorithm]
+            algorithms=[settings.security.jwt.algorithm],
         )
 
         return TokenPayload(**payload)
@@ -76,7 +76,7 @@ def generate_password_reset_token(email: str) -> str:
     return jwt.encode(
         {'exp': exp, 'nbf': now, 'sub': email},
         settings.security.jwt.secret_key,
-        algorithm=settings.security.jwt.algorithm
+        algorithm=settings.security.jwt.algorithm,
     )
 
 
@@ -93,7 +93,7 @@ def verify_password_reset_token(token: str) -> str | None:
         decoded_token = jwt.decode(
             token,
             settings.security.jwt.secret_key,
-            algorithms=[settings.security.jwt.algorithm]
+            algorithms=[settings.security.jwt.algorithm],
         )
 
         return decoded_token.get('sub')

@@ -1,1 +1,1 @@
-from .person_service import PersonService  # pyright: ignore  # noqa: F401
+from .person_service import PersonService  # noqa: F401

@@ -1,1 +1,1 @@
-from .person import Person  # pyright: ignore  # noqa: F401
+from .person import Person  # noqa: F401

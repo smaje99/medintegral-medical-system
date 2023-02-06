@@ -1,11 +1,13 @@
 from typing import Generic, Generator, Type, TypeVar
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.database import SessionLocal
 from app.services import BaseService
 
 
 # Service type hinting.
-ServiceType = TypeVar('ServiceType', bound=BaseService)  # type: ignore  # pylint: disable=invalid-name  # noqa: E501
+ServiceType = TypeVar('ServiceType', bound=BaseService)  # pylint: disable=C0103
 
 
 class ServiceDependency(Generic[ServiceType]):
@@ -14,6 +16,7 @@ class ServiceDependency(Generic[ServiceType]):
     Args:
         Generic ([ServiceType]): Service to be used.
     '''
+
     def __init__(self, service: Type[ServiceType]):
         '''Generate and manage of a database session for a given service.
 
@@ -30,10 +33,10 @@ class ServiceDependency(Generic[ServiceType]):
             Generator[ServiceType, None, None]: A service initialized with
             database session.
         '''
-        with SessionLocal() as session:  # pyright: ignore
+        with SessionLocal() as session:
             try:
-                yield self.service.get_service(session)  # pyright: ignore
-            except Exception:  # pylint: disable=broad-except
-                session.rollback()  # pyright: ignore
+                yield self.service.get_service(session)  # type: ignore
+            except SQLAlchemyError:
+                session.rollback()
             finally:
-                session.close()  # pyright: ignore
+                session.close()

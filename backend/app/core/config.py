@@ -1,16 +1,11 @@
 from typing import Any
 
-from pydantic import (
-    AnyHttpUrl,
-    BaseSettings,
-    EmailStr,
-    PostgresDsn,
-    validator
-)
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, PostgresDsn, validator
 
 
 class DatabaseSettings(BaseSettings):
-    ''' Settings for the database. '''
+    '''Settings for the database.'''
+
     host: str
     port: str
     uid: str
@@ -25,7 +20,7 @@ class DatabaseSettings(BaseSettings):
     def assemble_db_connection(  # pylint: disable=no-self-argument
         cls, value: str | None, values: dict[str, Any]
     ) -> str | PostgresDsn:
-        ''' Assemble the URI of the database connection. '''
+        '''Assemble the URI of the database connection.'''
         if isinstance(value, str):
             return value
 
@@ -35,12 +30,13 @@ class DatabaseSettings(BaseSettings):
             password=values.get('pwd'),
             host=values.get('host', ''),
             port=values.get('port'),
-            path=f"/{values.get('db', '')}"
+            path=f"/{values.get('db', '')}",
         )
 
 
 class DomainSettings(BaseSettings):
-    ''' Settings for the domain. '''
+    '''Settings for the domain.'''
+
     api_version: str
     server_host: str
 
@@ -50,7 +46,7 @@ class DomainSettings(BaseSettings):
     def assemble_cors_origins(  # pylint: disable=no-self-argument
         cls, value: str | list[str]
     ) -> list[str] | str:
-        ''' Assemble the origins for the CORS. '''
+        '''Assemble the origins for the CORS.'''
         if isinstance(value, str) and not value.startswith('['):
             return [i.strip() for i in value.split(',')]
         if isinstance(value, (list, str)):  # pyright: ignore
@@ -59,26 +55,30 @@ class DomainSettings(BaseSettings):
 
 
 class ProjectSettings(BaseSettings):
-    ''' Settings for the project. '''
+    '''Settings for the project.'''
+
     name: str
     version: str
     description: str
 
 
 class JWTSettings(BaseSettings):
-    ''' Settings for JWT. '''
+    '''Settings for JWT.'''
+
     algorithm: str
     secret_key: str
     access_token_expire_minutes: int
 
 
 class SecuritySettings(BaseSettings):
-    ''' Settings for the security. '''
+    '''Settings for the security.'''
+
     jwt: JWTSettings
 
 
 class SMTPSettings(BaseSettings):
-    ''' Settings for SMTP. '''
+    '''Settings for SMTP.'''
+
     tls: bool
     port: int | None = None
     host: str | None = None
@@ -87,7 +87,8 @@ class SMTPSettings(BaseSettings):
 
 
 class EmailSettings(BaseSettings):
-    ''' Settings for the email. '''
+    '''Settings for the email.'''
+
     smtp: SMTPSettings
 
     from_name: str | None = None
@@ -100,14 +101,15 @@ class EmailSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
-    ''' Settings of the application. '''
+    '''Settings of the application.'''
+
     db: DatabaseSettings
     domain: DomainSettings
     project: ProjectSettings
     security: SecuritySettings
     email: EmailSettings
 
-    class Config:  # pyright: ignore  # pylint: disable=[missing-class-docstring, too-few-public-methods]  # noqa: E501
+    class Config:  # pylint: disable=C0115
         env_file = '.env'
         env_prefix = ''
         env_nested_delimiter = '__'
@@ -115,4 +117,4 @@ class Settings(BaseSettings):
         case_sensitive = False
 
 
-settings = Settings()  # type: ignore
+settings = Settings()

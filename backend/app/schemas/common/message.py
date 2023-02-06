@@ -2,5 +2,6 @@ from fastapi_camelcase import CamelModel
 
 
 class Message(CamelModel):
-    ''' Message schema. '''
+    '''Message schema.'''
+
     message: str

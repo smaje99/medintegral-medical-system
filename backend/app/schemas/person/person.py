@@ -2,19 +2,14 @@ from datetime import date, datetime
 
 from fastapi_camelcase import CamelModel
 from pydantic import EmailStr, validator
-from sqlalchemy_utils import PhoneNumber  # pyright: ignore
+from sqlalchemy_utils import PhoneNumber
 
-from app.core.types import (
-    BloodType,
-    CivilStatus,
-    DocumentType,
-    Gender,
-    RHFactor
-)
+from app.core.types import BloodType, CivilStatus, DocumentType, Gender, RHFactor
 
 
 class PersonBase(CamelModel):
-    ''' Shared properties. '''
+    '''Shared properties.'''
+
     dni: int
     name: str
     surname: str
@@ -32,52 +27,55 @@ class PersonBase(CamelModel):
 
 
 class PersonCreate(PersonBase):
-    ''' Properties to receive via API on creation. '''
+    '''Properties to receive via API on creation.'''
 
 
 class PersonUpdate(PersonBase):
-    ''' Properties to receive via API on update. '''
+    '''Properties to receive via API on update.'''
 
 
 class PersonInDBBase(PersonBase):
-    ''' Properties shared by models stored in the database. '''
+    '''Properties shared by models stored in the database.'''
+
     created_at: datetime
     modified_at: datetime
 
     @validator('phone', pre=True)
-    def get_phone_number(  # pylint: disable=no-self-argument, missing-function-docstring  # noqa: E501
-        cls,
-        value: str | PhoneNumber
+    def get_phone_number(  # pylint: disable=C0116, E0213
+        cls, value: str | PhoneNumber
     ) -> str:
         return value.e164 if isinstance(value, PhoneNumber) else value
 
-    class Config:  # pylint: disable=missing-class-docstring
+    class Config:  # pylint: disable=C0115
         orm_mode = True
 
 
 class Person(PersonInDBBase):
-    ''' Additional properties to return via API. '''
+    '''Additional properties to return via API.'''
+
     age: str | None
 
     @validator('age', pre=True)
-    def translate_age_into_spanish(  # pylint: disable=no-self-argument, missing-function-docstring  # noqa: E501
+    def translate_age_into_spanish(  # pylint: disable=C0116, E0213
         cls, value: str
-    ) -> str:  # sourcery skip: instance-method-first-arg-name
-        return (value
-                .replace('years', 'años')
-                .replace('mons', 'meses')
-                .replace('days', 'días')
-                .replace('year', 'año')
-                .replace('mon', 'mes')
-                .replace('day', 'día'))
+    ) -> str:
+        return (
+            value.replace('years', 'años')
+            .replace('mons', 'meses')
+            .replace('days', 'días')
+            .replace('year', 'año')
+            .replace('mon', 'mes')
+            .replace('day', 'día')
+        )
 
 
 class PersonInDB(PersonInDBBase):
-    ''' Additional properties stored in database. '''
+    '''Additional properties stored in database.'''
 
 
 class PersonInUserSession(CamelModel):
-    ''' Properties to return via user API. '''
+    '''Properties to return via user API.'''
+
     dni: int
     name: str
     surname: str
@@ -88,11 +86,10 @@ class PersonInUserSession(CamelModel):
     modified_at: datetime
 
     @validator('phone', pre=True)
-    def get_phone_number(  # pylint: disable=no-self-argument, missing-function-docstring  # noqa: E501
-        cls,
-        value: str | PhoneNumber
+    def get_phone_number(  # pylint: disable=C0116, E0213
+        cls, value: str | PhoneNumber
     ) -> str:
         return value.e164 if isinstance(value, PhoneNumber) else value
 
-    class Config:  # pylint: disable=missing-class-docstring
+    class Config:  # pylint: disable=C0115
         orm_mode = True

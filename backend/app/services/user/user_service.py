@@ -3,13 +3,7 @@ from uuid import UUID
 
 from sqlalchemy.orm import lazyload, Session
 from sqlalchemy.sql import func
-from sqlalchemy.sql.expression import (
-    asc,
-    cast,
-    or_,
-    select,
-    true
-)
+from sqlalchemy.sql.expression import asc, cast, or_, select, true
 from sqlalchemy.sql.functions import array_agg
 from sqlalchemy.sql.sqltypes import Text
 
@@ -18,12 +12,7 @@ from app.core.email import send_new_account_email
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import get_password_hash, verify_password
 from app.models.person import Person
-from app.models.user import (
-    Permission,
-    RolePermission,
-    UserPermission,
-    User
-)
+from app.models.user import Permission, RolePermission, UserPermission, User
 from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.user import UserCreate, UserUpdate
 from app.services import BaseService
@@ -38,8 +27,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
     '''
 
     @classmethod
-    def get_service(cls, db: Session):  # pylint: disable=missing-function-docstring, invalid-name  # noqa: E501
-        return cls(model=User, db=db)
+    def get_service(cls, database: Session):
+        return cls(model=User, database=database)
 
     def get_by_username(self, username: str) -> User | None:
         '''Retrieve a user by username.
@@ -50,11 +39,12 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             User | None: A user if exists, None otherwise.
         '''
-        return (self.db  # pyright: ignore
-                .query(User)
-                .options(lazyload(User.person), lazyload(User.role))
-                .filter(User.username == username)  # type: ignore
-                .first())
+        return (
+            self.database.query(User)
+            .options(lazyload(User.person), lazyload(User.role))
+            .filter(User.username == username)
+            .first()
+        )
 
     def get_by_email(self, email: str) -> User | None:
         '''Retrieve a user by email.
@@ -65,11 +55,12 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             User | None: A user if exists, None otherwise.
         '''
-        return (self.db  # pyright: ignore
-                .query(User)
-                .join(Person, Person.dni == User.dni)  # type: ignore
-                .filter(Person.email == email)  # type: ignore
-                .first())
+        return (
+            self.database.query(User)
+            .join(Person, Person.dni == User.dni)
+            .filter(Person.email == email)
+            .first()
+        )
 
     def create(self, obj_in: UserCreate) -> User:
         '''Create a new user by encrypting password.
@@ -80,21 +71,19 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             User: User data recorded.
         '''
-        db_obj = User(  # pyright: ignore
+        db_obj = User(
             dni=obj_in.dni,
             hashed_password=get_password_hash(obj_in.password),
-            role_id=obj_in.role_id
+            role_id=obj_in.role_id,  # type: ignore
         )
 
-        self.db.add(db_obj)  # type: ignore
-        self.db.commit()
-        self.db.refresh(db_obj)  # type: ignore
+        self.database.add(db_obj)
+        self.database.commit()
+        self.database.refresh(db_obj)
 
         return db_obj
 
-    def update(
-        self, *, db_obj: User, obj_in: UserUpdate | dict[str, Any]
-    ) -> User:
+    def update(self, *, db_obj: User, obj_in: UserUpdate | dict[str, Any]) -> User:
         '''Update a user data recorded, encrypting the password
         if it's present in the data to be updated.
 
@@ -109,9 +98,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             User: User data updated.
         '''
         update_data = (
-            obj_in
-            if isinstance(obj_in, dict) else
-            obj_in.dict(exclude_unset=True)
+            obj_in if isinstance(obj_in, dict) else obj_in.dict(exclude_unset=True)
         )
 
         if update_data['password']:
@@ -121,7 +108,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
 
         return super().update(db_obj=db_obj, obj_in=update_data)
 
-    def authenticate(self, *, username: str, password: str) -> User | None:
+    def authenticate(self, *, username: str, password: str) -> User:
         '''Authenticates a user's credentials.
 
         Args:
@@ -161,10 +148,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             bool: True if the user exists, False otherwise.
         '''
-        query = self.db.query(User).filter(User.dni == user_id)
-        return (self.db
-                .query(query.exists())
-                .scalar())
+        query = self.database.query(User).filter(User.dni == user_id)
+        return self.database.query(query.exists()).scalar()
 
     def contains_by_username(self, username: str) -> bool:
         '''Checks if the user model contains the given username.
@@ -175,10 +160,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             bool: True if the user exists, False otherwise.
         '''
-        query = self.db.query(User).filter(User.username == username)
-        return (self.db
-                .query(query.exists())
-                .scalar())
+        query = self.database.query(User).filter(User.username == username)
+        return self.database.query(query.exists()).scalar()
 
     def update_password(self, *, db_user: User, new_password: str):
         '''Update an user's password.
@@ -187,32 +170,30 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             db_user (User): User recorded.
             new_password (str): New user's password.
         '''
-        user_in = UserUpdate(**db_user._asdict())  # pyright: ignore
+        user_in = UserUpdate(**db_user._asdict())
         user_in.password = new_password
 
-        self.update(
-            db_obj=db_user,
-            obj_in=user_in
-        )
+        self.update(db_obj=db_user, obj_in=user_in)
 
-    def send_new_account_email(self, *, user: User):
+    def send_new_account_email(self, *, user: User, password: str):
         '''Send a new account email to the given user.
         This is if the system supports it.
 
         Args:
             user (User): User to send the email to.
+            password(str): User's password.
         '''
         if settings.email.emails_enabled:
             send_new_account_email(
                 email_to=user.person.email,
-                username=user.username,
-                password=user.password
+                username=user.username or '',
+                password=password,
             )
 
-    def get(self, dni: int) -> User | None:  # pylint: disable=C0103, C0116, W0622  # noqa: E501
-        if (user := super().get(dni)):
-            user.permissions = self.get_permissions_for_user(user=user)
-            user.person.age = self.get_age_for_user(user=user)
+    def get(self, id: int) -> User | None:  # pylint: disable=C0103, W0622
+        if user := super().get(id):
+            user.permissions = self.get_permissions_for_user(user=user)  # type: ignore
+            user.person.age = self.get_age_for_user(user=user)  # type: ignore
 
         return user
 
@@ -225,15 +206,13 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             str: User's age.
         '''
-        return (self.db.query(
-                    cast(func.age(Person.birthdate), Text).label('age')
-               )
-                .filter(Person.dni == user.dni)
-                .scalar())
+        return (
+            self.database.query(cast(func.age(Person.birthdate), Text).label('age'))
+            .filter(Person.dni == user.dni)
+            .scalar()
+        )
 
-    def get_permissions_for_user(
-        self, *, user: User
-    ) -> list[PermissionInUser]:
+    def get_permissions_for_user(self, *, user: User) -> list[PermissionInUser]:
         '''List of permissions of a user and its role.
 
         Args:
@@ -243,36 +222,22 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             list[PermissionInUser]: List of permissions.
         '''
         role_subquery = self.__get_permissions_from(
-            RolePermission,
-            with_id=user.role.id
+            RolePermission, with_id=user.role.id  # type: ignore
         )
-
         user_subquery = self.__get_permissions_from(
-            UserPermission,
-            with_id=user.dni
+            UserPermission, with_id=user.dni  # type: ignore
         )
+        permissions_subquery = role_subquery.union(user_subquery).alias('permissions')
+        actions_agg = array_agg(permissions_subquery.c.action).label('actions')
 
-        permissions_subquery = (
-            role_subquery
-            .union(user_subquery)
-            .alias('permissions')
-        )
-
-        actions_agg = array_agg(
-            permissions_subquery.c.action
-        ).label('actions')
-
-        return self.db.execute(
+        return self.database.execute(
             select(permissions_subquery.c.name, actions_agg)
             .distinct()
             .group_by(permissions_subquery.c.name)
         ).all()
 
     def __get_permissions_from(
-        self,
-        model: RolePermission | UserPermission,
-        *,
-        with_id: int | UUID
+        self, model: RolePermission | UserPermission, *, with_id: int | UUID
     ):
         '''Query to fetch the permissions and actions
         of the given role or user.
@@ -288,25 +253,27 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         return (
             select(Permission.name, model.action)  # type: ignore
             .join(
-                Permission,
-                model.permission_id == Permission.id,
+                Permission,  # type: ignore
+                model.permission_id == Permission.id,  # type: ignore
                 isouter=True
             )
-            .filter(
-                model.role_id == with_id
-                if model.__name__ == 'RolePermission' else
-                model.user_id == with_id
-            )
+            .filter(with_id == (
+                model.role_id  # type: ignore
+                if model.__name__ == 'RolePermission'
+                else model.user_id  # type: ignore
+            ))
             .filter(model.is_active == true())
         )
 
-    def get_all(self, *, skip: int = 0, limit: int = 50) -> list[User]:  # pylint: disable=C0116  # noqa: E501
-        return (self.db.query(User)
-                .filter(User.is_active == true())
-                .order_by(asc(User.username))
-                .order_by(asc(User.created_at))
-                .slice(skip, limit)
-                .all())
+    def get_all(self, *, skip: int = 0, limit: int = 50) -> list[User]:
+        return (
+            self.database.query(User)
+            .filter(User.is_active == true())
+            .order_by(asc(User.username))
+            .order_by(asc(User.created_at))
+            .slice(skip, limit)
+            .all()
+        )
 
     def search_by_dni(self, dni: int) -> list[User]:
         '''Search for users by a given DNI.
@@ -317,11 +284,11 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             list[User]: List of users who start their DNI with the given.
         '''
-        return (self.db
-                .query(User)
-                .filter(or_(User.dni == dni,
-                            cast(User.dni, Text).startswith(str(dni))))
-                .order_by(asc(User.dni))
-                .order_by(asc(User.username))
-                .order_by(asc(User.created_at))
-                .all())
+        return (
+            self.database.query(User)
+            .filter(or_(User.dni == dni, cast(User.dni, Text).startswith(str(dni))))
+            .order_by(asc(User.dni))
+            .order_by(asc(User.username))
+            .order_by(asc(User.created_at))
+            .all()
+        )

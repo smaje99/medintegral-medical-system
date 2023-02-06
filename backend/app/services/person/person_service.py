@@ -13,9 +13,10 @@ class PersonService(BaseService[Person, PersonCreate, PersonUpdate]):
     Args:
         BaseService ([Person, PersonCreate, PersonUpdate]): Models and schemas.
     '''
+
     @classmethod
-    def get_service(cls, db: Session):  # pylint: disable=missing-function-docstring, invalid-name  # noqa: E501
-        return cls(model=Person, db=db)
+    def get_service(cls, database: Session):
+        return cls(model=Person, database=database)
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[Person]:
         '''Retrieves a list of people sorted by creation date.
@@ -27,8 +28,9 @@ class PersonService(BaseService[Person, PersonCreate, PersonUpdate]):
         Returns:
             list[Person]: A list of suggestion subset.
         '''
-        return (self.db
-                .query(self.model)  # type: ignore
-                .order_by(desc(self.model.created_at))
-                .slice(skip, limit)
-                .all())
+        return (
+            self.database.query(self.model)
+            .order_by(desc(self.model.created_at))
+            .slice(skip, limit)
+            .all()
+        )

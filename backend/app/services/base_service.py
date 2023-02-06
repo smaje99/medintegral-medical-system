@@ -7,13 +7,13 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.database import Base  # pyright: ignore
+from app.database import Base
 
 
 # Types hinting for the service.
-ModelType = TypeVar('ModelType', bound=Base)  # pylint: disable=invalid-name  # noqa: E501
-CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)  # pylint: disable=invalid-name  # noqa: E501
-UpdateSchemaType = TypeVar('UpdateSchemaType', bound=BaseModel)  # pylint: disable=invalid-name  # noqa: E501
+ModelType = TypeVar('ModelType', bound=Base)  # pylint: disable=C0103
+CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)  # pylint: disable=C0103
+UpdateSchemaType = TypeVar('UpdateSchemaType', bound=BaseModel)  # pylint: disable=C0103
 
 
 class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
@@ -26,7 +26,8 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Models and schemes
         to be used in the operation of the service.
     '''
-    def __init__(self, model: Type[ModelType], db: Session):  # pylint: disable=invalid-name  # noqa: E501
+
+    def __init__(self, model: Type[ModelType], database: Session):
         '''
         Base class for all services by default as
         create, update, get, get all and delete.
@@ -36,13 +37,13 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             db (Session): A database session instance.
         '''
         self.model: Type[ModelType] = model
-        self.db: Session = db  # pylint: disable=invalid-name
+        self.database: Session = database
 
     @classmethod
     @abstractmethod
     def get_service(
         cls: Type[BaseService[ModelType, CreateSchemaType, UpdateSchemaType]],
-        db: Session  # pylint: disable=invalid-name
+        database: Session,
     ) -> BaseService[ModelType, CreateSchemaType, UpdateSchemaType]:
         '''Retrieve a service instance
 
@@ -53,7 +54,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             BaseService: Service initialized.
         '''
 
-    def get(self, id: Any) -> ModelType | None:  # pylint: disable=invalid-name, redefined-builtin  # noqa: E501
+    def get(self, id: Any) -> ModelType | None:  # pylint: disable=C0103, W0622
         """Retrieve a record using the given id.
 
         Args:
@@ -62,7 +63,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             ModelType: The record retrieved.
         """
-        return self.db.query(self.model).get(id)  # pyright: ignore
+        return self.database.query(self.model).get(id)
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[ModelType]:
         '''Retrieve a list of the records.
@@ -74,10 +75,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             list[ModelType]: A list of record subset.
         '''
-        return (self.db
-                .query(self.model)  # pyright: ignore
-                .slice(skip, limit)
-                .all())
+        return self.database.query(self.model).slice(skip, limit).all()
 
     def create(self, obj_in: CreateSchemaType) -> ModelType:
         '''Create a new record within the given model.
@@ -91,19 +89,16 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         '''
         # sourcery skip: class-extract-method
         obj_in_data = jsonable_encoder(obj_in)
-        db_obj: ModelType = self.model(**obj_in_data)  # type: ignore
+        db_obj: ModelType = self.model(**obj_in_data)
 
-        self.db.add(db_obj)  # pyright: ignore
-        self.db.commit()
-        self.db.refresh(db_obj)  # pyright: ignore
+        self.database.add(db_obj)
+        self.database.commit()
+        self.database.refresh(db_obj)
 
         return db_obj
 
     def update(
-        self,
-        *,
-        db_obj: ModelType,
-        obj_in: UpdateSchemaType | dict[str, Any]
+        self, *, db_obj: ModelType, obj_in: UpdateSchemaType | dict[str, Any]
     ) -> ModelType:
         '''Update data of a record in the given model.
 
@@ -122,9 +117,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         obj_data = jsonable_encoder(db_obj)
 
         update_data = (
-            obj_in
-            if isinstance(obj_in, dict) else
-            obj_in.dict(exclude_unset=True)
+            obj_in if isinstance(obj_in, dict) else obj_in.dict(exclude_unset=True)
         )
 
         for field in obj_data:
@@ -132,19 +125,18 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 setattr(db_obj, field, update_data[field])
 
         try:
-            self.db.add(db_obj)  # pyright: ignore
+            self.database.add(db_obj)
         except Exception as error:
             raise ValueError(
-                'No se puede actualizar el registro, ' +
-                'no existe en la base de datos'
+                'No se puede actualizar el registro, no existe en la base de datos'
             ) from error
 
-        self.db.commit()
-        self.db.refresh(db_obj)  # pyright: ignore
+        self.database.commit()
+        self.database.refresh(db_obj)
 
         return db_obj
 
-    def remove(self, id: Any) -> ModelType:  # pylint: disable=invalid-name, redefined-builtin  # noqa: E501
+    def remove(self, id: Any) -> ModelType:  # pylint: disable=C0103, W0622
         '''Delete a record in the given model.
 
         Args:
@@ -161,7 +153,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if obj is None:
             raise ValueError('Registro no encontrado')
 
-        self.db.delete(obj)  # pyright: ignore
-        self.db.commit()
+        self.database.delete(obj)
+        self.database.commit()
 
-        return obj  # pyright: ignore
+        return obj

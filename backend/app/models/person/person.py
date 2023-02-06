@@ -4,25 +4,18 @@ from sqlalchemy import Column, Date, Enum, BigInteger, Text
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from sqlalchemy_utils import EmailType, PhoneNumberType  # pyright: ignore
+from sqlalchemy_utils import EmailType, PhoneNumberType
 
-from app.core.types import (
-    BloodType,
-    CivilStatus,
-    DocumentType,
-    Gender,
-    RHFactor
-)
+from app.core.types import BloodType, CivilStatus, DocumentType, Gender, RHFactor
 from app.database.base import Base
 
 
 if TYPE_CHECKING:
-    from ..user.user import User  # pyright: ignore  # noqa: F401
+    from ..user.user import User
 
 
 class Person(Base):
-    '''Person model. Registration of personal data of a person in the system.
-    '''
+    '''Person model. Registration of personal data of a person in the system.'''
 
     # Identification number of the person according
     # to their identification document.
@@ -38,18 +31,14 @@ class Person(Base):
     address = Column(Text)
 
     # Person's email.
-    email = Column(EmailType, nullable=False, unique=True)  # pyright: ignore
+    email = Column(EmailType, nullable=False, unique=True)
 
     # Person's phone number.
-    phone = Column(PhoneNumberType(), nullable=False)  # pyright: ignore
+    phone = Column(PhoneNumberType(), nullable=False)
 
     # Person's gender.
     gender = Column(
-        Enum(
-            Gender,
-            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
-        ),
-        nullable=False
+        Enum(Gender, values_callable=lambda obj: [e.value for e in obj]), nullable=False
     )
 
     # Person's birthdate.
@@ -57,23 +46,15 @@ class Person(Base):
 
     # Type of person's identification document.
     document_type = Column(
-        Enum(
-            DocumentType,
-            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
-        ),
-        nullable=False
+        Enum(DocumentType, values_callable=lambda obj: [e.value for e in obj]),
+        nullable=False,
     )
 
     # Person's blood type.
     blood_type = Column(Enum(BloodType))
 
     # Person's RH blood factor.
-    rh_factor = Column(
-        Enum(
-            RHFactor,
-            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
-        )
-    )
+    rh_factor = Column(Enum(RHFactor, values_callable=lambda obj: [e.value for e in obj]))
 
     # Ethnicity to which  the person belongs if any.
     ethnicity = Column(Text)
@@ -83,17 +64,12 @@ class Person(Base):
 
     # Person's civil status.
     civil_status = Column(
-        Enum(
-            CivilStatus,
-            values_callable=lambda obj: [e.value for e in obj]  # type: ignore
-        )
+        Enum(CivilStatus, values_callable=lambda obj: [e.value for e in obj])
     )
 
     # Date of creation of the person's record in the system.
     created_at = Column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=func.current_timestamp()
+        TIMESTAMP(timezone=True), nullable=False, server_default=func.current_timestamp()
     )
 
     # Date of the last modification to a person's registration data.
@@ -101,14 +77,12 @@ class Person(Base):
         TIMESTAMP(timezone=True),
         nullable=False,
         server_default=func.current_timestamp(),
-        onupdate=func.current_timestamp()
+        onupdate=func.current_timestamp(),
     )
 
     # User relationship one to one.
     user: 'User' = relationship(  # type: ignore
-        'User',
-        uselist=False,
-        back_populates='person'
+        'User', uselist=False, back_populates='person'
     )
 
     __table_args__ = {'schema': 'person'}

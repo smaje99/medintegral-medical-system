@@ -1,23 +1,11 @@
-from typing import Any
 from uuid import UUID
 
-from fastapi import (
-    APIRouter,
-    Body,
-    Depends,
-    HTTPException,
-    Path,
-    Query
-)
-from starlette.status import (
-    HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND
-)
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
+from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from app.api.dependencies.auth import (
     get_current_active_user,
-    get_current_user_with_permissions
+    get_current_user_with_permissions,
 )
 from app.api.dependencies.person import get_person_if_no_user_exists
 from app.core.types import PermissionAction
@@ -32,26 +20,26 @@ from .user_deps import get_user_service, get_role_service
 router = APIRouter()
 
 
-@router.get('/me', response_model=UserInSession)
+@router.get('/me')
 def read_user_me(
-    current_user: UserModel = Depends(get_current_active_user)
-) -> Any:
+    current_user: UserModel = Depends(get_current_active_user),
+) -> UserInSession:
     '''Retrieve the current user.
 
     Returns:
     * User: Current user.
     '''
-    return current_user
+    return current_user  # type: ignore
 
 
-@router.get('/search', response_model=list[User])
+@router.get('/search')
 def search_user_by_dni(
     dni: int = Query(...),
     current_user: User = Depends(  # pylint: disable=W0613
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
-    service: UserService = Depends(get_user_service)
-) -> Any:
+    service: UserService = Depends(get_user_service),
+) -> list[User]:
     '''Search for users by a given DNI.
 
     Args:
@@ -60,22 +48,19 @@ def search_user_by_dni(
     Returns:
     * list[User]: List of users who start their DNI with the given.
     '''
-    return service.search_by_dni(dni)
+    return service.search_by_dni(dni)  # type: ignore
 
 
-@router.post('/', response_model=User, status_code=HTTP_201_CREATED)
+@router.post('/', status_code=HTTP_201_CREATED)
 def create_user(
     current_user: User = Depends(  # pylint: disable=W0613
-        get_current_user_with_permissions(
-            'usuarios',
-            {PermissionAction.creation}
-        )
+        get_current_user_with_permissions('usuarios', {PermissionAction.creation})
     ),
     person: Person = Depends(get_person_if_no_user_exists),
     role_id: UUID = Body(..., alias='roleId'),
     role_service: RoleService = Depends(get_role_service),
-    user_service: UserService = Depends(get_user_service)
-) -> Any:
+    user_service: UserService = Depends(get_user_service),
+) -> User:
     '''Create an user and notify the user's email address.
 
     Args:
@@ -92,29 +77,26 @@ def create_user(
     if not role_service.contains(role_id):
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
-            detail='El rol a asignar al usuario no existe'
+            detail='El rol a asignar al usuario no existe',
         )
 
-    user_in = UserCreate(
-        dni=person.dni,
-        password=str(person.dni),
-        role_id=role_id
-    )
+    password = str(person.dni)
+    user_in = UserCreate(dni=person.dni, password=password, role_id=role_id)
 
     user = user_service.create(user_in)
-    user_service.send_new_account_email(user=user)
+    user_service.send_new_account_email(user=user, password=password)
 
-    return user
+    return user  # type: ignore
 
 
-@router.get('/{dni}', response_model=User)
+@router.get('/{dni}')
 def read_user(
     dni: int = Path(...),
     current_user: User = Depends(
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
-    user_service: UserService = Depends(get_user_service)
-) -> Any:
+    user_service: UserService = Depends(get_user_service),
+) -> User:
     '''Retrieve a user by a given DNI.
     If the given DNI doesn't exist, raise an error.
 
@@ -131,32 +113,27 @@ def read_user(
         return current_user
 
     if not (user := user_service.get(dni)):
-        raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND,
-            detail='El usuario no existe'
-        )
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail='El usuario no existe')
 
-    return user
+    return user  # type: ignore
 
 
-@router.get('/', response_model=list[User])
+@router.get('/')
 def read_users(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
     current_user: User = Depends(  # pylint: disable=W0613
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
-    service: UserService = Depends(get_user_service)
-) -> Any:
+    service: UserService = Depends(get_user_service),
+) -> list[User]:
     '''Retrieve a list of users.
 
     Args:
-    * skip (int): Start cut of subset of users via query parameter.
-        Defaults to 0.
-    * limit (int): Number of users within the subset via query parameter.
-        Defaults to 50.
+    * skip (int): Start cut of subset of users via query parameter. Defaults to 0.
+    * limit (int): Number of users within the subset via query parameter. Defaults to 50.
 
     Returns:
     * list[Person]: Specified subset of users.
     '''
-    return service.get_all(skip=skip, limit=limit)
+    return service.get_all(skip=skip, limit=limit)  # type: ignore
