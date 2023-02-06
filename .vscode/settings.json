@@ -1,0 +1,78 @@
+{
+    "cSpell.words": [
+        "Anek",
+        "asyncpg",
+        "Bloodtype",
+        "camelcase",
+        "dayjs",
+        "decamilize",
+        "dmypy",
+        "esnext",
+        "fullname",
+        "innerjoin",
+        "isbot",
+        "isouter",
+        "joinedload",
+        "lazyload",
+        "medintegral",
+        "Medintegral",
+        "Medintregal",
+        "mons",
+        "mypy",
+        "nextauth",
+        "NEXTAUTH",
+        "onupdate",
+        "passlib",
+        "primaryjoin",
+        "referrerpolicy",
+        "setrecursionlimit",
+        "sourcery",
+        "sqltypes",
+        "subinfo",
+        "tanstack",
+        "ubicanos",
+        "unidecode",
+        "uvicorn",
+        "viewonly",
+        "Whatsapp",
+        "wixc"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyArgs": [
+        "--rcfile=backend/mypy.ini"
+    ],
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--rcfile=backend/.flake8"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--rcfile=backend/.pylintrc"
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/__pycache__": true,
+        "**/venv": true,
+        "**/.next": true,
+        "**/.storybook": true,
+        "**/package-lock.json": true,
+        "**/node_modules": true,
+        ".mypy_cache": true,
+        ".VSCodeCounter": true,
+        "**/poetry.lock": true,
+        ".vscode": true
+    },
+    "sonarlint.": "backend/venv/**",
+    "flake8.args": [
+        "--rcfile=backend/.flake8"
+    ],
+    "pylint.args": [
+        "--rcfile=backend/.pylintrc"
+    ],
+}
