@@ -5,9 +5,9 @@ import { Badge } from '@Components/Badge';
 import {
     CopyButton, EmailButton, TelButton, WhatsAppButton
 } from '@Components/Button';
-import { IndeterminateCheckbox } from '@Components/Input';
 import { Table as TableTemplate } from '@Components/Table';
 import { IdentificationCell } from '@Components/Table/cells';
+import { SelectionColumn } from '@Components/Table/columns';
 import { fuzzySort } from '@Components/Table/filters';
 import routes from '@Helpers/routes';
 import { formatPhone } from '@Utils/phone';
@@ -20,25 +20,7 @@ const columnHelper = createColumnHelper<UserDataForTable>();
 
 const Table = ({ users }: TableProps) => {
     const columns = useMemo<ColumnDef<UserDataForTable>[]>(() => ([
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <IndeterminateCheckbox {...{
-                    checked: table.getIsAllRowsSelected(),
-                    indeterminate: table.getIsSomeRowsSelected(),
-                    onChange: table.getToggleAllPageRowsSelectedHandler()
-                }} />
-            ),
-            cell: ({ row }) => (
-                <div>
-                    <IndeterminateCheckbox {...{
-                        checked: row.getIsSelected(),
-                        indeterminate: row.getIsSomeSelected(),
-                        onChange: row.getToggleSelectedHandler()
-                    }} />
-                </div>
-            )
-        },
+        SelectionColumn<UserDataForTable>(),
         columnHelper.accessor('dni', {
             header: 'Identificación',
             cell: info => (
@@ -120,7 +102,7 @@ const Table = ({ users }: TableProps) => {
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                         <TelButton number={info.getValue()} />
-                        <WhatsAppButton number={info.getValue()} />
+                        <WhatsAppButton phoneNumber={info.getValue()} />
                     </div>
                 </>
             ),

@@ -37,7 +37,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
                             username: credentials.username,
                             password: credentials.password
                         });
-                        const user: UserInSession = await getMe(token.access_token);
+                        const user: UserInSession = await getMe(token.accessToken);
 
                         return { user, token };
                     } catch (error) {
@@ -49,7 +49,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         callbacks: {
             async jwt({ token, user }) {
                 if (user) {
-                    token.accessToken = user.token.access_token;
+                    token.accessToken = user.token.accessToken;
                     token.user = user.user;
                 }
                 return token;

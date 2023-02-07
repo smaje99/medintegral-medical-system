@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import type { NavLinkProps } from './NavLink.types';
 
-const NavLink = ({ href, className, children, ...props }: NavLinkProps) => {
+const NavLink: React.FC<NavLinkProps> = ({ href, className, children, ...props }) => {
     const { pathname } = useRouter();
     const [newClassName, setNewClassName] = useState('');
 
@@ -21,8 +21,8 @@ const NavLink = ({ href, className, children, ...props }: NavLinkProps) => {
     }, [className]);
 
     return (
-        <Link href={href} {...props}>
-            <a className={newClassName}>
+        <Link href={href}>
+            <a className={newClassName} {...props}>
                 {children}
             </a>
         </Link>

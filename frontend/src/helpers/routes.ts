@@ -11,7 +11,7 @@ const routes = {
     dashboard: {
         home: '/dashboard',
         users: '/dashboard/users',
-        user: dni => `/dashboard/users/${dni}`
+        user: (dni: number | string) => `/dashboard/users/${dni}`
     } as const
 } as const;
 

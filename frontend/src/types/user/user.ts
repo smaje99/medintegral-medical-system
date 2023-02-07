@@ -8,8 +8,8 @@ export interface User {
     readonly is_active: boolean;
     readonly role: Role;
     readonly person: Person;
-    readonly created_at: Date;
-    readonly modified_at: Date;
+    readonly createdAt: Date;
+    readonly modifiedAt: Date;
 }
 
 export interface UserInSession extends Omit<User, 'role' | 'person'> {

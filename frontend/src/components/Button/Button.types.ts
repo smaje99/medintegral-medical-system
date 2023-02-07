@@ -9,6 +9,8 @@ export interface ButtonProps extends React.HTMLProps<
 
 export interface ButtonAnchorProps extends React.HTMLProps<HTMLAnchorElement> { }
 
-export interface ButtonAuxProps extends React.HTMLProps<HTMLButtonElement> { }
+export interface ButtonAuxProps extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement
+> { }
 
 export interface ButtonInputProps extends React.HTMLProps<HTMLInputElement> { }

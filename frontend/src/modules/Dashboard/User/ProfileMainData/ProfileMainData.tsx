@@ -24,7 +24,7 @@ const ProfileMainData = ({ user }: ProfileMainDataProps) => {
         columnHelper.accessor('person', {
             header: () => <><HiIdentification /> Identificación</>,
             cell: info => {
-                const documentType = info.getValue().document_type;
+                const documentType = info.getValue().documentType;
                 const dni = Intl.NumberFormat('es-CO').format(info.getValue().dni);
 
                 return (
@@ -80,7 +80,7 @@ const ProfileMainData = ({ user }: ProfileMainDataProps) => {
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                         <TelButton number={info.getValue()} />
-                        <WhatsAppButton number={info.getValue()} />
+                        <WhatsAppButton phoneNumber={info.getValue()} />
                     </div>
                 </>
             )

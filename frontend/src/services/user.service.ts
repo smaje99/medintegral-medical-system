@@ -6,7 +6,7 @@ import type { User, UserInSession } from '@Types/user/user';
 
 import { isAxiosError } from '@Utils/axios-error';
 
-export const getMe = async (token: Token['access_token']): Promise<UserInSession> => {
+export const getMe = async (token: Token['accessToken']): Promise<UserInSession> => {
     try {
         const response = await api.getMe(token);
         return response.data;
@@ -20,7 +20,7 @@ export const getMe = async (token: Token['access_token']): Promise<UserInSession
 }
 
 export const createUser = async (
-    dni: User['dni'], role_id: User['role']['id'], token: Token['access_token']
+    dni: User['dni'], role_id: User['role']['id'], token: Token['accessToken']
 ): Promise<User> => {
     try {
         const response = await api.create(dni, role_id, token);
@@ -35,7 +35,7 @@ export const createUser = async (
 }
 
 export const getAllOfUsers = async(
-    skip: number, limit: number, token: Token['access_token']
+    skip: number, limit: number, token: Token['accessToken']
 ): Promise<User[]> => {
     try {
         const response = await api.getAll(skip, limit, token);
@@ -50,7 +50,7 @@ export const getAllOfUsers = async(
 }
 
 export const getUser = async (
-    dni: User['dni'], token: Token['access_token']
+    dni: User['dni'], token: Token['accessToken']
 ): Promise<User> => {
     try {
         const response = await api.get(dni, token);

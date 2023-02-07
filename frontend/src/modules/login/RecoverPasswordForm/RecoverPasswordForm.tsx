@@ -21,13 +21,13 @@ const RecoverPasswordForm = forwardRef((props, ref) => {
                 success: {
                     render({ data }) {
                         reset();
-                        return (data as Message).message;
+                        return data.message;
                     }
                 },
                 error: {
                     render({ data }) {
                         // ! Probar
-                        return data.message;
+                        return (data as Message).message;
                     }
                 }
             },

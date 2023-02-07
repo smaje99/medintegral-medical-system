@@ -28,8 +28,8 @@ export default Users;
 export const getServerSideProps: GetServerSideProps<DataProps> = async (context) => {
     const token = await getToken({ req: context.req });
 
-    const roles = { data: null, error: null };
-    const users = { data: null, error: null };
+    const roles: DataProps['data']['roles'] = {};
+    const users: DataProps['data']['users'] = {};
 
     try {
         roles.data = await getAllOfRoles();

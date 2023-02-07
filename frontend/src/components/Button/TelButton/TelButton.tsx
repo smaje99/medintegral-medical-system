@@ -1,10 +1,9 @@
 import { BsFillTelephoneForwardFill } from 'react-icons/bs';
 
-import { TelButtonProps } from './TelButton.types';
-
 import Button from '../Button';
+import type { TelButtonProps } from './TelButton.types';
 
-const TelButton = ({number}: TelButtonProps) => {
+const TelButton: React.FC<TelButtonProps> = ({ number }) => {
     return (
         <Button
             as="a"

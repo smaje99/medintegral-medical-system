@@ -4,12 +4,14 @@ import { AuthLayout } from '@Components/layouts'
 import { Form, styles } from '@Modules/ResetPassword';
 
 const ResetPassword = () => {
-    const router = useRouter();
+    const { query: { token } } = useRouter();
+    const tokenStr = token && typeof token === 'string' ? token : '';
+
 
     return (
         <section className={styles.form_box}>
             <h2 className={styles.title}>Restablecer tu contraseña</h2>
-            <Form token={router?.query?.token} />
+            <Form token={tokenStr} />
         </section>
     )
 }

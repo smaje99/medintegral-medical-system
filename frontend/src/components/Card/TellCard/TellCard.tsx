@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
 import styles from './TellCard.module.scss';
-import { TellCardProps } from '../Card.types';
+import type { TellCardProps } from '../Card.types';
 
-const TellCard = ({ opinion, created_at }: TellCardProps) => {
-    const date = useMemo(() => new Date(created_at).toLocaleDateString(), [created_at]);
+const TellCard: React.FC<TellCardProps> = ({ opinion, createdAt }) => {
+    const date = useMemo(() => new Date(createdAt).toLocaleDateString(), [createdAt]);
 
     return (
         <section className={styles.card}>

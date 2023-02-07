@@ -1,11 +1,12 @@
+import { Data } from '@Types/data-request';
 import type { Person } from '@Types/person';
-import type { Role } from "@Types/user/role";
+import type { Role } from '@Types/user/role';
 import { User } from '@Types/user/user';
 
 export interface DataProps {
     data: {
-        roles: { data: Role[]; error: Error; };
-        users: { data: User[]; error: Error; };
+        roles: Data<Role[]>;
+        users: Data<User[]>;
     };
 }
 
@@ -25,24 +26,24 @@ export interface CreateFormViewProps {
 }
 
 export enum BloodTypeWithRHFactor {
-    'A+' = 'A+',
-    'A-' = 'A-',
-    'B+' = 'B+',
-    'B-' = 'B-',
-    'AB+' = 'AB+',
-    'AB-' = 'AB-',
-    'O+' = 'O+',
-    'O-' = 'O-',
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
 }
 
 export interface UserCreateFormValues extends Omit<
     Person,
-    'blood_type'
-    | 'rh_factor'
+    'bloodType'
+    | 'rhFactor'
     | 'occupation'
-    | 'created_at'
-    | 'modified_at'
+    | 'createdAt'
+    | 'modifiedAt'
 > {
-    readonly blood_type?: BloodTypeWithRHFactor;
-    readonly role_id: Role['id'];
+    readonly bloodType?: BloodTypeWithRHFactor;
+    readonly roleId: Role['id'];
 }

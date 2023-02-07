@@ -6,6 +6,8 @@ export interface DebouncedInputProps extends Omit<
     debounce?: number;
 }
 
-export interface IndeterminateCheckboxProps extends React.HTMLProps<HTMLInputElement> {
+export interface IndeterminateCheckboxProps extends React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement
+> {
     indeterminate?: boolean;
 }

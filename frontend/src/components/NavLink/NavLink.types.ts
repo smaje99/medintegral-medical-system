@@ -1,5 +1,5 @@
-export interface NavLinkProps {
-    href: string;
+export interface NavLinkProps extends Omit<
+    React.HTMLProps<HTMLAnchorElement>, 'className'
+> {
     className?: string | ((active: boolean) => string);
-    children: React.ReactNode;
 }

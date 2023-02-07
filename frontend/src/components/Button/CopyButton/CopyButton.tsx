@@ -1,9 +1,9 @@
 import { IoCopy } from 'react-icons/io5';
 
 import Button from '../Button';
-import { CopyButtonProps } from './CopyButton.types';
+import type { CopyButtonProps } from './CopyButton.types';
 
-const CopyButton = ({ textToCopy }: CopyButtonProps) => {
+const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
     const handleCopy = () => {
         navigator.clipboard.writeText(textToCopy);
     }

@@ -3,17 +3,13 @@ import { useMemo } from 'react';
 import { BsFillTelephoneFill, BsFillPhoneFill, BsWhatsapp } from 'react-icons/bs';
 import { FiMail } from 'react-icons/fi';
 
+import type { InfoProps } from './InfoFooter.types';
+
 import styles from './InfoFooter.module.scss';
 
 import medintegralIcon from '@Icons/medintegral.svg';
 
-type InfoProps = {
-    id: string;
-    title: string;
-    children: JSX.Element;
-}
-
-const Info = ({ id, title, children }: InfoProps) => (
+const Info: React.FC<InfoProps> = ({ id, title, children }) => (
     <section className={styles.info} id={styles[id]}>
         <h3 className={styles.title}>{title}</h3>
         {children}

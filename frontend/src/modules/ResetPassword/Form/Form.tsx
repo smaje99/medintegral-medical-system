@@ -33,14 +33,14 @@ const Form = ({ token }: FormProps) => {
                     render({ data }) {
                         reset();
                         router.push(routes.login);
-                        return (data as Message).message;
+                        return data.message;
                     }
                 },
                 error: {
                     render({ data }) {
                         router.push(routes.home);
                         // ! probar
-                        return data.message
+                        return (data as Message).message;
                     }
                 }
             },

@@ -1,3 +1,3 @@
 export interface WhatsAppButtonProps {
-    number: string
+    phoneNumber: string
 }

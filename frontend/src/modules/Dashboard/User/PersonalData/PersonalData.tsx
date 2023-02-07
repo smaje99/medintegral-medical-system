@@ -27,12 +27,12 @@ import styles from './PersonalData.module.scss';
 
 const columnHelper = createColumnHelper<User>();
 
-const PersonalData = ({ user }: PersonalDataProps) => {
+const PersonalData: React.FC<PersonalDataProps> = ({ user }) => {
     const columns = useMemo<ColumnDef<User>[]>(() => ([
         columnHelper.accessor('person', {
             header: () => <><HiIdentification /> Identificación</>,
             cell: info => {
-                const documentType = info.getValue().document_type;
+                const documentType = info.getValue().documentType;
                 const dni = Intl.NumberFormat('es-CO').format(info.getValue().dni);
 
                 return (
@@ -100,7 +100,7 @@ const PersonalData = ({ user }: PersonalDataProps) => {
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                         <TelButton number={info.getValue()} />
-                        <WhatsAppButton number={info.getValue()} />
+                        <WhatsAppButton phoneNumber={info.getValue()} />
                     </div>
                 </>
             )
@@ -120,9 +120,7 @@ const PersonalData = ({ user }: PersonalDataProps) => {
             header: () => <><BsFillCalendar2EventFill /> Edad</>,
             cell: info => (
                 <>
-                    <span>
-                        {info.getValue() ?? 'Información no disponible'}
-                    </span>
+                    <span>{info.getValue() ?? 'Información no disponible'}</span>
                     <div role="toolbar">
                         <CopyButton textToCopy={info.getValue()} />
                     </div>
@@ -144,11 +142,11 @@ const PersonalData = ({ user }: PersonalDataProps) => {
                 )
             }
         }),
-        columnHelper.accessor('person.blood_type', {
+        columnHelper.accessor('person', {
             header: () => <><MdBloodtype /> Grupo Sanguíneo</>,
             cell: info => {
-                const rhFactor = (info.row.getValue('person') as User['person']).rh_factor;
-                const blood = `${info.getValue()}${rhFactor}`;
+                const { bloodType, rhFactor } = info.getValue();
+                const blood = `${bloodType}${rhFactor}`;
 
                 return (
                     <>
@@ -182,7 +180,7 @@ const PersonalData = ({ user }: PersonalDataProps) => {
                 </>
             )
         }),
-        columnHelper.accessor('person.civil_status', {
+        columnHelper.accessor('person.civilStatus', {
             header: () => <><GiLinkedRings /> Estado civil</>,
             cell: info => (
                 <>
@@ -193,19 +191,19 @@ const PersonalData = ({ user }: PersonalDataProps) => {
                 </>
             )
         }),
-        columnHelper.accessor('person.created_at', {
+        columnHelper.accessor('person.createdAt', {
             header: () => <><BsFillCalendar2PlusFill /> Creado</>,
             cell: info => relativeDateToNow(info.getValue())
         }),
-        columnHelper.accessor('person.modified_at', {
+        columnHelper.accessor('person.modifiedAt', {
             header: () => <><BsFillCalendar2MinusFill /> Modificado</>,
             cell: info => relativeDateToNow(info.getValue())
         }),
-        columnHelper.accessor('created_at', {
+        columnHelper.accessor('createdAt', {
             header: () => <><BsFillCalendar2PlusFill /> Usuario creado</>,
             cell: info => relativeDateToNow(info.getValue())
         }),
-        columnHelper.accessor('modified_at', {
+        columnHelper.accessor('modifiedAt', {
             header: () => <><BsFillCalendar2MinusFill /> Usuario modificado</>,
             cell: info => relativeDateToNow(info.getValue())
         })

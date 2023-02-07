@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useCallback } from 'react';
 
 import styles from './Button.module.scss';
 import {
@@ -27,7 +28,7 @@ const ButtonAux = ({ children, ...props }: ButtonAuxProps) => (
 )
 
 const Button = ({ className, stylesFor, as, children, ...props }: ButtonProps) => {
-    const getButton = () => {
+    const getButton = useCallback(() => {
         switch (as) {
             case 'a':
                 return (
@@ -51,12 +52,12 @@ const Button = ({ className, stylesFor, as, children, ...props }: ButtonProps) =
                 return (
                     <ButtonInput
                         className={`${styles.button} ${styles[stylesFor]} ${className}`}
-                        value={children as string}
+                        value={children.toString()}
                         {...props as ButtonInputProps}
                     />
                 )
         }
-    }
+    }, [as]);
 
     return <>{getButton()}</>;
 }

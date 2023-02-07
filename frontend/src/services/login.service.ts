@@ -22,7 +22,7 @@ export const login = async (credentials: UserLogin): Promise<Token> => {
     }
 }
 
-export const testToken = async (token: Token['access_token']): Promise<UserInSession> => {
+export const testToken = async (token: Token['accessToken']): Promise<UserInSession> => {
     try {
         const response = await api.testToken(token);
         return response.data;
@@ -36,7 +36,7 @@ export const testToken = async (token: Token['access_token']): Promise<UserInSes
 }
 
 export const resetPassword = async (
-    token: Token['access_token'], newPassword: string
+    token: Token['accessToken'], newPassword: string
 ): Promise<Message> => {
     try {
         const response = await api.resetPassword(

@@ -12,14 +12,14 @@ import type { CreateFormViewProps, UserCreateFormValues } from '../Users.types';
 
 import styles from './CreateFormModal.module.scss';
 
-const CreateFormView = ({
+const CreateFormView: React.FC<CreateFormViewProps> = ({
     isPersonLoading,
     isPersonCreated,
     handleCreate,
     handleClose,
     searchPerson,
     roles
-}: CreateFormViewProps) => {
+}) => {
     const [isObligatory, handleObligatory] = useReducer((state) => !state, true);
     const { control, handleSubmit, register } = useFormContext<UserCreateFormValues>();
 
@@ -48,7 +48,7 @@ const CreateFormView = ({
                     <select
                         className={styles.select}
                         disabled={isPersonCreated}
-                        {...register('document_type')}
+                        {...register('documentType')}
                     >
                         <option value="C.C." key="C.C.">C.C.</option>
                         <option value="C.E." key="C.E.">C.E.</option>
@@ -180,7 +180,7 @@ const CreateFormView = ({
                         id="blood_type"
                         className={styles.input_select}
                         disabled={isPersonCreated}
-                        {...register('blood_type')}
+                        {...register('bloodType')}
                     >
                         <option value="" key="none">- Seleccione G.S. -</option>
                         <option value="A+" key="A+">A+</option>
@@ -209,7 +209,7 @@ const CreateFormView = ({
                         id="civil_status"
                         className={styles.input_select}
                         disabled={isPersonCreated}
-                        {...register('civil_status')}
+                        {...register('civilStatus')}
                     >
                         <option value="" key="none">- Seleccione estado civil -</option>
                         <option value="soltero" key="soltero">Soltero</option>
@@ -225,10 +225,10 @@ const CreateFormView = ({
                         id="role_id"
                         className={styles.input_select}
                         required
-                        {...register('role_id')}
+                        {...register('roleId')}
                     >
                         <option value="" key="none">- Seleccione rol -</option>
-                        {roles?.data && roles.data.map(role => (
+                        {roles?.data?.map(role => (
                             <option value={role.id} key={role.id}>
                                 {role.name}
                             </option>

@@ -1,9 +1,9 @@
 import { MdOutgoingMail } from 'react-icons/md';
 
-import { EmailButtonProps } from './EmailButton.types';
 import Button from '../Button';
+import type { EmailButtonProps } from './EmailButton.types';
 
-const EmailButton = ({ email }: EmailButtonProps) => {
+const EmailButton: React.FC<EmailButtonProps> = ({ email }) => {
     return (
         <Button
             as="a"

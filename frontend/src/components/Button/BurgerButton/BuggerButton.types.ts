@@ -1,5 +1,6 @@
-export interface BurgerButtonProps {
-    className?: string;
+export interface BurgerButtonProps extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement
+> {
     onEvent?: (active: boolean) => void;
 }
 

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { DebouncedInput } from '@Components/Input';
 
-import { FilterProps } from '../Table/Table.types';
+import type { FilterProps } from './filters.types';
 
 import styles from '../Table/Table.module.scss';
 

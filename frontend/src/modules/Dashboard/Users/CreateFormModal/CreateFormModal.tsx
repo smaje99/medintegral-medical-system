@@ -33,7 +33,7 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
         const dni = getValues('dni');
         setPersonLoading(true);
         try {
-            const { blood_type, rh_factor, ...person } = await getPerson(dni);
+            const { bloodType: blood_type, rhFactor: rh_factor, ...person } = await getPerson(dni);
             setPersonCreated(true);
             reset({
                 blood_type: BloodTypeWithRHFactor[`${blood_type}${rh_factor}`],
@@ -61,8 +61,8 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
 
         const GSWithRHFactor = blood_type ? (blood_type as string).split(/\b/) : undefined;
         const newPerson: PersonCreate = GSWithRHFactor ? {
-            blood_type: GSWithRHFactor[0] as PersonCreate['blood_type'],
-            rh_factor: GSWithRHFactor[1] as PersonCreate['rh_factor'],
+            bloodType: GSWithRHFactor[0] as PersonCreate['bloodType'],
+            rhFactor: GSWithRHFactor[1] as PersonCreate['rhFactor'],
             ...person
         } : person;
 
