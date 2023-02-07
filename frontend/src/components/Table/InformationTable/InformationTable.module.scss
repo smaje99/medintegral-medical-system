@@ -72,5 +72,16 @@
 }
 
 .no-content {
-    text-decoration: line-through wavy $green-complementary;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+
+    & > :first-child {
+        color: lighten($color: $black, $amount: 10%);
+    }
+
+    & > :last-child {
+        font-size: 12pt;
+        color: $green-complementary;
+    }
 }

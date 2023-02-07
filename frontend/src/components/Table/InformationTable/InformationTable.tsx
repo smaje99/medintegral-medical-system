@@ -1,4 +1,5 @@
 import { zip } from 'lodash';
+import { RiFileWarningFill } from 'react-icons/ri';
 import {
     flexRender, getCoreRowModel, useReactTable
 } from '@tanstack/react-table';
@@ -34,7 +35,7 @@ function InformationTable<D extends object = {}>(
                             ? flexRender(cell.column.columnDef.cell, cell.getContext())
                             : (
                                 <span className={styles["no-content"]}>
-                                    Información no existente
+                                    Información no existente <RiFileWarningFill />
                                 </span>
                             )
                         }
