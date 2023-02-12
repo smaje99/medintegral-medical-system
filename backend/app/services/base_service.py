@@ -127,9 +127,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         try:
             self.database.add(db_obj)
         except Exception as error:
-            raise ValueError(
-                'No se puede actualizar el registro, no existe en la base de datos'
-            ) from error
+            raise ValueError('No se puede actualizar el registro.') from error
 
         self.database.commit()
         self.database.refresh(db_obj)

@@ -1,17 +1,29 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from starlette.status import (
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_404_NOT_FOUND,
+)
 
 from app.api.dependencies.auth import (
     get_current_active_user,
     get_current_user_with_permissions,
 )
 from app.api.dependencies.person import get_person_if_no_user_exists
+from app.core.exceptions import IncorrectCredentialsException
 from app.core.types import PermissionAction
 from app.models.user import User as UserModel
 from app.schemas.person.person import Person
-from app.schemas.user.user import User, UserCreate, UserInSession
+from app.schemas.user.user import (
+    User,
+    UserCreate,
+    UserUpdate,
+    UserUpdatePassword,
+    UserInSession,
+)
 from app.services.user import UserService, RoleService
 
 from .user_deps import get_user_service, get_role_service
@@ -35,7 +47,7 @@ def read_user_me(
 @router.get('/search')
 def search_user_by_dni(
     dni: int = Query(...),
-    current_user: User = Depends(  # pylint: disable=W0613
+    current_user: UserModel = Depends(  # pylint: disable=W0613
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
     service: UserService = Depends(get_user_service),
@@ -53,7 +65,7 @@ def search_user_by_dni(
 
 @router.post('/', status_code=HTTP_201_CREATED)
 def create_user(
-    current_user: User = Depends(  # pylint: disable=W0613
+    current_user: UserModel = Depends(  # pylint: disable=W0613
         get_current_user_with_permissions('usuarios', {PermissionAction.creation})
     ),
     person: Person = Depends(get_person_if_no_user_exists),
@@ -122,7 +134,7 @@ def read_user(
 def read_users(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
-    current_user: User = Depends(  # pylint: disable=W0613
+    current_user: UserModel = Depends(  # pylint: disable=W0613
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
     service: UserService = Depends(get_user_service),
@@ -137,3 +149,70 @@ def read_users(
     * list[Person]: Specified subset of users.
     '''
     return service.get_all(skip=skip, limit=limit)  # type: ignore
+
+
+@router.put('/{dni}')
+def update_user(
+    dni: int = Path(..., gt=0),
+    user_in: UserUpdate = Body(...),
+    current_user: UserModel = Depends(
+        get_current_user_with_permissions('usuarios', {PermissionAction.update})
+    ),
+    role_service: RoleService = Depends(get_role_service),
+    user_service: UserService = Depends(get_user_service),
+) -> User:
+    '''Update a user's data with a given DNI.
+
+    Args:
+    * dni: DNI given to retrieve the user to be updated via a path parameter.
+    * user_in(UserUpdate): User's data to update via body parameter.
+
+    Returns:
+    * User: The user's data updated.
+    '''
+    if not (user := user_service.get(dni)):
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f'El usuario con la identificación {dni} no existe',
+        )
+
+    if user_in.role_id:
+        if current_user.dni == dni:
+            raise HTTPException(
+                status_code=HTTP_401_UNAUTHORIZED,
+                detail='El usuario propietario no puede actualizar su rol',
+            )
+
+        if not role_service.contains(user_in.role_id):
+            raise HTTPException(
+                status_code=HTTP_400_BAD_REQUEST,
+                detail='El rol a asignar al usuario no existe',
+            )
+
+    return user_service.update(db_obj=user, obj_in=user_in)  # type: ignore
+
+
+@router.patch('/password')
+def update_password(
+    user_in: UserUpdatePassword = Body(...),
+    current_user: UserModel = Depends(get_current_active_user),
+    service: UserService = Depends(get_user_service),
+) -> User:
+    '''Update the current user's password.
+
+    Args:
+    * oldPassword(str): The old user's password via body parameter.
+    * newPassword(str): The new user's password via body parameter.
+
+    Returns:
+    * User: The user's data updated.
+    '''
+
+    try:
+        return service.update_password(  # type: ignore
+            db_user=current_user, user_in=user_in
+        )
+    except (ValueError, IncorrectCredentialsException) as error:
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST, detail=str(error)
+        ) from error

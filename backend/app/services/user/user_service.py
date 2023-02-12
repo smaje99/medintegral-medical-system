@@ -14,7 +14,7 @@ from app.core.security.pwd import get_password_hash, verify_password
 from app.models.person import Person
 from app.models.user import Permission, RolePermission, UserPermission, User
 from app.schemas.user.permission import PermissionInUser
-from app.schemas.user.user import UserCreate, UserUpdate
+from app.schemas.user.user import UserCreate, UserUpdate, UserUpdatePassword
 from app.services import BaseService
 
 
@@ -101,7 +101,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             obj_in if isinstance(obj_in, dict) else obj_in.dict(exclude_unset=True)
         )
 
-        if update_data['password']:
+        if update_data.get('password', False):
             hashed_password = get_password_hash(update_data['password'])
             del update_data['password']
             update_data['hashed_password'] = hashed_password
@@ -163,17 +163,24 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         query = self.database.query(User).filter(User.username == username)
         return self.database.query(query.exists()).scalar()
 
-    def update_password(self, *, db_user: User, new_password: str):
+    def update_password(self, *, db_user: User, user_in: UserUpdatePassword) -> User:
         '''Update an user's password.
 
         Args:
             db_user (User): User recorded.
-            new_password (str): New user's password.
-        '''
-        user_in = UserUpdate(**db_user._asdict())
-        user_in.password = new_password
+            user_in (UserUpdatePassword): New user's password.
 
-        self.update(db_obj=db_user, obj_in=user_in)
+        Returns:
+            User: User data with updated and hashed password.
+        '''
+        if not verify_password(user_in.old_password, db_user.hashed_password):
+            raise IncorrectCredentialsException('Contraseña incorrecta')
+
+        if not (user := self.get_by_username(str(db_user.username))):
+            raise ValueError('Usuario no encontrado')
+
+        update_data = {'password': user_in.new_password}
+        return self.update(db_obj=user, obj_in=update_data)
 
     def send_new_account_email(self, *, user: User, password: str):
         '''Send a new account email to the given user.
@@ -255,13 +262,16 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             .join(
                 Permission,  # type: ignore
                 model.permission_id == Permission.id,  # type: ignore
-                isouter=True
+                isouter=True,
             )
-            .filter(with_id == (
-                model.role_id  # type: ignore
-                if model.__name__ == 'RolePermission'
-                else model.user_id  # type: ignore
-            ))
+            .filter(
+                with_id
+                == (
+                    model.role_id  # type: ignore
+                    if model.__name__ == 'RolePermission'
+                    else model.user_id  # type: ignore
+                )
+            )
             .filter(model.is_active == true())
         )
 
