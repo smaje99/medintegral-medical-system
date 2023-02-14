@@ -15,6 +15,11 @@
     }
 }
 
+.fit {
+    font-size: 11pt !important;
+    padding: .16rem .6rem;
+}
+
 .floating {
     font: 700 16pt $body-font;
     color: $white;
@@ -51,6 +56,11 @@
             3px 3px 10px rgba($blue-analogous, .5),
             -3px -3px 10px rgba($blue-analogous, .5);
     }
+
+    &-fit {
+        @extend .primary;
+        @extend .fit;
+    }
 }
 
 .secondary {
@@ -59,8 +69,13 @@
     &:hover {
         transition: box-shadow 400ms;
         box-shadow:
-            3px 3px 25px rgba($green-complementary, .75),
-            -3px -3px 25px rgba($green-complementary, .75);
+            3px 3px 10px rgba($green-complementary, .5),
+            -3px -3px 10px rgba($green-complementary, .5);
+    }
+
+    &-fit {
+        @extend .secondary;
+        @extend .fit;
     }
 }
 

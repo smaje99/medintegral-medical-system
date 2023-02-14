@@ -6,10 +6,10 @@ import PersonalData from '../PersonalData';
 import ProfileMainData from '../ProfileMainData';
 import type { ProfileDataProps } from '../User.types';
 
-const ProfileData = ({ user }: ProfileDataProps) => {
+const ProfileData = ({ user, roles }: ProfileDataProps) => {
     return (
         <>
-            <ProfileMainData user={user} />
+            <ProfileMainData user={user} roles={roles} />
             <Tabs
                 tabs={(<>
                     <HiIdentification /> Información Personal
