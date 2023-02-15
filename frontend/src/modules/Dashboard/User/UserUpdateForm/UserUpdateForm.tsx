@@ -1,20 +1,46 @@
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Button from '@Components/Button/Button';
+import getToastConfig from '@Helpers/toast.config';
+import { updateUser } from '@Services/user.service';
+import type { APIError } from '@Types/error';
+import type { User } from '@Types/user/user';
 
 import { UserUpdateFormProps, UserUpdateValues } from '../User.types';
 
 import styles from './UserUpdateForm.module.scss';
 
-const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ roles, setEditRole }) => {
+const UserUpdateForm: React.FC<UserUpdateFormProps> = ({ userDni, roles, setEditRole }) => {
+    const router = useRouter();
+    const { data: session } = useSession();
     const { handleSubmit, register } = useForm<UserUpdateValues>();
 
     const rolesMemo = useMemo(() => roles, [roles]);
 
     const handleUpdate = async (data: UserUpdateValues) => {
-        console.log(data)
-        setEditRole(false);
+        await toast.promise<User, APIError>(
+            updateUser(userDni, data, session.accessToken),
+            {
+                pending: 'Actualizando usuario',
+                success: {
+                    render() {
+                        setEditRole(false);
+                        router.replace(router.asPath);
+                        return 'Usuario actualizado';
+                    }
+                },
+                error: {
+                    render({ data }) {
+                        return data.detail;
+                    }
+                }
+            },
+            getToastConfig()
+        )
     }
 
     return (

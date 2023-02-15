@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import type { Token } from '@Types/user/token';
-import type { User, UserInSession } from '@Types/user/user';
+import type { User, UserInSession, UserUpdate } from '@Types/user/user';
 
 const { NEXT_PUBLIC_API } = process.env;
 const baseURL = NEXT_PUBLIC_API;
@@ -24,5 +24,8 @@ export default {
     },
     async get(dni: User['dni'], token: Token['accessToken']) {
         return axios.get<User>(`${baseURL}/user/${dni}`, headers(token));
+    },
+    async update(dni: User['dni'], user: UserUpdate, token: Token['accessToken']) {
+        return axios.put<User>(`${baseURL}/user/${dni}`, user, headers(token));
     }
 }

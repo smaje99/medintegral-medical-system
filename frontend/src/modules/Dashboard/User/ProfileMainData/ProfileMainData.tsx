@@ -72,7 +72,13 @@ const ProfileMainData = ({ user, roles }: ProfileMainDataProps) => {
                             ): null}
                         </div>
                     </>
-                ): <UpdateFormModal roles={roles} setEditRole={setEditRole} />
+                ) : (
+                    <UpdateFormModal
+                        userDni={user?.data?.dni}
+                        roles={roles}
+                        setEditRole={setEditRole}
+                    />
+                )
             )
         }),
         columnHelper.accessor('person.email', {

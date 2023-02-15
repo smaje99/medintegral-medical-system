@@ -2,7 +2,7 @@ import api from '@Api/user.api';
 
 import type { APIError } from '@Types/error';
 import { Token } from '@Types/user/token';
-import type { User, UserInSession } from '@Types/user/user';
+import type { User, UserInSession, UserUpdate } from '@Types/user/user';
 
 import { isAxiosError } from '@Utils/axios-error';
 
@@ -54,6 +54,21 @@ export const getUser = async (
 ): Promise<User> => {
     try {
         const response = await api.get(dni, token);
+        return response.data;
+    } catch (error) {
+        if (isAxiosError<APIError>(error) && error.response) {
+            throw new Error(error.response.data.detail);
+        }
+
+        throw error;
+    }
+}
+
+export const updateUser = async (
+    dni: User['dni'], user: UserUpdate, token: Token['accessToken']
+): Promise<User> => {
+    try {
+        const response = await api.update(dni, user, token);
         return response.data;
     } catch (error) {
         if (isAxiosError<APIError>(error) && error.response) {
