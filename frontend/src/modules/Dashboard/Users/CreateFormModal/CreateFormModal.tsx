@@ -1,10 +1,9 @@
+import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import ReactModal from 'react-modal';
 import { toast } from 'react-toastify';
 
-import { CloseButton } from '@Components/Button';
 import { Modal } from '@Components/Modal';
 import getToastConfig, { getToastUpdateConfig } from '@Helpers/toast.config';
 import { getPerson, createPerson } from '@Services/person.service';
@@ -18,9 +17,8 @@ import {
     UserCreateFormValues
 } from '../Users.types';
 
-import styles from './CreateFormModal.module.scss';
-
 const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
+    const router = useRouter();
     const { data: session } = useSession();
 
     const [isPersonLoading, setPersonLoading] = useState(false);
@@ -33,10 +31,10 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
         const dni = getValues('dni');
         setPersonLoading(true);
         try {
-            const { bloodType: blood_type, rhFactor: rh_factor, ...person } = await getPerson(dni);
+            const { bloodType, rhFactor, ...person } = await getPerson(dni);
             setPersonCreated(true);
             reset({
-                blood_type: BloodTypeWithRHFactor[`${blood_type}${rh_factor}`],
+                bloodType: BloodTypeWithRHFactor[`${bloodType}${rhFactor}`],
                 ...person
             }, { keepDefaultValues: true });
         } catch (error) {
@@ -56,10 +54,10 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
     }
 
     const handleCreate = async (formData: UserCreateFormValues) => {
-        const { role_id, blood_type, ...person } = formData;
+        const { roleId, bloodType, ...person } = formData;
         const idToast = toast.loading('Creando al usuario', getToastConfig());
 
-        const GSWithRHFactor = blood_type ? (blood_type as string).split(/\b/) : undefined;
+        const GSWithRHFactor = bloodType ? bloodType.toString().split(/\b/) : undefined;
         const newPerson: PersonCreate = GSWithRHFactor ? {
             bloodType: GSWithRHFactor[0] as PersonCreate['bloodType'],
             rhFactor: GSWithRHFactor[1] as PersonCreate['rhFactor'],
@@ -69,7 +67,7 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
         try {
             const { 1: user } = await Promise.all([
                 !isPersonCreated && createPerson(newPerson),
-                createUser(person.dni, role_id, session.accessToken)
+                createUser(person.dni, roleId, session.accessToken)
             ]);
 
             handleClose();
@@ -77,6 +75,7 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
                 render: `EL usuario ${user.username} ha sido creado`,
                 ...getToastUpdateConfig('success', { delay: 200 })
             });
+            router.replace(router.asPath);
         } catch (error) {
             toast.update(idToast, {
                 render: error.message ?? 'EL usuario no pudo crearse',
