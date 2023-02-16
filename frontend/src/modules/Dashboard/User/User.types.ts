@@ -1,6 +1,7 @@
 import type { Data } from '@Types/data-request';
+import type { PersonUpdate } from '@Types/person';
 import type { Role } from '@Types/user/role';
-import type { User, UserUpdate } from '@Types/user/user';
+import type { User, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
 
 export interface DataProps {
     readonly data: {
@@ -25,6 +26,24 @@ export interface UserUpdateFormProps extends Pick<ProfileProps, 'roles'> {
     readonly setEditRole: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface UserPersonalDataUpdateFormValues extends Omit<User['person'], 'age'> { }
-
 export interface UserUpdateValues extends UserUpdate { }
+
+export type UserUpdateModalProps = {
+    isOpen: boolean;
+    close: () => void;
+    isUserOwner: boolean;
+}
+
+export type PersonalDataUpdateProps = {
+    onUpdate: (data: PersonalDataUpdateValues) => Promise<void>;
+    onClose: () => void;
+};
+
+export type ChangePasswordProps = {
+    onUpdate: (data: ChangePasswordValues) => Promise<void>;
+    onClose: () => void;
+};
+
+export type PersonalDataUpdateValues = PersonUpdate;
+
+export type ChangePasswordValues = UserPasswordUpdate;

@@ -1,0 +1,54 @@
+@import '../../../../styles/fonts';
+@import '../../../../styles/palette';
+
+.title {
+    color: $white;
+    font: 700 22pt $title-font;
+    line-height: 1;
+    letter-spacing: .2rem;
+}
+
+.form {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: 1fr;
+
+    & .input {
+        flex: 1;
+        font-size: 12pt;
+        display: inline-block;
+        letter-spacing: 0.1rem;
+        color: $black;
+        background-color: transparent;
+        border-color: transparent;
+        outline: 0;
+
+        &:focus {
+            border-bottom: 1px solid rgba($blue-monochromatic, 0.25);
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:is(:hover, :focus, :active) {
+            transition: font 0s 10800s;
+            transition: color 0s 10800s;
+            transition: background-color 0s 10800s;
+        }
+    }
+
+    & .show-password {
+        display: flex;
+        align-items: center;
+        font-size: 11pt;
+        color: $black;
+        border-color: transparent;
+        background-color: transparent;
+    }
+
+    & > .commands {
+        display: grid;
+        place-content: center;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+        margin: 2.4rem 0;
+    }
+}

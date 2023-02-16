@@ -4,15 +4,18 @@ import { FaUserEdit, FaUserSlash } from 'react-icons/fa';
 import Balancer from 'react-wrap-balancer';
 
 import { Badge } from "@Components/Badge";
+import useModal from '@Hooks/useModal';
 
 import ProfileData from '../ProfileData';
-import { ProfileProps } from "../User.types";
+import type { ProfileProps } from "../User.types";
+import UserUpdateModal from '../UserUpdateModal';
 
 import styles from './Profile.module.scss';
 
 const Profile = ({ user, roles }: ProfileProps) => {
     const { data: session } = useSession();
     const userMemo = useMemo(() => user, [user]);
+    const [isOpenUpdateModal, openUpdateModal, closeUpdateModal] = useModal();
 
     return (
         <>
@@ -28,7 +31,7 @@ const Profile = ({ user, roles }: ProfileProps) => {
                             {user.data?.role.name}
                         </Badge>
                         {session?.user?.permissions?.['usuarios']?.includes('modificación') ? (
-                            <button className={styles["button"]}>
+                            <button className={styles["button"]} onClick={openUpdateModal}>
                                 <FaUserEdit />
                                 Modificar datos
                             </button>
@@ -42,6 +45,12 @@ const Profile = ({ user, roles }: ProfileProps) => {
 
                 <ProfileData user={userMemo} roles={roles} />
             </section>
+
+            <UserUpdateModal
+                isOpen={isOpenUpdateModal}
+                close={closeUpdateModal}
+                isUserOwner={session?.user?.dni === user?.data?.dni}
+            />
         </>
     )
 }

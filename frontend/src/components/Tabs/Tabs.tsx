@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import {
     Tab,
     Tabs as TabsContainer,
@@ -9,14 +10,17 @@ import { TabsProps } from './Tabs.types';
 
 import styles from './Tabs.module.scss';
 
-const Tabs = ({ tabs, children }: TabsProps) => {
+const Tabs: React.FC<TabsProps> = ({ tabs, theme = 'light', children }) => {
+    const tabsId = useId();
+    const panelsId = useId();
+
     return (
         <TabsContainer>
             <TabList className={['react-tabs__tab-list', styles["list"]]}>
-                {Array.isArray(tabs) ? tabs.map(tab => (
+                {Array.isArray(tabs) ? tabs.filter(tab => !!tab).map((tab, idx) => (
                     <Tab
-                        key={tab.toString()}
-                        className={['react-tabs__tab', styles["tab"]]}
+                        key={`${tabsId}-${tab.toString()}-${idx}`}
+                        className={['react-tabs__tab', styles["tab"], styles[theme]]}
                         selectedClassName={`react-tabs__tab--selected ${styles["tab--selected"]}`}
                     >
                         {tab}
@@ -31,8 +35,8 @@ const Tabs = ({ tabs, children }: TabsProps) => {
                 )}
             </TabList>
 
-            {Array.isArray(children) ? children.map(child => (
-                <TabPanel key={child.toString()}>
+            {Array.isArray(children) ? children.filter(child => !!child).map((child, idx) => (
+                <TabPanel key={`${panelsId}-${child.toString()}-${idx}`}>
                     {child}
                 </TabPanel>
             )) : (

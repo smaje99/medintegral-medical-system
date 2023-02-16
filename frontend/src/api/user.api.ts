@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import type { Token } from '@Types/user/token';
-import type { User, UserInSession, UserUpdate } from '@Types/user/user';
+import type { User, UserInSession, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
 
 const { NEXT_PUBLIC_API } = process.env;
 const baseURL = NEXT_PUBLIC_API;
@@ -27,5 +27,8 @@ export default {
     },
     async update(dni: User['dni'], user: UserUpdate, token: Token['accessToken']) {
         return axios.put<User>(`${baseURL}/user/${dni}`, user, headers(token));
+    },
+    async updatePassword(credentials: UserPasswordUpdate, token: Token['accessToken']) {
+        return axios.patch<User>(`${baseURL}/user/password`, credentials, headers(token));
     }
 }

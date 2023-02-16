@@ -30,3 +30,8 @@ export interface UserWithToken {
 export interface UserUpdate {
     readonly roleId: Role['id'];
 }
+
+export interface UserPasswordUpdate {
+    oldPassword: string;
+    newPassword: string;
+}
