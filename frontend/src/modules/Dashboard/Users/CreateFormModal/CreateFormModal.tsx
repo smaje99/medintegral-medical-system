@@ -11,11 +11,7 @@ import { createUser } from '@Services/user.service';
 import { PersonCreate } from '@Types/person';
 
 import CreateFormView from './CreateForm.view';
-import {
-    BloodTypeWithRHFactor,
-    CreateFormModalProps,
-    UserCreateFormValues
-} from '../Users.types';
+import { CreateFormModalProps, UserCreateFormValues } from '../Users.types';
 
 const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
     const router = useRouter();
@@ -34,7 +30,7 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
             const { bloodType, rhFactor, ...person } = await getPerson(dni);
             setPersonCreated(true);
             reset({
-                bloodType: BloodTypeWithRHFactor[`${bloodType}${rhFactor}`],
+                bloodType: bloodType ? `${bloodType}${rhFactor}` : '',
                 ...person
             }, { keepDefaultValues: true });
         } catch (error) {
@@ -57,7 +53,7 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
         const { roleId, bloodType, ...person } = formData;
         const idToast = toast.loading('Creando al usuario', getToastConfig());
 
-        const GSWithRHFactor = bloodType ? bloodType.toString().split(/\b/) : undefined;
+        const GSWithRHFactor = bloodType ? bloodType.split(/\b/) : undefined;
         const newPerson: PersonCreate = GSWithRHFactor ? {
             bloodType: GSWithRHFactor[0] as PersonCreate['bloodType'],
             rhFactor: GSWithRHFactor[1] as PersonCreate['rhFactor'],

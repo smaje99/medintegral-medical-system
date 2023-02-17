@@ -23,12 +23,12 @@ const Profile = ({ user, roles }: ProfileProps) => {
                 <section className={styles["profile"]}>
                     <h2 className={styles["name"]}>
                         <Balancer>
-                            {user.data?.person.name} {user.data?.person.surname}
+                            {userMemo.data?.person.name} {userMemo.data?.person.surname}
                         </Balancer>
                     </h2>
                     <section className={styles["commands"]}>
                         <Badge color="green-blue" className={styles["badge-role"]}>
-                            {user.data?.role.name}
+                            {userMemo.data?.role.name}
                         </Badge>
                         {session?.user?.permissions?.['usuarios']?.includes('modificación') ? (
                             <button className={styles["button"]} onClick={openUpdateModal}>
@@ -49,7 +49,8 @@ const Profile = ({ user, roles }: ProfileProps) => {
             <UserUpdateModal
                 isOpen={isOpenUpdateModal}
                 close={closeUpdateModal}
-                isUserOwner={session?.user?.dni === user?.data?.dni}
+                isUserOwner={session?.user?.dni === userMemo?.data?.dni}
+                personalData={userMemo?.data?.person}
             />
         </>
     )

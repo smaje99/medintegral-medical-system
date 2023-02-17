@@ -32,4 +32,4 @@ export type PersonInUserSession = Pick<
 
 export type PersonCreate = Omit<Person, 'createdAt' | 'modifiedAt' | 'age'>
 
-export type PersonUpdate = Omit<Partial<Person>, 'age'>
+export type PersonUpdate = Omit<Partial<Person>, 'createdAt' | 'modifiedAt' | 'age'>;

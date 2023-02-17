@@ -1,5 +1,5 @@
 import type { Data } from '@Types/data-request';
-import type { PersonUpdate } from '@Types/person';
+import { Person, PersonUpdate } from '@Types/person';
 import type { Role } from '@Types/user/role';
 import type { User, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
 
@@ -32,6 +32,7 @@ export type UserUpdateModalProps = {
     isOpen: boolean;
     close: () => void;
     isUserOwner: boolean;
+    personalData: Person;
 }
 
 export type PersonalDataUpdateProps = {
@@ -44,6 +45,8 @@ export type ChangePasswordProps = {
     onClose: () => void;
 };
 
-export type PersonalDataUpdateValues = PersonUpdate;
+export interface PersonalDataUpdateValues extends Omit<PersonUpdate, 'bloodType' | 'rhFactor'> {
+    readonly bloodType?: string;
+}
 
 export type ChangePasswordValues = UserPasswordUpdate;
