@@ -1,3 +1,4 @@
+import { withRouter } from 'next/router'
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { FaUserEdit, FaUserSlash } from 'react-icons/fa';
@@ -12,10 +13,12 @@ import UserUpdateModal from '../UserUpdateModal';
 
 import styles from './Profile.module.scss';
 
-const Profile = ({ user, roles }: ProfileProps) => {
+const Profile = ({ user, roles, router }: ProfileProps) => {
     const { data: session } = useSession();
     const userMemo = useMemo(() => user, [user]);
-    const [isOpenUpdateModal, openUpdateModal, closeUpdateModal] = useModal();
+    const [
+        isOpenUpdateModal, openUpdateModal, closeUpdateModal
+    ] = useModal(Boolean(router.query?.update));
 
     return (
         <>
@@ -56,4 +59,4 @@ const Profile = ({ user, roles }: ProfileProps) => {
     )
 }
 
-export default Profile;
+export default withRouter(Profile);

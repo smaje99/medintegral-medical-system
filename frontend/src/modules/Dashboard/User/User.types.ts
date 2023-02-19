@@ -1,3 +1,5 @@
+import { NextRouter } from 'next/router';
+
 import type { Data } from '@Types/data-request';
 import { Person, PersonUpdate } from '@Types/person';
 import type { Role } from '@Types/user/role';
@@ -13,11 +15,12 @@ export interface DataProps {
 export interface ProfileProps {
     readonly user: DataProps['data']['user'];
     readonly roles: DataProps['data']['roles'];
+    readonly router: NextRouter;
 }
 
-export interface ProfileDataProps extends ProfileProps { }
+export interface ProfileDataProps extends Omit<ProfileProps, 'router'> { }
 
-export interface ProfileMainDataProps extends ProfileProps { }
+export interface ProfileMainDataProps extends Omit<ProfileProps, 'router'> { }
 
 export interface PersonalDataProps extends Pick<ProfileProps, 'user'> { }
 

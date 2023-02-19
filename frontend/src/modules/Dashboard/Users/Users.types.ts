@@ -10,10 +10,14 @@ export interface DataProps {
     };
 }
 
+export type BarProps = {
+    openCreateModal: () => void;
+}
+
 export interface CreateFormModalProps {
     isOpen: boolean;
     close: () => void;
-    data: DataProps['data'];
+    roles: DataProps['data']['roles'];
 }
 
 export interface CreateFormViewProps {

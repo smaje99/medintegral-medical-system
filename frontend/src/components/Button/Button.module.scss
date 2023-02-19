@@ -80,12 +80,13 @@
 }
 
 .icon {
-    font-size: 16pt;
+    font-size: 18pt;
     color: $black;
     border-color: transparent;
     background-color: transparent;
     padding: 0;
     outline: 0;
+    cursor: pointer;
 
     &:hover {
         filter: drop-shadow(1px 4px 4px rgba($blue-monochromatic, 0.75));

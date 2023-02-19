@@ -1,22 +1,48 @@
-import { IoPersonAdd } from 'react-icons/io5';
+import { useRouter } from 'next/router';
+import { useMemo } from 'react';
+import { FaUserEdit, FaUserPlus } from 'react-icons/fa';
 
+import routes from '@Helpers/routes';
 import Button from '@Components/Button';
-import useModal from '@Hooks/useModal';
+import { useTable } from '@Components/Table/Table';
 
-import CreateFormModal from '../CreateFormModal';
-import { DataProps } from '../Users.types';
+import { BarProps } from '../Users.types';
+import { UserDataForTable } from '..';
 
 import styles from './Bar.module.scss';
 
-const Bar = ({ data }: DataProps) => {
-    const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
+function Bar({ openCreateModal }: BarProps) {
+    const router = useRouter();
+    const { rowSelection, getSelectedFlatRows } = useTable<UserDataForTable>();
+
+    const rowSelectionSize = useMemo(
+        () => Object.keys(rowSelection ?? {}).length, [rowSelection]
+    );
+
+    const handleToGoUserUpdate = () => {
+        const { dni } = getSelectedFlatRows()[0].original;
+        const route = routes.dashboard.user(dni);
+        router.push({
+            pathname: route,
+            query: { update: true }
+        }, route);
+    }
 
     return (
         <>
             <nav className={styles.bar}>
-                <h1 className={styles.title}>
-                    Usuarios
-                </h1>
+                <section className={styles['section']}>
+                    <h1 className={styles.title}>
+                        Usuarios
+                    </h1>
+                    {rowSelectionSize > 0 ? (
+                        <span className={styles['row-size']}>
+                            {rowSelectionSize}
+                            &nbsp;
+                            {rowSelectionSize === 1 ? 'seleccionado' : 'seleccionados'}
+                        </span>
+                    ): null}
+                </section>
                 <ul className={styles.nav}>
                     <li className={styles.item}>
                         <Button
@@ -25,17 +51,23 @@ const Bar = ({ data }: DataProps) => {
                             onClick={openCreateModal}
                             title="Agregar usuario"
                         >
-                            <IoPersonAdd />
+                            <FaUserPlus />
                         </Button>
                     </li>
+                    {rowSelectionSize === 1 ? (
+                        <li className={styles['item']}>
+                            <Button
+                                as="button"
+                                stylesFor="icon"
+                                onClick={handleToGoUserUpdate}
+                                title="Modificar usuario"
+                            >
+                                <FaUserEdit />
+                            </Button>
+                        </li>
+                    ): null}
                 </ul>
             </nav>
-
-            <CreateFormModal
-                isOpen={isCreateModal}
-                close={closeCreateModal}
-                data={data}
-            />
         </>
     )
 }

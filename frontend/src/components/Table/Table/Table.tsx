@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     ColumnFiltersState,
     flexRender,
@@ -15,6 +15,7 @@ import {
 
 import { TableProps } from './Table.types';
 import { Filter, fuzzyFilter, startWithFilter } from '../filters';
+import useTable from './useTable';
 
 import styles from './Table.module.scss';
 
@@ -22,6 +23,8 @@ function Table<D extends object = {}>({ columns, data }: TableProps<D>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [sorting, setSorting] = useState<SortingState>([]);
+
+    const { setRowSelection: setRowSelectionProvider, setTable } = useTable<D>();
 
     const table = useReactTable<D>({
         data,
@@ -47,6 +50,11 @@ function Table<D extends object = {}>({ columns, data }: TableProps<D>) {
         getHeaderGroups,
         getRowModel
     } = table;
+
+    useEffect(() => {
+        setTable(table);
+        setRowSelectionProvider(rowSelection);
+    }, [table, rowSelection]);
 
     return (
         <table className={styles["table"]}>

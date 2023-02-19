@@ -14,6 +14,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ textToCopy }) => {
             stylesFor="cell"
             title="Copiar contenido"
             onClick={handleCopy}
+            style={{ cursor: 'copy' }}
         >
             <IoCopy />
         </Button>

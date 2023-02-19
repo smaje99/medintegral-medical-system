@@ -13,7 +13,7 @@ import { PersonCreate } from '@Types/person';
 import CreateFormView from './CreateForm.view';
 import { CreateFormModalProps, UserCreateFormValues } from '../Users.types';
 
-const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
+const CreateFormModal = ({ isOpen, close, roles }: CreateFormModalProps) => {
     const router = useRouter();
     const { data: session } = useSession();
 
@@ -94,7 +94,7 @@ const CreateFormModal = ({ isOpen, close, data }: CreateFormModalProps) => {
                     handleCreate={handleCreate}
                     handleClose={handleClose}
                     searchPerson={searchPerson}
-                    roles={data.roles}
+                    roles={roles}
                 />
             </FormProvider>
         </Modal>
