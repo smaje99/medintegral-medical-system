@@ -5,7 +5,8 @@ import type { Token } from '@Types/user/token';
 export interface User {
     readonly dni: number;
     readonly username: string;
-    readonly is_active: boolean;
+    readonly isSuperuser: boolean;
+    readonly isActive: boolean;
     readonly role: Role;
     readonly person: Person;
     readonly createdAt: Date;
