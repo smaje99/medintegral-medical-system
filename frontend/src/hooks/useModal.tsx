@@ -7,8 +7,8 @@ import { useState } from 'react';
  * sets isOpen to true. close is a function that sets isOpen to false.
  * @returns An array of three elements.
  */
-const useModal = () => {
-    const [isOpen, setOpen] = useState(false);
+const useModal = (initialValue: boolean = false) => {
+    const [isOpen, setOpen] = useState(initialValue);
 
     const open = () => setOpen(true);
 

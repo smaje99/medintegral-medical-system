@@ -110,11 +110,7 @@ const Table = ({ users }: TableProps) => {
     ]), []);
 
     const data = useMemo<UserDataForTable[]>(() => (
-        users.data?.map(user => {
-            const { dni, ...rest } = user;
-
-            return { dni: dni.toString(), ...rest }
-        })
+        users.data?.map(user => ({ ...user, dni: user.dni.toString() }))
     ), [users]);
 
     return <TableTemplate<UserDataForTable> {...{ columns, data }} />

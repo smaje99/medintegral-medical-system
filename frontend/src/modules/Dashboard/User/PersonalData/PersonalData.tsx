@@ -142,11 +142,11 @@ const PersonalData: React.FC<PersonalDataProps> = ({ user }) => {
                 )
             }
         }),
-        columnHelper.accessor('person', {
+        columnHelper.accessor('person.bloodType', {
             header: () => <><MdBloodtype /> Grupo Sanguíneo</>,
             cell: info => {
-                const { bloodType, rhFactor } = info.getValue();
-                const blood = `${bloodType}${rhFactor}`;
+                const { rhFactor } = info.row.getValue<User['person']>('person')
+                const blood = `${info.getValue()}${rhFactor}`;
 
                 return (
                     <>

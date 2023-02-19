@@ -4,12 +4,16 @@
 
 
 .table {
-    display: grid;
-    grid-template-rows: 1fr;
-    gap: 4px;
-    overflow: hidden;
+    width: 100%;
 
-    & > .row {
+    & > tbody {
+        display: grid;
+        grid-template-rows: 1fr;
+        gap: 4px;
+        overflow: hidden;
+    }
+
+    & .row {
         display: grid;
         grid-template-columns: 25% 75%;
         align-items: center;

@@ -13,8 +13,6 @@ from app.schemas.user.role import Role
 class UserBase(CamelModel):
     '''Shared properties.'''
 
-    dni: int | None = None
-
 
 class UserCreate(UserBase):
     '''Properties to receive via API on creation.'''
@@ -27,8 +25,14 @@ class UserCreate(UserBase):
 class UserUpdate(UserBase):
     '''Properties to receive via API on update.'''
 
-    password: str | None = None
     role_id: UUID | None = None
+
+
+class UserUpdatePassword(UserBase):
+    '''Properties to receive via API to update the user's password.'''
+
+    old_password: str
+    new_password: str
 
 
 class UserInDBBase(UserBase):

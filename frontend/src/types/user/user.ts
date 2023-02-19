@@ -26,3 +26,12 @@ export interface UserWithToken {
     readonly user: UserInSession;
     readonly token: Token;
 }
+
+export interface UserUpdate {
+    readonly roleId: Role['id'];
+}
+
+export interface UserPasswordUpdate {
+    oldPassword: string;
+    newPassword: string;
+}

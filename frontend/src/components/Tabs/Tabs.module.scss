@@ -14,10 +14,22 @@
         flex-wrap: nowrap;
         gap: 0.6rem;
 
+        &.light {
+            color: $black;
+        }
+
+        &.dark {
+            color: $white;
+        }
+
         &--selected {
             color: $green-blue-monochromatic;
             background-color: $green-blue-light-shade;
             border-color: $green-blue;
+
+            &.light, &.dark {
+                color: $green-blue-monochromatic;
+            }
 
             &:focus:after {
                 background-color: $green-blue;

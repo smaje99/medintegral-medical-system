@@ -2,16 +2,29 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { getToken } from 'next-auth/jwt';
 
 import { ProtectedLayout } from '@Components/layouts';
-import { Bar, styles, Table } from '@Modules/Dashboard/Users';
+import { TableProvider } from '@Components/Table/Table';
+import useModal from '@Hooks/useModal';
+import {
+    Bar, CreateFormModal, styles, Table, UserDataForTable
+} from '@Modules/Dashboard/Users';
 import type { DataProps } from '@Modules/Dashboard/Users/Users.types';
 import { getAllOfRoles } from '@Services/role.service';
 import { getAllOfUsers } from '@Services/user.service';
 
 const Users: NextPage<DataProps> = ({ data }) => {
+    const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
+
     return (
         <main className={styles.main}>
-            <Bar data={data} />
-            <Table users={data.users} />
+            <TableProvider<UserDataForTable>>
+                <Bar openCreateModal={openCreateModal} />
+                <Table users={data.users} />
+            </TableProvider>
+            <CreateFormModal
+                isOpen={isCreateModal}
+                close={closeCreateModal}
+                roles={data.roles}
+            />
         </main>
     )
 }

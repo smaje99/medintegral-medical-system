@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useSession } from 'next-auth/react';
+import { useMemo, useState } from 'react';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaTag, FaUserAlt } from 'react-icons/fa';
 import { HiIdentification } from 'react-icons/hi2';
@@ -7,19 +8,23 @@ import { createColumnHelper, ColumnDef } from '@tanstack/react-table';
 
 import { Badge } from '@Components/Badge';
 import {
-    CopyButton, EmailButton, TelButton, WhatsAppButton
+    CopyButton, EditButton, EmailButton, TelButton, WhatsAppButton
 } from '@Components/Button';
 import { InformationTable } from '@Components/Table';
 import type { User } from '@Types/user/user';
 import { formatPhone } from '@Utils/phone';
 
+import UpdateFormModal from '../UserUpdateForm';
 import type { ProfileMainDataProps } from '../User.types';
 
 import styles from './ProfileMainData.module.scss';
 
 const columnHelper = createColumnHelper<User>();
 
-const ProfileMainData = ({ user }: ProfileMainDataProps) => {
+const ProfileMainData = ({ user, roles }: ProfileMainDataProps) => {
+    const { data: session } = useSession();
+    const [isEditRole, setEditRole] = useState(false);
+
     const columns = useMemo<ColumnDef<User>[]>(() => ([
         columnHelper.accessor('person', {
             header: () => <><HiIdentification /> Identificación</>,
@@ -55,9 +60,25 @@ const ProfileMainData = ({ user }: ProfileMainDataProps) => {
         columnHelper.accessor('role.name', {
             header: () => <><FaTag /> Role</>,
             cell: info => (
-                <Badge color="green-blue" className={styles["badge"]}>
-                    {info.getValue()}
-                </Badge>
+                !isEditRole ? (
+                    <>
+                        <Badge color="green-blue" className={styles["badge"]}>
+                            {info.getValue()}
+                        </Badge>
+                        <div role="toolbar">
+                            {session?.user?.permissions?.['usuarios']?.includes('modificación')
+                                && session?.user?.dni !== user?.data?.dni ? (
+                                <EditButton onEdit={() => {setEditRole(true); }} />
+                            ): null}
+                        </div>
+                    </>
+                ) : (
+                    <UpdateFormModal
+                        userDni={user?.data?.dni}
+                        roles={roles}
+                        setEditRole={setEditRole}
+                    />
+                )
             )
         }),
         columnHelper.accessor('person.email', {
@@ -85,7 +106,7 @@ const ProfileMainData = ({ user }: ProfileMainDataProps) => {
                 </>
             )
         })
-    ]), []);
+    ]), [isEditRole]);
 
     return <InformationTable<User> {...{ data: [user.data], columns }} />
 }

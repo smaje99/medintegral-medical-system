@@ -4,8 +4,15 @@
 .bar {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
+}
+
+.section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 1.2rem;
 }
 
 .title {
@@ -16,11 +23,16 @@
     padding: 0;
 }
 
+.row-size {
+    font: 400 11pt $body-font;
+    letter-spacing: .5px;
+}
+
 .nav {
     @include non-list;
-    width: 100%;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row-reverse;
+    justify-content: center;
     align-items: center;
     gap: 1.2rem;
 }

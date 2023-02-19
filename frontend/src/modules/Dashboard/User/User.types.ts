@@ -1,18 +1,55 @@
-import { Data } from '@Types/data-request';
-import { User } from '@Types/user/user';
+import { NextRouter } from 'next/router';
+
+import type { Data } from '@Types/data-request';
+import { Person, PersonUpdate } from '@Types/person';
+import type { Role } from '@Types/user/role';
+import type { User, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
 
 export interface DataProps {
-    data: {
+    readonly data: {
         user: Data<User>;
+        roles: Data<Role[]>;
     }
 }
 
 export interface ProfileProps {
-    user: DataProps['data']['user'];
+    readonly user: DataProps['data']['user'];
+    readonly roles: DataProps['data']['roles'];
+    readonly router: NextRouter;
 }
 
-export interface ProfileDataProps extends ProfileProps { }
+export interface ProfileDataProps extends Omit<ProfileProps, 'router'> { }
 
-export interface ProfileMainDataProps extends ProfileProps { }
+export interface ProfileMainDataProps extends Omit<ProfileProps, 'router'> { }
 
-export interface PersonalDataProps extends ProfileProps { }
+export interface PersonalDataProps extends Pick<ProfileProps, 'user'> { }
+
+export interface UserUpdateFormProps extends Pick<ProfileProps, 'roles'> {
+    readonly userDni: User['dni']
+    readonly setEditRole: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface UserUpdateValues extends UserUpdate { }
+
+export type UserUpdateModalProps = {
+    isOpen: boolean;
+    close: () => void;
+    isUserOwner: boolean;
+    personalData: Person;
+}
+
+export type PersonalDataUpdateProps = {
+    onUpdate: (data: PersonalDataUpdateValues) => Promise<void>;
+    onClose: () => void;
+};
+
+export type ChangePasswordProps = {
+    onUpdate: (data: ChangePasswordValues) => Promise<void>;
+    onClose: () => void;
+};
+
+export interface PersonalDataUpdateValues extends Omit<PersonUpdate, 'bloodType' | 'rhFactor'> {
+    readonly bloodType?: string;
+}
+
+export type ChangePasswordValues = UserPasswordUpdate;
