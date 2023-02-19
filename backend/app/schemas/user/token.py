@@ -25,7 +25,9 @@ class TokenPayload(TokenPayloadBase):
     exp: float | None = None
 
     @validator('sub', pre=True)
-    def cast_sub(cls, value: str | UUID) -> str | int | UUID:  # pylint: disable=C0116, E0213
+    def cast_sub(  # pylint: disable=C0116, E0213
+        cls, value: str | UUID
+    ) -> str | int | UUID:
         return int(value) if isinstance(value, str) and value.isnumeric() else value
 
 
@@ -36,5 +38,7 @@ class TokenPayloadIn(TokenPayloadBase):
     iat: float = Field(default=datetime.now(timezone.utc).timestamp())
 
     @validator('sub', pre=True)
-    def cast_sub(cls, value: str | int | UUID) -> str | UUID:  # pylint: disable=C0116, E0213
+    def cast_sub(  # pylint: disable=C0116, E0213
+        cls, value: str | int | UUID
+    ) -> str | UUID:
         return str(value) if isinstance(value, int) else value

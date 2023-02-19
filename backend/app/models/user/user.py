@@ -31,6 +31,9 @@ class User(Base):
     # Encrypted user password.
     hashed_password = Column(Text, nullable=False)
 
+    # Superuser status
+    is_superuser = Column(Boolean, nullable=False, server_default=expression.false())
+
     # User status in the system.
     is_active = Column(Boolean, nullable=False, server_default=expression.true())
 

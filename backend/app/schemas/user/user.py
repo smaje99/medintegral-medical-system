@@ -40,6 +40,7 @@ class UserInDBBase(UserBase):
 
     dni: int
     username: str
+    is_superuser: bool
     is_active: bool
     created_at: datetime
     modified_at: datetime

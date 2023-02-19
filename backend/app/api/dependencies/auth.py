@@ -135,3 +135,29 @@ def get_current_user_with_permissions(
         return current_user
 
     return wrapper
+
+
+def get_current_active_superuser(
+    current_user: User = Depends(get_current_active_user),
+    service: UserService = Depends(get_service),
+) -> User:
+    '''Check if the current user is a superuser and returns it.
+    Otherwise raise an exception.
+
+    Args:
+        current_user (User): Get the current user in the system.
+        service (UserService): Service with initialized database session.
+
+    Raises:
+        HTTPException: User isn't a superuser.
+
+    Returns:
+        User: Current user.
+    '''
+    if not service.is_superuser(current_user):
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED,
+            detail='El usuario no tiene privilegios suficientes',
+        )
+
+    return current_user

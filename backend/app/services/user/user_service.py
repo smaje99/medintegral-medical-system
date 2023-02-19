@@ -139,6 +139,17 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         '''
         return user.is_active
 
+    def is_superuser(self, user: User) -> bool:
+        '''Check if the user is a superuser.
+
+        Args:
+            user (User): The user to check.
+
+        Returns:
+            bool: The superuser status.
+        '''
+        return user.is_superuser
+
     def contains(self, user_id: int) -> bool:
         '''Checks if the user model contains the given id.
 

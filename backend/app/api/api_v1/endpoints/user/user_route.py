@@ -176,6 +176,12 @@ def update_user(
             detail=f'El usuario con la identificación {dni} no existe',
         )
 
+    if user.is_superuser and not current_user.is_superuser:
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED,
+            detail='No tienes permiso de modificar a un superusuario',
+        )
+
     if user_in.role_id:
         if current_user.dni == dni:
             raise HTTPException(
