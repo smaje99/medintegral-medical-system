@@ -222,3 +222,48 @@ def update_password(
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail=str(error)
         ) from error
+
+
+@router.patch('/disable/{dni}')
+def disable_user(
+    dni: int = Path(..., ge=0),
+    disable: bool = Body(..., embed=True),
+    current_user: UserModel = Depends(
+        get_current_user_with_permissions('usuarios', {PermissionAction.disable})
+    ),
+    service: UserService = Depends(ServiceDependency(UserService)),
+) -> User:
+    '''Change the user's status in the system.
+    The user can be enabled or disabled.
+
+    Args:
+    * dni (int): DNI given to retrieve the user to be disabled via a path parameter.
+    * disable (bool): New status to be assigned to the user via a body parameter
+
+    Raises:
+    * HTTPException: HTTP error 404. User not found.
+    * HTTPException: HTTP error 401. User is a superuser.
+    * HTTPException: HTTP error 401. Current user is not authorized.
+
+    Returns:
+    * User: User with updated status.
+    '''
+    if not (user := service.get(dni)):
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail=f'El usuario con la identificación {dni} no existe',
+        )
+
+    if user.is_superuser:
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED,
+            detail='No tienes permiso de deshabilitar a un superusuario',
+        )
+
+    if current_user.dni == dni:
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED,
+            detail='El usuario propietario no puede cambiar su estado en el sistema',
+        )
+
+    return service.disable(user, disable)  # type: ignore

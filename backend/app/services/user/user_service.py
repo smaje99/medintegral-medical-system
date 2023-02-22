@@ -313,3 +313,18 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             .order_by(asc(User.created_at))
             .all()
         )
+
+    def disable(self, user: User, disable: bool):
+        '''Change the user's status in the system.
+        The user can be enabled or disabled.
+
+        Args:
+            user (User): User to change the status.
+            disable (bool): New status to be assigned to the user.
+
+        Returns:
+            User: User with updated status.
+        '''
+
+        update_data = {'is_active': not disable}
+        return self.update(db_obj=user, obj_in=update_data)
