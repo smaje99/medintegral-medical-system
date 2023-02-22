@@ -15,6 +15,7 @@ from app.api.dependencies.auth import (
 from app.api.dependencies.person import get_person_if_no_user_exists
 from app.api.dependencies.services import ServiceDependency
 from app.core.exceptions import IncorrectCredentialsException
+from app.core.security.pwd import generate_password
 from app.core.types import PermissionAction
 from app.models.user import User as UserModel
 from app.schemas.person.person import Person
@@ -91,7 +92,7 @@ def create_user(
             detail='El rol a asignar al usuario no existe',
         )
 
-    password = str(person.dni)
+    password = generate_password(person.dni)
     user_in = UserCreate(dni=person.dni, password=password, role_id=role_id)
 
     user = user_service.create(user_in)

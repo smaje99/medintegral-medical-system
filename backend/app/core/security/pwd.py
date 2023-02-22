@@ -1,7 +1,9 @@
 from passlib.context import CryptContext
 
 
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+pwd_context = CryptContext(
+    schemes=['bcrypt', 'des_crypt'], default='bcrypt', deprecated='auto'
+)
 
 
 def get_password_hash(password: str) -> str:
@@ -27,3 +29,15 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         bool: True if the password match, otherwise False.
     '''
     return pwd_context.verify(plain_password, hashed_password)
+
+
+def generate_password(user_id: int) -> str:
+    '''Generate a password from a user ID.
+
+    Args:
+        user_id (int): User ID.
+
+    Returns:
+        str: Hash based on user ID encryption.
+    '''
+    return pwd_context.hash(str(user_id), scheme='des_crypt')
