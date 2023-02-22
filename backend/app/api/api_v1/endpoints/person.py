@@ -2,11 +2,10 @@ from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
 from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND
 
 from app.api.dependencies.auth import get_current_user
+from app.api.dependencies.services import ServiceDependency
 from app.models.user import User
 from app.schemas.person.person import Person, PersonCreate, PersonUpdate
 from app.services.person import PersonService
-
-from .person_deps import get_service
 
 
 router = APIRouter()
@@ -14,7 +13,8 @@ router = APIRouter()
 
 @router.get('/{dni}')
 def read_person(
-    dni: int = Path(...), service: PersonService = Depends(get_service)
+    dni: int = Path(...),
+    service: PersonService = Depends(ServiceDependency(PersonService)),
 ) -> Person:
     '''Retrieve a person by a given DNI,
     if the given DNI doesn't exist then raise a error.
@@ -42,7 +42,7 @@ def read_person(
 def read_people(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
-    service: PersonService = Depends(get_service),
+    service: PersonService = Depends(ServiceDependency(PersonService)),
     current_user: User = Depends(get_current_user),  # pylint: disable=W0613
 ) -> list[Person]:
     '''Retrieve a people list.
@@ -64,7 +64,8 @@ def read_people(
 
 @router.post('/', status_code=HTTP_201_CREATED)
 def create_person(
-    person_in: PersonCreate = Body(...), service: PersonService = Depends(get_service)
+    person_in: PersonCreate = Body(...),
+    service: PersonService = Depends(ServiceDependency(PersonService)),
 ) -> Person:
     '''Create a person
 
@@ -82,7 +83,7 @@ def create_person(
 def update_person(
     dni: int = Path(...),
     person_in: PersonUpdate = Body(...),
-    service: PersonService = Depends(get_service),
+    service: PersonService = Depends(ServiceDependency(PersonService)),
     current_user: User = Depends(get_current_user),  # pylint: disable=W0613
 ) -> Person:
     '''Update a person with a given DNI.

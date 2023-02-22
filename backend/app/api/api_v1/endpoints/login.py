@@ -9,6 +9,7 @@ from starlette.status import (
 )
 
 from app.api.dependencies.auth import get_current_user
+from app.api.dependencies.services import ServiceDependency
 from app.core.email import send_reset_password_email
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.jwt import (
@@ -22,15 +23,13 @@ from app.schemas.user.token import Token, TokenPayloadIn
 from app.schemas.user.user import UserInSession
 from app.services.user import UserService
 
-from .login_deps import get_service
-
 
 router = APIRouter()
 
 
 @router.post('/login/access-token')
 def login(
-    service: UserService = Depends(get_service),
+    service: UserService = Depends(ServiceDependency(UserService)),
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> Token:
     '''OAuth2 compatible token login.
@@ -83,7 +82,8 @@ def test_token(current_user: UserModel = Depends(get_current_user)) -> UserInSes
 
 @router.post('/password-recovery/{email}')
 def recover_password(
-    email: EmailStr = Path(...), service: UserService = Depends(get_service)
+    email: EmailStr = Path(...),
+    service: UserService = Depends(ServiceDependency(UserService)),
 ) -> Message:
     '''Password recovery via user's email.
 
@@ -113,7 +113,7 @@ def recover_password(
 def reset_password(
     token: str = Body(...),
     new_password: str = Body(..., alias='newPassword'),
-    service: UserService = Depends(get_service),
+    service: UserService = Depends(ServiceDependency(UserService)),
 ) -> Message:
     '''Reset an user's password.
 

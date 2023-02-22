@@ -13,6 +13,7 @@ from app.api.dependencies.auth import (
     get_current_user_with_permissions,
 )
 from app.api.dependencies.person import get_person_if_no_user_exists
+from app.api.dependencies.services import ServiceDependency
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.types import PermissionAction
 from app.models.user import User as UserModel
@@ -25,8 +26,6 @@ from app.schemas.user.user import (
     UserInSession,
 )
 from app.services.user import UserService, RoleService
-
-from .user_deps import get_user_service, get_role_service
 
 
 router = APIRouter()
@@ -50,7 +49,7 @@ def search_user_by_dni(
     current_user: UserModel = Depends(  # pylint: disable=W0613
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
-    service: UserService = Depends(get_user_service),
+    service: UserService = Depends(ServiceDependency(UserService)),
 ) -> list[User]:
     '''Search for users by a given DNI.
 
@@ -70,8 +69,8 @@ def create_user(
     ),
     person: Person = Depends(get_person_if_no_user_exists),
     role_id: UUID = Body(..., alias='roleId'),
-    role_service: RoleService = Depends(get_role_service),
-    user_service: UserService = Depends(get_user_service),
+    role_service: RoleService = Depends(ServiceDependency(RoleService)),
+    user_service: UserService = Depends(ServiceDependency(UserService)),
 ) -> User:
     '''Create an user and notify the user's email address.
 
@@ -107,7 +106,7 @@ def read_user(
     current_user: User = Depends(
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
-    user_service: UserService = Depends(get_user_service),
+    user_service: UserService = Depends(ServiceDependency(UserService)),
 ) -> User:
     '''Retrieve a user by a given DNI.
     If the given DNI doesn't exist, raise an error.
@@ -137,7 +136,7 @@ def read_users(
     current_user: UserModel = Depends(  # pylint: disable=W0613
         get_current_user_with_permissions('usuarios', {PermissionAction.read})
     ),
-    service: UserService = Depends(get_user_service),
+    service: UserService = Depends(ServiceDependency(UserService)),
 ) -> list[User]:
     '''Retrieve a list of users.
 
@@ -158,8 +157,8 @@ def update_user(
     current_user: UserModel = Depends(
         get_current_user_with_permissions('usuarios', {PermissionAction.update})
     ),
-    role_service: RoleService = Depends(get_role_service),
-    user_service: UserService = Depends(get_user_service),
+    role_service: RoleService = Depends(ServiceDependency(RoleService)),
+    user_service: UserService = Depends(ServiceDependency(UserService)),
 ) -> User:
     '''Update a user's data with a given DNI.
 
@@ -202,7 +201,7 @@ def update_user(
 def update_password(
     user_in: UserUpdatePassword = Body(...),
     current_user: UserModel = Depends(get_current_active_user),
-    service: UserService = Depends(get_user_service),
+    service: UserService = Depends(ServiceDependency(UserService)),
 ) -> User:
     '''Update the current user's password.
 

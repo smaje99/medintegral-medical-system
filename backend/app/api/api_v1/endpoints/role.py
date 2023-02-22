@@ -3,10 +3,9 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
 from starlette.status import HTTP_404_NOT_FOUND
 
+from app.api.dependencies.services import ServiceDependency
 from app.schemas.user.role import Role, RoleCreate, RoleUpdate
 from app.services.user import RoleService
-
-from .role_deps import get_service
 
 
 router = APIRouter()
@@ -14,7 +13,8 @@ router = APIRouter()
 
 @router.get('/{role_id}')
 def read_role(
-    role_id: UUID = Path(...), service: RoleService = Depends(get_service)
+    role_id: UUID = Path(...),
+    service: RoleService = Depends(ServiceDependency(RoleService)),
 ) -> Role:
     '''Retrieve a role by a given ID.
     if the ID doesn't exist then raise a error.
@@ -40,7 +40,7 @@ def read_role(
 def read_roles(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
-    service: RoleService = Depends(get_service),
+    service: RoleService = Depends(ServiceDependency(RoleService)),
 ) -> list[Role]:
     '''Retrieve a list of roles.
 
@@ -56,7 +56,8 @@ def read_roles(
 
 @router.post('/')
 def create_role(
-    role_in: RoleCreate = Body(...), service: RoleService = Depends(get_service)
+    role_in: RoleCreate = Body(...),
+    service: RoleService = Depends(ServiceDependency(RoleService)),
 ) -> Role:
     '''Create a role.
 
@@ -73,7 +74,7 @@ def create_role(
 def update_role(
     role_id: UUID = Path(...),
     role_in: RoleUpdate = Body(...),
-    service: RoleService = Depends(get_service),
+    service: RoleService = Depends(ServiceDependency(RoleService)),
 ) -> Role:
     '''Update a role with a given ID.
 

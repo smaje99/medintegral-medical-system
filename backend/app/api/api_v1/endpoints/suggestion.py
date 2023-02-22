@@ -3,10 +3,9 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
 from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND
 
+from app.api.dependencies.services import ServiceDependency
 from app.schemas.suggestion.suggestion import Suggestion, SuggestionCreate
 from app.services.suggestion import SuggestionService
-
-from .suggestion_deps import get_service
 
 
 router = APIRouter()
@@ -14,8 +13,8 @@ router = APIRouter()
 
 @router.get('/{id}')
 def read_suggestion(
-    id: UUID = Path(...),  # pylint: disable=[invalid-name, redefined-builtin]
-    service: SuggestionService = Depends(get_service),
+    id: UUID = Path(...),  # pylint: disable=C0103, W0622
+    service: SuggestionService = Depends(ServiceDependency(SuggestionService)),
 ) -> Suggestion:
     '''Retrieve a suggestion using a given ID,
     if the given ID doesn't exist then raise a error.
@@ -42,7 +41,7 @@ def read_suggestions(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=50),
     pinned: bool = Query(default=False),
-    service: SuggestionService = Depends(get_service),
+    service: SuggestionService = Depends(ServiceDependency(SuggestionService)),
 ) -> list[Suggestion]:
     '''Retrieve a suggestions list.
 
@@ -66,7 +65,7 @@ def read_suggestions(
 @router.post('/', status_code=HTTP_201_CREATED)
 def create_suggestion(
     suggestion_in: SuggestionCreate = Body(...),
-    service: SuggestionService = Depends(get_service),
+    service: SuggestionService = Depends(ServiceDependency(SuggestionService)),
 ) -> Suggestion:
     '''Create a suggestion
 
@@ -86,7 +85,7 @@ def create_suggestion(
 def modify_pinned(
     id: UUID = Path(...),  # pylint: disable=C0103, W0622
     pinned: bool = Body(...),
-    service: SuggestionService = Depends(get_service),
+    service: SuggestionService = Depends(ServiceDependency(SuggestionService)),
 ) -> Suggestion:
     '''Modify the pinning of a suggestion given an ID.
     There can only be three pinned suggestions.
