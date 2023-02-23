@@ -30,5 +30,8 @@ export default {
     },
     async updatePassword(credentials: UserPasswordUpdate, token: Token['accessToken']) {
         return axios.patch<User>(`${baseURL}/user/password`, credentials, headers(token));
+    },
+    async disable(dni: User['dni'], disable: boolean, token: Token['accessToken']) {
+        return axios.patch<User>(`${baseURL}/user/disable/${dni}`, { disable }, headers(token));
     }
 }
