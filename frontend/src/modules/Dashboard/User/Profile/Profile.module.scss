@@ -29,13 +29,21 @@
         justify-content: flex-start;
         align-items: center;
 
+        & > .disabled {
+            font-size: 11pt;
+            font-weight: 600;
+            letter-spacing: 0.56px;
+            color: $green-complementary;
+            user-select: none;
+        }
+
         & > .button {
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
             font-size: 10pt;
             font-weight: 500;
-            letter-spacing: 0.045rem;
+            letter-spacing: 0.45px;
             color: $green-blue-monochromatic;
             background-color: transparent;
             border: none;

@@ -31,12 +31,17 @@ const Profile = ({ user, roles, router }: ProfileProps) => {
                             {userMemo.data?.person.name} {userMemo.data?.person.surname}
                         </Balancer>
                     </h2>
-                    <section className={styles["commands"]}>
+                    <section className={styles['commands']}>
+                        {!userMemo?.data?.isActive ? (
+                            <span className={styles['disabled']}>
+                                Deshabilitado
+                            </span>
+                        ): null}
                         <Badge color="green-blue" className={styles["badge-role"]}>
                             {userMemo.data?.role.name}
                         </Badge>
                         {session?.user?.permissions?.['usuarios']?.includes('modificación') ? (
-                            <button className={styles["button"]} onClick={openUpdateModal}>
+                            <button className={styles['button']} onClick={openUpdateModal}>
                                 <FaUserEdit />
                                 Modificar datos
                             </button>
