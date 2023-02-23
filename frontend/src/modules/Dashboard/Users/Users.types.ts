@@ -12,6 +12,7 @@ export interface DataProps {
 
 export type BarProps = {
     openCreateModal: () => void;
+    openDisableModal: () => void;
 }
 
 export interface CreateFormModalProps {
@@ -37,4 +38,9 @@ export interface UserCreateFormValues extends Omit<
 > {
     readonly bloodType?: string;
     readonly roleId: Role['id'];
+}
+
+export type UsersDisableModalProps = {
+    readonly isOpen: boolean;
+    readonly onClose: () => void;
 }

@@ -5,7 +5,7 @@ import { ProtectedLayout } from '@Components/layouts';
 import { TableProvider } from '@Components/Table/Table';
 import useModal from '@Hooks/useModal';
 import {
-    Bar, CreateFormModal, styles, Table, UserDataForTable
+    Bar, CreateFormModal, styles, Table, UserDataForTable, UsersDisableModal
 } from '@Modules/Dashboard/Users';
 import type { DataProps } from '@Modules/Dashboard/Users/Users.types';
 import { getAllOfRoles } from '@Services/role.service';
@@ -13,13 +13,20 @@ import { getAllOfUsers } from '@Services/user.service';
 
 const Users: NextPage<DataProps> = ({ data }) => {
     const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
+    const [isDisableModal, openDisableModal, closeDisableModal] = useModal();
 
     return (
         <main className={styles.main}>
             <TableProvider<UserDataForTable>>
-                <Bar openCreateModal={openCreateModal} />
+                <Bar {...{ openCreateModal, openDisableModal }}  />
                 <Table users={data.users} />
+
+                <UsersDisableModal
+                    isOpen={isDisableModal}
+                    onClose={closeDisableModal}
+                />
             </TableProvider>
+
             <CreateFormModal
                 isOpen={isCreateModal}
                 close={closeCreateModal}

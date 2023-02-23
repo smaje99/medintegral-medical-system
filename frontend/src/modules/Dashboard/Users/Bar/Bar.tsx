@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { FaUserEdit, FaUserPlus } from 'react-icons/fa';
+import { FaUserEdit, FaUserPlus, FaUserSlash } from 'react-icons/fa';
 
 import routes from '@Helpers/routes';
 import Button from '@Components/Button';
@@ -11,7 +11,7 @@ import { UserDataForTable } from '..';
 
 import styles from './Bar.module.scss';
 
-function Bar({ openCreateModal }: BarProps) {
+function Bar({ openCreateModal, openDisableModal }: BarProps) {
     const router = useRouter();
     const { rowSelection, getSelectedFlatRows } = useTable<UserDataForTable>();
 
@@ -65,7 +65,19 @@ function Bar({ openCreateModal }: BarProps) {
                                 <FaUserEdit />
                             </Button>
                         </li>
-                    ): null}
+                    ) : null}
+                    {rowSelectionSize > 0 ? (
+                        <li className={styles['item']}>
+                            <Button
+                                as="button"
+                                stylesFor="icon"
+                                onClick={openDisableModal}
+                                title="Deshabilitar usuario"
+                            >
+                                <FaUserSlash />
+                            </Button>
+                        </li>
+                    ) : null}
                 </ul>
             </nav>
         </>
