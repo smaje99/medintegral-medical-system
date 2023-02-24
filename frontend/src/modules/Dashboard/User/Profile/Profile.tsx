@@ -34,7 +34,7 @@ const Profile = ({ user, roles, router }: ProfileProps) => {
                     <section className={styles['commands']}>
                         {!userMemo?.data?.isActive ? (
                             <span className={styles['disabled']}>
-                                Deshabilitado
+                                Inactivo
                             </span>
                         ): null}
                         <Badge color="green-blue" className={styles["badge-role"]}>
