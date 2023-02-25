@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { FaUserEdit, FaUserPlus, FaUserSlash } from 'react-icons/fa';
 
@@ -12,6 +13,7 @@ import { UserDataForTable } from '..';
 import styles from './Bar.module.scss';
 
 function Bar({ openCreateModal, openDisableModal }: BarProps) {
+    const { data: session } = useSession();
     const router = useRouter();
     const { rowSelection, getSelectedFlatRows } = useTable<UserDataForTable>();
 
@@ -44,17 +46,20 @@ function Bar({ openCreateModal, openDisableModal }: BarProps) {
                     ): null}
                 </section>
                 <ul className={styles.nav}>
-                    <li className={styles.item}>
-                        <Button
-                            as="button"
-                            stylesFor="icon"
-                            onClick={openCreateModal}
-                            title="Agregar usuario"
-                        >
-                            <FaUserPlus />
-                        </Button>
-                    </li>
-                    {rowSelectionSize === 1 ? (
+                    {session?.user?.permissions?.['usuarios']?.includes('creación') ? (
+                        <li className={styles.item}>
+                            <Button
+                                as="button"
+                                stylesFor="icon"
+                                onClick={openCreateModal}
+                                title="Agregar usuario"
+                            >
+                                <FaUserPlus />
+                            </Button>
+                        </li>
+                    ): null}
+                    {rowSelectionSize === 1
+                        && session?.user?.permissions?.['usuarios']?.includes('modificación') ? (
                         <li className={styles['item']}>
                             <Button
                                 as="button"
@@ -66,7 +71,8 @@ function Bar({ openCreateModal, openDisableModal }: BarProps) {
                             </Button>
                         </li>
                     ) : null}
-                    {rowSelectionSize > 0 ? (
+                    {rowSelectionSize > 0
+                        && session?.user?.permissions?.['usuarios']?.includes('deshabilitar') ? (
                         <li className={styles['item']}>
                             <Button
                                 as="button"
