@@ -93,3 +93,33 @@ export const changeUserPassword = async (
         throw error;
     }
 }
+
+export const disableUser = async (
+    dni: User['dni'], disable: boolean, token: Token['accessToken']
+): Promise<User> => {
+    try {
+        const response = await api.disable(dni, disable, token);
+        return response.data;
+    } catch (error) {
+        if (isAxiosError<APIError>(error) && error.response) {
+            throw new Error(error.response.data.detail);
+        }
+
+        throw error;
+    }
+}
+
+export const searchUserByDni = async (
+    dni: User['dni'], token: Token['accessToken']
+): Promise<User[]> => {
+    try {
+        const response = await api.search(dni, token);
+        return response.data;
+    } catch (error) {
+        if (isAxiosError<APIError>(error) && error.response) {
+            throw new Error(error.response.data.detail);
+        }
+
+        throw error;
+    }
+}

@@ -18,7 +18,7 @@ import styles from './Table.module.scss';
 
 const columnHelper = createColumnHelper<UserDataForTable>();
 
-const Table = ({ users }: TableProps) => {
+const Table: React.FC<TableProps> = () => {
     const columns = useMemo<ColumnDef<UserDataForTable>[]>(() => ([
         SelectionColumn<UserDataForTable>(),
         columnHelper.accessor('dni', {
@@ -27,6 +27,7 @@ const Table = ({ users }: TableProps) => {
                 <IdentificationCell
                     href={routes.dashboard.user(info.getValue())}
                     title="ver información general del usuario"
+                    isActive={info.row.original.isActive}
                 >
                     {info.getValue()}
                 </IdentificationCell>
@@ -109,11 +110,7 @@ const Table = ({ users }: TableProps) => {
         })
     ]), []);
 
-    const data = useMemo<UserDataForTable[]>(() => (
-        users.data?.map(user => ({ ...user, dni: user.dni.toString() }))
-    ), [users]);
-
-    return <TableTemplate<UserDataForTable> {...{ columns, data }} />
+    return <TableTemplate<UserDataForTable> columns={columns} />
 }
 
 export default Table;

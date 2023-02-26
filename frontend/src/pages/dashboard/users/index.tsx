@@ -1,25 +1,39 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import { getToken } from 'next-auth/jwt';
+import { useMemo } from 'react';
 
 import { ProtectedLayout } from '@Components/layouts';
 import { TableProvider } from '@Components/Table/Table';
 import useModal from '@Hooks/useModal';
 import {
-    Bar, CreateFormModal, styles, Table, UserDataForTable
+    Bar, CreateFormModal, styles, Table, UserDataForTable, UsersDisableModal
 } from '@Modules/Dashboard/Users';
 import type { DataProps } from '@Modules/Dashboard/Users/Users.types';
 import { getAllOfRoles } from '@Services/role.service';
 import { getAllOfUsers } from '@Services/user.service';
+import type { Data } from '@Types/data-request';
 
 const Users: NextPage<DataProps> = ({ data }) => {
     const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
+    const [isDisableModal, openDisableModal, closeDisableModal] = useModal();
+
+    const users = useMemo<Data<UserDataForTable[]>>(() => ({
+        ...data.users,
+        data: data.users?.data?.map(user => ({ ...user, dni: user.dni.toString() }))
+    }), [data.users]);
 
     return (
         <main className={styles.main}>
-            <TableProvider<UserDataForTable>>
-                <Bar openCreateModal={openCreateModal} />
-                <Table users={data.users} />
+            <TableProvider<UserDataForTable> data={users}>
+                <Bar {...{ openCreateModal, openDisableModal }}  />
+                <Table />
+
+                <UsersDisableModal
+                    isOpen={isDisableModal}
+                    onClose={closeDisableModal}
+                />
             </TableProvider>
+
             <CreateFormModal
                 isOpen={isCreateModal}
                 close={closeCreateModal}

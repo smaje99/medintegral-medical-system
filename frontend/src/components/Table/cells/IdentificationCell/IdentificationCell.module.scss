@@ -8,11 +8,19 @@
     align-items: center;
 
     & > .identification {
+        display: inline-flex;
+        align-self: flex-end;
+        gap: 2px;
         font-weight: 600;
 
         &::selection {
             color: white;
             background-color: $blue-monochromatic;
+        }
+
+        & > svg {
+            font-size: 11pt;
+            color: $green-complementary;
         }
     }
 

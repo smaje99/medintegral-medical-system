@@ -19,12 +19,16 @@ import useTable from './useTable';
 
 import styles from './Table.module.scss';
 
-function Table<D extends object = {}>({ columns, data }: TableProps<D>) {
+function Table<D extends object = {}>({ columns }: TableProps<D>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    const { setRowSelection: setRowSelectionProvider, setTable } = useTable<D>();
+    const {
+        setRowSelection: setRowSelectionProvider,
+        setTable,
+        dataForTable: { data }
+    } = useTable<D>();
 
     const table = useReactTable<D>({
         data,

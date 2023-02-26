@@ -53,3 +53,9 @@ export interface PersonalDataUpdateValues extends Omit<PersonUpdate, 'bloodType'
 }
 
 export type ChangePasswordValues = UserPasswordUpdate;
+
+export type UserDisableModalProps = {
+    isOpen: boolean;
+    onClose: () => void;
+    user: User;
+}
