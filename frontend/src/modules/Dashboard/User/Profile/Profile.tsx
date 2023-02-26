@@ -1,7 +1,7 @@
 import { withRouter } from 'next/router'
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
-import { FaUserEdit, FaUserSlash } from 'react-icons/fa';
+import { FaUserEdit, FaUserMinus } from 'react-icons/fa';
 import Balancer from 'react-wrap-balancer';
 
 import { Badge } from "@Components/Badge";
@@ -53,7 +53,7 @@ const Profile = ({ user, roles, router }: ProfileProps) => {
                                 className={`${styles["button"]} ${userMemo?.data?.isActive && styles["button--disable"]}`}
                                 onClick={openDisableModal}
                             >
-                                <FaUserSlash />
+                                <FaUserMinus />
                                 {userMemo?.data?.isActive ? 'Deshabilitar' : 'Habilitar'}
                             </button>
                         ): null}

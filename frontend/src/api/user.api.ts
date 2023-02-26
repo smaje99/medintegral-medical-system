@@ -33,5 +33,8 @@ export default {
     },
     async disable(dni: User['dni'], disable: boolean, token: Token['accessToken']) {
         return axios.patch<User>(`${baseURL}/user/disable/${dni}`, { disable }, headers(token));
+    },
+    async search(dni: User['dni'], token: Token['accessToken']) {
+        return axios.get<User[]>('/user/search', { baseURL, params: { dni }, ...headers(token) });
     }
 }

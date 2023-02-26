@@ -27,6 +27,7 @@ const Table: React.FC<TableProps> = () => {
                 <IdentificationCell
                     href={routes.dashboard.user(info.getValue())}
                     title="ver información general del usuario"
+                    isActive={info.row.original.isActive}
                 >
                     {info.getValue()}
                 </IdentificationCell>
