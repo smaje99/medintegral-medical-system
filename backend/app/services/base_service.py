@@ -88,7 +88,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             ModelType: Data recorded in the given model.
         '''
         # sourcery skip: class-extract-method
-        obj_in_data = jsonable_encoder(obj_in)
+        obj_in_data = obj_in.dict()
         db_obj: ModelType = self.model(**obj_in_data)
 
         self.database.add(db_obj)

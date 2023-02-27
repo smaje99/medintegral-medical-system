@@ -5,6 +5,7 @@ from fastapi_camelcase import CamelModel
 from pydantic import validator
 
 from app.core.types import PermissionAction
+from app.schemas.doctor.doctor import Doctor
 from app.schemas.person.person import Person, PersonInUserSession
 from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.role import Role
@@ -54,6 +55,7 @@ class User(UserInDBBase):
 
     role: Role
     person: Person
+    doctor: Doctor | None = None
 
 
 class UserInDB(UserInDBBase):

@@ -11,6 +11,7 @@ from app.database.base import Base
 if TYPE_CHECKING:
     from ..person.person import Person
     from .role import Role
+    from ..doctor import Doctor
 
 
 class User(Base):
@@ -61,6 +62,11 @@ class User(Base):
     # Role relationship many to one.
     role: 'Role' = relationship(  # type: ignore
         'Role', back_populates='users', lazy='joined'
+    )
+
+    # Doctor relationship one to one.
+    doctor: 'Doctor' = relationship(  # type: ignore
+        'Doctor', uselist=False, back_populates='user'
     )
 
     __table_args__ = {'schema': 'user'}
