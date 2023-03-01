@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi_camelcase import CamelModel
-from pydantic import validator
+from pydantic import SecretStr, validator
 
 from app.core.types import PermissionAction
 from app.schemas.doctor.doctor import Doctor
@@ -19,7 +19,7 @@ class UserCreate(UserBase):
     '''Properties to receive via API on creation.'''
 
     dni: int
-    password: str
+    password: SecretStr
     role_id: UUID
 
 
@@ -32,8 +32,8 @@ class UserUpdate(UserBase):
 class UserUpdatePassword(UserBase):
     '''Properties to receive via API to update the user's password.'''
 
-    old_password: str
-    new_password: str
+    old_password: SecretStr
+    new_password: SecretStr
 
 
 class UserInDBBase(UserBase):

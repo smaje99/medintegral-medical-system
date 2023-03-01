@@ -1,4 +1,5 @@
 from passlib.context import CryptContext
+from pydantic import SecretStr
 
 
 pwd_context = CryptContext(
@@ -6,7 +7,7 @@ pwd_context = CryptContext(
 )
 
 
-def get_password_hash(password: str) -> str:
+def get_password_hash(password: SecretStr) -> str:
     '''Generates a hash from password encryption.
 
     Args:
@@ -15,10 +16,10 @@ def get_password_hash(password: str) -> str:
     Returns:
         str: Hashed password.
     '''
-    return pwd_context.hash(password)
+    return pwd_context.hash(password.get_secret_value())
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
+def verify_password(plain_password: SecretStr, hashed_password: str) -> bool:
     '''Verify if a plain password matches an hashed password.
 
     Args:
@@ -28,7 +29,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         bool: True if the password match, otherwise False.
     '''
-    return pwd_context.verify(plain_password, hashed_password)
+    return pwd_context.verify(plain_password.get_secret_value(), hashed_password)
 
 
 def generate_password(user_id: int) -> str:
