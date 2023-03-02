@@ -68,6 +68,7 @@ const Profile = ({ user, roles, router }: ProfileProps) => {
                 close={closeUpdateModal}
                 isUserOwner={session?.user?.dni === userMemo?.data?.dni}
                 personalData={userMemo?.data?.person}
+                doctorData={userMemo?.data?.doctor}
             />
 
             <UserDisableModal
