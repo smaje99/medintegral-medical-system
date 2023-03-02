@@ -6,24 +6,30 @@ import { toast } from 'react-toastify';
 
 import { Modal } from '@Components/Modal';
 import getToastConfig, { getToastUpdateConfig } from '@Helpers/toast.config';
+import { createDoctor } from '@Services/doctor.service';
 import { getPerson, createPerson } from '@Services/person.service';
 import { createUser } from '@Services/user.service';
-import { PersonCreate } from '@Types/person';
+import type { PersonCreate } from '@Types/person';
 
 import CreateFormView from './CreateForm.view';
-import { CreateFormModalProps, UserCreateFormValues } from '../Users.types';
+import {
+    CreateFormModalProps, CreateFormViewProps, UserCreateFormValues
+} from '../Users.types';
 
-const CreateFormModal = ({ isOpen, close, roles }: CreateFormModalProps) => {
+const CreateFormModal: React.FC<CreateFormModalProps> = ({ isOpen, close, roles }) => {
     const router = useRouter();
     const { data: session } = useSession();
 
     const [isPersonLoading, setPersonLoading] = useState(false);
     const [isPersonCreated, setPersonCreated] = useState(false);
+    const [isDoctor, setDoctor] = useState(false);
+
+    const [medicalLicenses, setMedicalLicenses] = useState<string[]>([]);
 
     const formMethods = useForm<UserCreateFormValues>();
     const { getValues, setValue, reset } = formMethods;
 
-    const searchPerson = async () => {
+    const searchPerson: CreateFormViewProps['searchPerson'] = async () => {
         const dni = getValues('dni');
         setPersonLoading(true);
         try {
@@ -42,14 +48,21 @@ const CreateFormModal = ({ isOpen, close, roles }: CreateFormModalProps) => {
         }
     }
 
-    const handleClose = () => {
+    const handleClose: CreateFormViewProps['handleClose'] = () => {
         reset();
         setPersonLoading(false)
         setPersonCreated(false);
         close();
     }
 
-    const handleCreate = async (formData: UserCreateFormValues) => {
+    /**
+     * Handle to create a new user in the system.
+     * If the personal data is already created, then only the user will be created.
+     * If the user to be created has the role of doctor, then the doctor will
+     * be created in the system as well.
+     * @param formData - UserCreateFormValues
+     */
+    const handleCreate: CreateFormViewProps['handleCreate'] = async (formData) => {
         const { roleId, bloodType, ...person } = formData;
         const idToast = toast.loading('Creando al usuario', getToastConfig());
 
@@ -63,7 +76,8 @@ const CreateFormModal = ({ isOpen, close, roles }: CreateFormModalProps) => {
         try {
             const { 1: user } = await Promise.all([
                 !isPersonCreated && createPerson(newPerson),
-                createUser(person.dni, roleId, session.accessToken)
+                createUser(person.dni, roleId, session.accessToken),
+                isDoctor && createDoctor({ dni: person.dni, medicalLicenses }, session.accessToken)
             ]);
 
             handleClose();
@@ -80,6 +94,41 @@ const CreateFormModal = ({ isOpen, close, roles }: CreateFormModalProps) => {
         }
     }
 
+    /**
+     * Handle the identification of a doctor to be created.
+     * @param event - React.FormEvent<HTMLSelectElement>
+     */
+    const handleCreateDoctor: CreateFormViewProps['handleCreateDoctor'] = (event) => {
+        const role = roles?.data?.filter(role => role.id === event.currentTarget.value);
+        setDoctor(role[0].name === 'médico');
+    }
+
+    /**
+     * Handle the addition of medical license.
+     * @param event - React.KeyboardEvent<HTMLInputElement>
+     */
+    const handleAddMedicalLicense: CreateFormViewProps['handleAddMedicalLicense'] = (event) => {
+        const { value } = event.currentTarget;
+        if (event.code === 'Comma'
+            && value.match(/RM\s\d{3}-\d{2}/)
+            && !medicalLicenses.includes(value)) {
+            setMedicalLicenses(currentLicenses => [...currentLicenses, value]);
+            event.currentTarget.value = '';
+        }
+    }
+
+    /**
+     * Handle the removal of medical licenses.
+     * @param item - string - the item to be removed from the array.
+     */
+    const handleRemoveMedicalLicense: CreateFormViewProps['handleRemoveMedicalLicense'] = (
+        item
+    ) => {
+        setMedicalLicenses(currentLicenses => (
+            currentLicenses.filter(license => license != item)
+        ));
+    }
+
     return (
         <Modal
             isOpen={isOpen}
@@ -88,14 +137,19 @@ const CreateFormModal = ({ isOpen, close, roles }: CreateFormModalProps) => {
             shouldCloseOnEsc={false}
         >
             <FormProvider {...formMethods}>
-                <CreateFormView
-                    isPersonLoading={isPersonLoading}
-                    isPersonCreated={isPersonCreated}
-                    handleCreate={handleCreate}
-                    handleClose={handleClose}
-                    searchPerson={searchPerson}
-                    roles={roles}
-                />
+                <CreateFormView {...{
+                    isPersonLoading,
+                    isPersonCreated,
+                    handleCreate,
+                    handleClose,
+                    searchPerson,
+                    roles,
+                    isDoctor,
+                    medicalLicenses,
+                    handleCreateDoctor,
+                    handleAddMedicalLicense,
+                    handleRemoveMedicalLicense
+                }} />
             </FormProvider>
         </Modal>
     )

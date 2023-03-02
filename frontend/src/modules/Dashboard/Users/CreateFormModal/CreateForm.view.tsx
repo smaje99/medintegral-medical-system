@@ -3,7 +3,9 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { MdPersonSearch } from 'react-icons/md';
 import PhoneInput from 'react-phone-input-2';
 import es from 'react-phone-input-2/lang/es.json';
+import MaskedInput from 'react-text-mask';
 
+import { Badge } from '@Components/Badge';
 import Button from '@Components/Button';
 import { Field } from '@Components/Form';
 import { Spinner } from '@Components/loaders';
@@ -18,7 +20,12 @@ const CreateFormView: React.FC<CreateFormViewProps> = ({
     handleCreate,
     handleClose,
     searchPerson,
-    roles
+    roles,
+    isDoctor,
+    medicalLicenses,
+    handleCreateDoctor,
+    handleAddMedicalLicense,
+    handleRemoveMedicalLicense
 }) => {
     const [isObligatory, handleObligatory] = useReducer((state) => !state, true);
     const { control, handleSubmit, register } = useFormContext<UserCreateFormValues>();
@@ -225,6 +232,7 @@ const CreateFormView: React.FC<CreateFormViewProps> = ({
                         id="role_id"
                         className={styles.input_select}
                         required
+                        onChangeCapture={handleCreateDoctor}
                         {...register('roleId')}
                     >
                         <option value="" key="none">- Seleccione rol -</option>
@@ -235,6 +243,42 @@ const CreateFormView: React.FC<CreateFormViewProps> = ({
                         ))}
                     </select>
                 </Field>
+
+                {isDoctor ? (
+                    <Field
+                        htmlFor='medicalLicenses'
+                        title='Registro médico'
+                        obligatory
+                        legend='Añadir una coma después de cada registro'
+                    >
+                        <ul className={styles.box} role="listbox">
+                            {medicalLicenses.map((license, idx) => (
+                                <li key={`license-${license}-${idx}`}>
+                                    <Badge
+                                        color='green-blue'
+                                        onClose={handleRemoveMedicalLicense}
+                                        className={styles.badge}
+                                        titleClose='Remover registro'
+                                    >
+                                        {license}
+                                    </Badge>
+                                </li>
+                            ))}
+                            <MaskedInput
+                                mask={['R', 'M', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/]}
+                                guide={true}
+                                showMask={true}
+                                placeholderChar={'\u2000'}
+                                type='text'
+                                id='medicalLicenses'
+                                className={styles.input}
+                                required
+                                autoFocus
+                                onKeyDownCapture={handleAddMedicalLicense}
+                            />
+                        </ul>
+                    </Field>
+                ) : null}
 
                 <div className={styles.commands}>
                     <Button

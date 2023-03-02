@@ -3,14 +3,18 @@
 
 .content {
     display: grid;
-    gap: .1rem;
+    gap: 1px;
     grid-template-columns: 1fr;
+}
+
+.text, .legend {
+    color: $white;
+    margin-left: .8rem;
 }
 
 .text {
     font-size: 12pt;
-    color: $white;
-    margin-left: .8rem;
+    line-height: 1.2;
 
     &[data-obligatory=yes] {
         &:after {
@@ -21,6 +25,10 @@
             margin-left: 0.25rem;
         }
     }
+}
+
+.legend {
+    font-size: 10pt;
 }
 
 .field {
