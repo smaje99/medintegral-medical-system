@@ -39,6 +39,12 @@ def create_doctor(
             status_code=HTTP_404_NOT_FOUND, detail='El usuario a asignar no existe'
         )
 
+    if not user_service.has_role(doctor.dni, 'médico'):
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail='El usuario debe tener el rol de médico',
+        )
+
     if doctor_service.contains(doctor.dni):
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST, detail='El médico ya está creado'

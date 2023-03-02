@@ -2,6 +2,11 @@ from fastapi_camelcase import CamelModel
 from pydantic import conlist, constr
 
 
+MedicalLicensesType = conlist(
+    constr(regex=r'RM\s\d{3}-\d{2}'), min_items=1, unique_items=True
+)
+
+
 class DoctorBase(CamelModel):
     '''Share properties.'''
 
@@ -10,17 +15,13 @@ class DoctorCreate(DoctorBase):
     '''Properties to received via API on creation.'''
 
     dni: int
-    medical_licenses: conlist(
-        constr(regex=r'RM\s[0-9]{3}-[0-9]{2}'), min_items=1, unique_items=True
-    )
+    medical_licenses: MedicalLicensesType  # type: ignore
 
 
 class DoctorUpdate(DoctorBase):
     '''Properties to received via API on update.'''
 
-    medical_licenses: conlist(
-        constr(regex=r'RM\s[0-9]{3}-[0-9]{2}'), min_items=1, unique_items=True
-    ) | None = None
+    medical_licenses: MedicalLicensesType | None = None  # type: ignore
     signature: str | None = None
 
 

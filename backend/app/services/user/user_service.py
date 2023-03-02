@@ -13,7 +13,7 @@ from app.core.email import send_new_account_email
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import get_password_hash, verify_password
 from app.models.person import Person
-from app.models.user import Permission, RolePermission, UserPermission, User
+from app.models.user import Permission, Role, RolePermission, User, UserPermission
 from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.user import UserCreate, UserUpdate, UserUpdatePassword
 from app.services import BaseService
@@ -342,3 +342,21 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
 
         update_data = {'is_active': not disable}
         return self.update(db_obj=user, obj_in=update_data)
+
+    def has_role(self, dni: int, role: str) -> bool:
+        '''Check if the user has an assigned role.
+
+        Args:
+            dni (int): User identifier.
+            role (str): Role name.
+
+        Returns:
+            bool: True if the user has the role. Otherwise, False.
+        '''
+        query = (
+            self.database.query(User)
+            .join(Role, User.role_id == Role.id)
+            .filter(User.dni == dni)
+            .filter(Role.name == role)
+        )
+        return self.database.query(query.exists()).scalar()
