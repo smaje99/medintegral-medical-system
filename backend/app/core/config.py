@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, PostgresDsn, validator
+from pydantic import AnyHttpUrl, BaseSettings, EmailStr, PostgresDsn, SecretStr, validator
 
 
 class DatabaseSettings(BaseSettings):
@@ -9,7 +9,7 @@ class DatabaseSettings(BaseSettings):
     host: str
     port: str
     uid: str
-    pwd: str
+    pwd: SecretStr
     db: str
 
     echo: bool
@@ -24,10 +24,15 @@ class DatabaseSettings(BaseSettings):
         if isinstance(value, str):
             return value
 
+        password = values.get('pwd')
+        password = (
+            password.get_secret_value() if isinstance(password, SecretStr) else password
+        )
+
         return PostgresDsn.build(
             scheme='postgresql+psycopg2',
             user=values.get('uid'),
-            password=values.get('pwd'),
+            password=password,
             host=values.get('host', ''),
             port=values.get('port'),
             path=f"/{values.get('db', '')}",

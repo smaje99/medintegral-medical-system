@@ -1,6 +1,7 @@
 from typing import Any
 from uuid import UUID
 
+from pydantic import SecretStr
 from sqlalchemy.orm import lazyload, Session
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import asc, cast, or_, select, true
@@ -12,7 +13,7 @@ from app.core.email import send_new_account_email
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import get_password_hash, verify_password
 from app.models.person import Person
-from app.models.user import Permission, RolePermission, UserPermission, User
+from app.models.user import Permission, Role, RolePermission, User, UserPermission
 from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.user import UserCreate, UserUpdate, UserUpdatePassword
 from app.services import BaseService
@@ -108,7 +109,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
 
         return super().update(db_obj=db_obj, obj_in=update_data)
 
-    def authenticate(self, *, username: str, password: str) -> User:
+    def authenticate(self, *, username: str, password: SecretStr) -> User:
         '''Authenticates a user's credentials.
 
         Args:
@@ -193,7 +194,20 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         update_data = {'password': user_in.new_password}
         return self.update(db_obj=user, obj_in=update_data)
 
-    def send_new_account_email(self, *, user: User, password: str):
+    def reset_password(self, *, db_user: User, new_password: SecretStr) -> User:
+        '''Reset user's password.
+
+        Args:
+            db_user (User): User to reset password.
+            new_password (SecretStr): New password.
+
+        Returns:
+            User: User data with reset password.
+        '''
+        update_data = {'password': new_password}
+        return self.update(db_obj=db_user, obj_in=update_data)
+
+    def send_new_account_email(self, *, user: User, password: SecretStr):
         '''Send a new account email to the given user.
         This is if the system supports it.
 
@@ -205,7 +219,7 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
             send_new_account_email(
                 email_to=user.person.email,
                 username=user.username or '',
-                password=password,
+                password=password.get_secret_value(),
             )
 
     def get(self, id: int) -> User | None:  # pylint: disable=C0103, W0622
@@ -328,3 +342,21 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
 
         update_data = {'is_active': not disable}
         return self.update(db_obj=user, obj_in=update_data)
+
+    def has_role(self, dni: int, role: str) -> bool:
+        '''Check if the user has an assigned role.
+
+        Args:
+            dni (int): User identifier.
+            role (str): Role name.
+
+        Returns:
+            bool: True if the user has the role. Otherwise, False.
+        '''
+        query = (
+            self.database.query(User)
+            .join(Role, User.role_id == Role.id)
+            .filter(User.dni == dni)
+            .filter(Role.name == role)
+        )
+        return self.database.query(query.exists()).scalar()

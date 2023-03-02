@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from .endpoints import login, person, role, suggestion, user
+from .endpoints import doctor, login, person, role, suggestion, user
 
 
 api_router = APIRouter()
@@ -10,3 +10,4 @@ api_router.include_router(person.router, prefix='/person', tags=['person'])
 api_router.include_router(role.router, prefix='/role', tags=['role'])
 api_router.include_router(suggestion.router, prefix='/suggestion', tags=['suggestion'])
 api_router.include_router(user.router, prefix='/user', tags=['user'])
+api_router.include_router(doctor.router, prefix='/doctor', tags=['doctor'])

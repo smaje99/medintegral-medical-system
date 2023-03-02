@@ -5,7 +5,7 @@ import Button from '@Components/Button';
 import NavLink from '@Components/NavLink';
 import useGreetings from '@Hooks/useGreetings';
 
-import navigation from '@Helpers/navigationProtected'
+import navigation from '@Helpers/navigationProtected';
 import routes from '@Helpers/routes';
 
 import styles from './NavigationProtected.module.scss';
@@ -18,10 +18,12 @@ const NavigationProtected = () => {
         `${session?.user.person.name.split(' ')[0] || ''}`
     ), [session?.user]);
 
-    const navigationMenu = useMemo(() => (
-        Object.keys(session?.user.permissions || {})
-            .map(permission => navigation[permission])
-    ), [session?.user]);
+    const navigationMenu = useMemo(() => {
+        const permissions = Object.keys(session?.user.permissions || {});
+        return navigation.filter(
+            nav => permissions.includes(nav.role)
+        );
+    }, [session?.user]);
 
     return (
         <nav className={styles.navigation}>

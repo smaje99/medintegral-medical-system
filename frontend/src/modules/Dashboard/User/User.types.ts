@@ -1,7 +1,8 @@
 import { NextRouter } from 'next/router';
 
 import type { Data } from '@Types/data-request';
-import { Person, PersonUpdate } from '@Types/person';
+import type { DoctorUpdate } from '@Types/doctor.model';
+import type { Person, PersonUpdate } from '@Types/person';
 import type { Role } from '@Types/user/role';
 import type { User, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
 
@@ -36,6 +37,7 @@ export type UserUpdateModalProps = {
     close: () => void;
     isUserOwner: boolean;
     personalData: Person;
+    doctorData: User['doctor'];
 }
 
 export type PersonalDataUpdateProps = {
@@ -59,3 +61,17 @@ export type UserDisableModalProps = {
     onClose: () => void;
     user: User;
 }
+
+export type DoctorDataProps = Required<Pick<User, 'doctor'>>;
+
+export type DoctorDataTable = User['doctor'];
+
+export type DoctorDataFormProps = {
+    onUpdate: (data: DoctorDataUpdateValues) => Promise<void>;
+    onClose: () => void;
+    medicalLicenses: string[];
+    handleAddMedicalLicense: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+    handleRemoveMedicalLicense: (item: string) => void;
+};
+
+export type DoctorDataUpdateValues = DoctorUpdate;

@@ -1,27 +1,37 @@
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { HiIdentification } from 'react-icons/hi2';
-import { MdPassword } from 'react-icons/md';
+import { MdHealthAndSafety, MdPassword } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
 import { Modal } from '@Components/Modal';
 import { Tabs } from '@Components/Tabs';
 import getToastConfig, { getToastUpdateConfig } from '@Helpers/toast.config';
+import { updateDoctor } from '@Services/doctor.service';
+import { updatePerson } from '@Services/person.service';
 import { changeUserPassword } from '@Services/user.service';
-import { PersonUpdate } from '@Types/person';
+import type { PersonUpdate } from '@Types/person';
 
 import ChangePasswordForm from './ChangePasswordForm';
+import DoctorDataUpdate from './DoctorDataForm';
 import PersonalDataUpdate from './PersonalDataForm';
-import {
-    ChangePasswordValues, PersonalDataUpdateValues, UserUpdateModalProps
+import type {
+    ChangePasswordValues,
+    DoctorDataUpdateValues,
+    PersonalDataUpdateValues,
+    UserUpdateModalProps
 } from '../User.types';
 
 import styles from './UserUpdateModal.module.scss';
-import { updatePerson } from '@Services/person.service';
 
 const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
-    isOpen, close, isUserOwner, personalData: { bloodType, rhFactor, ...personalData }
+    isOpen,
+    close,
+    isUserOwner,
+    personalData: { bloodType, rhFactor, ...personalData },
+    doctorData
 }) => {
     const router = useRouter();
     const { data: session } = useSession();
@@ -33,6 +43,11 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
         }
     });
     const changePasswordFormMethods = useForm<ChangePasswordValues>();
+    const doctorDataUpdateFormMethods = useForm<DoctorDataUpdateValues>({
+        defaultValues: doctorData
+    });
+
+    const [medicalLicenses, setMedicalLicenses] = useState(() => doctorData.medicalLicenses);
 
     const handlePersonalDataClose = () => {
         personalDataUpdateFormMethods.reset();
@@ -41,6 +56,11 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
 
     const handleChangePasswordClose = () => {
         changePasswordFormMethods.reset();
+        close();
+    }
+
+    const handleDoctorDataClose = () => {
+        doctorDataUpdateFormMethods.reset();
         close();
     }
 
@@ -92,6 +112,51 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
         }
     }
 
+    const handleDoctorDataUpdate = async (data: DoctorDataUpdateValues) => {
+        const idToast = toast.loading('Actualizando datos médicos', getToastConfig());
+        try {
+            await updateDoctor(
+                personalData.dni, { ...data, medicalLicenses }, session.accessToken
+            );
+
+            handleDoctorDataClose();
+            toast.update(idToast, {
+                render: 'Datos médicos actualizados',
+                ...getToastUpdateConfig('success', { delay: 200 })
+            });
+            router.replace(router.asPath);
+        } catch (error) {
+            toast.update(idToast, {
+                render: error.message ?? 'Datos médicos no actualizados',
+                ...getToastUpdateConfig('error')
+            });
+        }
+    }
+
+    /**
+     * Handle the addition of medical license.
+     * @param event - React.KeyboardEvent<HTMLInputElement>
+     */
+    const handleAddMedicalLicense = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const { value } = event.currentTarget;
+        if (event.code === 'Comma'
+            && value.match(/RM\s\d{3}-\d{2}/)
+            && !medicalLicenses.includes(value)) {
+            setMedicalLicenses(currentLicenses => [...currentLicenses, value]);
+            event.currentTarget.value = '';
+        }
+    }
+
+    /**
+     * Handle the removal of medical licenses.
+     * @param item - string - the item to be removed from the array.
+     */
+    const handleRemoveMedicalLicense= (item: string) => {
+        setMedicalLicenses(currentLicenses => (
+            currentLicenses.filter(license => license != item)
+        ));
+    }
+
     return (
         <Modal
             isOpen={isOpen}
@@ -101,8 +166,9 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
             <h2 className={styles["title"]}>Actualizar usuario</h2>
             <Tabs
                 tabs={[
-                    (<><HiIdentification /> Información Personal</>),
-                    isUserOwner ? (<><MdPassword /> Cambiar contraseña</>) : null
+                    (<> <HiIdentification /> Información Personal </>),
+                    isUserOwner ? (<> <MdPassword /> Cambiar contraseña </>) : null,
+                    doctorData ? (<> <MdHealthAndSafety /> Datos médicos </>) : null
                 ]}
                 theme='dark'
             >
@@ -117,6 +183,17 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
                         <ChangePasswordForm
                             onUpdate={handleChangePassword}
                             onClose={handleChangePasswordClose}
+                        />
+                    </FormProvider>
+                ) : null}
+                {doctorData ? (
+                    <FormProvider {...doctorDataUpdateFormMethods}>
+                        <DoctorDataUpdate
+                            onUpdate={handleDoctorDataUpdate}
+                            onClose={handleDoctorDataClose}
+                            medicalLicenses={medicalLicenses}
+                            handleAddMedicalLicense={handleAddMedicalLicense}
+                            handleRemoveMedicalLicense={handleRemoveMedicalLicense}
                         />
                     </FormProvider>
                 ) : null}

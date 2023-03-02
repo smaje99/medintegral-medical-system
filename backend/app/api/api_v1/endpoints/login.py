@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, Depends, HTTPException, Path
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import EmailStr
+from pydantic import EmailStr, SecretStr
 from starlette.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
@@ -48,7 +48,7 @@ def login(
     '''
     try:
         user = service.authenticate(
-            username=form_data.username, password=form_data.password
+            username=form_data.username, password=SecretStr(form_data.password)
         )
     except IncorrectCredentialsException as error:
         raise HTTPException(
@@ -112,7 +112,7 @@ def recover_password(
 @router.patch('/reset-password')
 def reset_password(
     token: str = Body(...),
-    new_password: str = Body(..., alias='newPassword'),
+    new_password: SecretStr = Body(..., alias='newPassword'),
     service: UserService = Depends(ServiceDependency(UserService)),
 ) -> Message:
     '''Reset an user's password.
@@ -144,6 +144,6 @@ def reset_password(
             detail='El usuario con este correo electrónico está inactivo',
         )
 
-    service.update_password(db_user=user, new_password=new_password)
+    service.reset_password(db_user=user, new_password=new_password)
 
     return Message(message='Contraseña actualizada correctamente')
