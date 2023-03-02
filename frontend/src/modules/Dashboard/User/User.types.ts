@@ -59,3 +59,7 @@ export type UserDisableModalProps = {
     onClose: () => void;
     user: User;
 }
+
+export type DoctorDataProps = Required<Pick<User, 'doctor'>>;
+
+export type DoctorDataTable = User['doctor'];
