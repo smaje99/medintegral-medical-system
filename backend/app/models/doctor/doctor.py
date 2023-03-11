@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import BigInteger, Column, ForeignKey, String
-from sqlalchemy.dialects.postgresql import ARRAY, BYTEA
+from sqlalchemy import BigInteger, Column, ForeignKey
+from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
@@ -22,9 +22,6 @@ class Doctor(Base):
         primary_key=True,
         nullable=False,
     )
-
-    # Doctor's medical record identifiers.
-    medical_licenses = Column(ARRAY(String(9)), nullable=False, unique=True)
 
     # Doctor signature base64 image binaries.
     signature = Column(BYTEA)
