@@ -1,6 +1,5 @@
 export interface Doctor {
     readonly dni: number;
-    readonly medicalLicenses: string[];
     readonly signature?: string;
 }
 

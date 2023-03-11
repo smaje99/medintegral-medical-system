@@ -22,9 +22,6 @@ const CreateFormModal: React.FC<CreateFormModalProps> = ({ isOpen, close, roles 
 
     const [isPersonLoading, setPersonLoading] = useState(false);
     const [isPersonCreated, setPersonCreated] = useState(false);
-    const [isDoctor, setDoctor] = useState(false);
-
-    const [medicalLicenses, setMedicalLicenses] = useState<string[]>([]);
 
     const formMethods = useForm<UserCreateFormValues>();
     const { getValues, setValue, reset } = formMethods;
@@ -73,11 +70,15 @@ const CreateFormModal: React.FC<CreateFormModalProps> = ({ isOpen, close, roles 
             ...person
         } : person;
 
+        const isDoctor = roles?.data?.filter(
+            role => role.id === roleId
+        )[0].name === 'médico';
+
         try {
             const { 1: user } = await Promise.all([
                 !isPersonCreated && createPerson(newPerson),
                 createUser(person.dni, roleId, session.accessToken),
-                isDoctor && createDoctor({ dni: person.dni, medicalLicenses }, session.accessToken)
+                isDoctor && createDoctor({ dni: person.dni }, session.accessToken)
             ]);
 
             handleClose();
@@ -94,41 +95,6 @@ const CreateFormModal: React.FC<CreateFormModalProps> = ({ isOpen, close, roles 
         }
     }
 
-    /**
-     * Handle the identification of a doctor to be created.
-     * @param event - React.FormEvent<HTMLSelectElement>
-     */
-    const handleCreateDoctor: CreateFormViewProps['handleCreateDoctor'] = (event) => {
-        const role = roles?.data?.filter(role => role.id === event.currentTarget.value);
-        setDoctor(role[0].name === 'médico');
-    }
-
-    /**
-     * Handle the addition of medical license.
-     * @param event - React.KeyboardEvent<HTMLInputElement>
-     */
-    const handleAddMedicalLicense: CreateFormViewProps['handleAddMedicalLicense'] = (event) => {
-        const { value } = event.currentTarget;
-        if (event.code === 'Comma'
-            && value.match(/RM\s\d{3}-\d{2}/)
-            && !medicalLicenses.includes(value)) {
-            setMedicalLicenses(currentLicenses => [...currentLicenses, value]);
-            event.currentTarget.value = '';
-        }
-    }
-
-    /**
-     * Handle the removal of medical licenses.
-     * @param item - string - the item to be removed from the array.
-     */
-    const handleRemoveMedicalLicense: CreateFormViewProps['handleRemoveMedicalLicense'] = (
-        item
-    ) => {
-        setMedicalLicenses(currentLicenses => (
-            currentLicenses.filter(license => license != item)
-        ));
-    }
-
     return (
         <Modal
             isOpen={isOpen}
@@ -143,12 +109,7 @@ const CreateFormModal: React.FC<CreateFormModalProps> = ({ isOpen, close, roles 
                     handleCreate,
                     handleClose,
                     searchPerson,
-                    roles,
-                    isDoctor,
-                    medicalLicenses,
-                    handleCreateDoctor,
-                    handleAddMedicalLicense,
-                    handleRemoveMedicalLicense
+                    roles
                 }} />
             </FormProvider>
         </Modal>

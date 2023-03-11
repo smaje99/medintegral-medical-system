@@ -28,11 +28,6 @@ export interface CreateFormViewProps {
     handleClose: () => void;
     searchPerson: () => Promise<void>;
     roles: DataProps['data']['roles'];
-    isDoctor: boolean;
-    medicalLicenses: string[];
-    handleCreateDoctor: (event: React.FormEvent<HTMLSelectElement>) => void;
-    handleAddMedicalLicense: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    handleRemoveMedicalLicense: (item: string) => void;
 }
 
 export interface UserCreateFormValues extends Omit<
