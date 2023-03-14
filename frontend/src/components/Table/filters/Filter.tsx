@@ -65,7 +65,7 @@ function Filter({ column, table }: FilterProps) {
                 ))}
             </datalist>
             <DebouncedInput
-                type="text"
+                type="search"
                 value={(columnFilterValue ?? '') as string}
                 onChange={value => column.setFilterValue(value)}
                 placeholder={`Buscar... (${column.getFacetedUniqueValues().size})`}

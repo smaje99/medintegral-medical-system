@@ -66,17 +66,19 @@ function Bar({ openCreateModal, openDisableModal }: BarProps) {
                 <ul className={styles.nav}>
                     <li className={styles['item']}>
                         <label htmlFor='user-search' className={styles['search']}>
+                            <FaSearch />
                             <DebouncedInput
-                                type='number'
+                                type='search'
                                 id='user-search'
                                 className={styles['input']}
                                 value={undefined}
                                 min={0}
                                 onChange={searchUser}
                                 placeholder='Buscar...'
+                                pattern='/^\d+$/'
                                 title='Busca un usuario por su identificación'
+                                aria-label='Busca un usuario por su identificación'
                             />
-                            <FaSearch />
                         </label>
                     </li>
                     {rowSelectionSize === 0
