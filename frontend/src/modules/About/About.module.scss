@@ -1,0 +1,96 @@
+@import '../../styles/fonts';
+@import '../../styles/palette';
+@import '../../styles/mixins';
+
+.about {
+    width: min(8in, 80vw) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.section {
+    width: 100%;
+}
+
+.title {
+    font: 600 28pt $title-font;
+    margin: 0;
+}
+
+.paragraph {
+    font-size: 12pt;
+    width: 100%;
+    line-height: 1.5;
+    letter-spacing: .8px;
+}
+
+.ethical_group {
+    @include non-list;
+    width: 100%;
+    display: grid;
+    grid-gap: 1.2rem 2rem;
+    grid-auto-rows: 4rem;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    grid-auto-flow: dense;
+}
+
+.ethical_principle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: $green;
+    border-radius: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+
+    > span {
+        display: inline-block;
+        color: $white;
+        font-size: 14pt;
+        letter-spacing: .15rem;
+        text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+        text-align: center;
+    }
+}
+
+.corporate_group {
+    @include non-list;
+    width: 100%;
+}
+
+.corporate_principle {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 2rem;
+
+    & .paragraph {
+        margin-top: 0;
+    }
+}
+
+.corporate_item {
+    height: max-content;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    font-size: 20pt;
+    color: $blue-light-shade;
+    background-color: $blue-monochromatic;
+    padding: 1rem;
+    border-radius: 1.2rem;
+
+    &::before {
+        content: '';
+        left: 3.6rem;
+        display: inline-block;
+        position: absolute;
+        width: 2rem;
+        height: 2rem;
+        background-color: $blue;
+        transform: rotate(45deg);
+        z-index: -1;
+    }
+}
