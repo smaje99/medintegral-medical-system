@@ -1,8 +1,5 @@
-export interface ButtonProps extends React.HTMLProps<
-    HTMLAnchorElement | HTMLButtonElement | HTMLInputElement
-> {
+interface ButtonBaseProps {
     as: 'a' | 'button' | 'input';
-    className?: string;
     stylesFor: 'primary'
         | 'secondary'
         | 'floating'
@@ -11,12 +8,22 @@ export interface ButtonProps extends React.HTMLProps<
         | 'primary-fit'
         | 'secondary-fit';
     children: React.ReactNode;
+};
+
+export type ButtonAnchorProps = ButtonBaseProps & {
+    as: 'a';
+} & React.HTMLProps<HTMLAnchorElement>;
+
+export type ButtonAuxProps = ButtonBaseProps & {
+    as: 'button';
+} & React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement
+>;
+
+export type ButtonInputProps = ButtonBaseProps & {
+    as: 'input';
+} & Omit<React.HTMLProps<HTMLInputElement>, 'type'> & {
+    type: 'submit' | 'reset'
 }
 
-export interface ButtonAnchorProps extends React.HTMLProps<HTMLAnchorElement> { }
-
-export interface ButtonAuxProps extends React.DetailedHTMLProps<
-    React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement
-> { }
-
-export interface ButtonInputProps extends React.HTMLProps<HTMLInputElement> { }
+export type ButtonProps = ButtonAnchorProps | ButtonAuxProps | ButtonInputProps;

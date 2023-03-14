@@ -1,15 +1,13 @@
 import Link from 'next/link';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 
-import styles from './Button.module.scss';
-import {
-    ButtonAnchorProps,
-    ButtonAuxProps,
-    ButtonInputProps,
-    ButtonProps
+import type {
+    ButtonAnchorProps, ButtonAuxProps, ButtonInputProps, ButtonProps
 } from './Button.types';
 
-const ButtonAnchor = ({ children, ...props }: ButtonAnchorProps) => (
+import styles from './Button.module.scss';
+
+const ButtonAnchor: React.FC<ButtonAnchorProps> = ({ children, ...props }) => (
     <Link href={props.href}>
         <a {...props}>
             {children}
@@ -17,49 +15,32 @@ const ButtonAnchor = ({ children, ...props }: ButtonAnchorProps) => (
     </Link>
 )
 
-const ButtonInput = (props: ButtonInputProps) => (
-    <input {...props} />
+const ButtonInput: React.FC<ButtonInputProps> = ({ children, ...props}) => (
+    <input {...props} value={children.toString()} />
 )
 
-const ButtonAux = ({ children, ...props }: ButtonAuxProps) => (
+const ButtonAux: React.FC<ButtonAuxProps> = ({ children, ...props }) => (
     <button {...props}>
         {children}
     </button>
 )
 
-const Button = ({ className, stylesFor, as, children, ...props }: ButtonProps) => {
-    const getButton = useCallback(() => {
-        switch (as) {
-            case 'a':
-                return (
-                    <ButtonAnchor
-                        className={`${styles.button} ${styles[stylesFor]} ${className}`}
-                        {...props as ButtonAnchorProps}
-                    >
-                        {children}
-                    </ButtonAnchor>
-                )
-            case 'button':
-                return (
-                    <ButtonAux
-                        className={`${styles.button} ${styles[stylesFor]} ${className}`}
-                        {...props as ButtonAuxProps}
-                    >
-                        {children}
-                    </ButtonAux>
-                )
-            case 'input':
-                return (
-                    <ButtonInput
-                        className={`${styles.button} ${styles[stylesFor]} ${className}`}
-                        value={children.toString()}
-                        {...props as ButtonInputProps}
-                    />
-                )
-        }
-    }, [as]);
+const Button: React.FC<ButtonProps> = ({ as, stylesFor, className, ...props }) => {
+    const propsMemo = useMemo(() => ({
+        ...props,
+        className: `${styles.button} ${styles[stylesFor]} ${className ?? ''}`
+    }), []);
 
-    return <>{getButton()}</>;
+    switch (as) {
+        case 'a':
+            return <ButtonAnchor {...propsMemo as ButtonAnchorProps} />
+        case 'button':
+            return <ButtonAux {...propsMemo as ButtonAuxProps} />
+        case 'input':
+            return <ButtonInput {...propsMemo as ButtonInputProps} />
+        default:
+            throw new Error("Invalid Field Type");
+    }
 }
 
 export default Button;
