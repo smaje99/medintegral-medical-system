@@ -30,8 +30,10 @@ const InfoFooter = () => {
             <section className={styles.group}>
                 <Info id="address" title="Dirección">
                     <span className={styles.subinfo}>
-                        Cra. 13 # 6-104 Juan XXIII<br />
-                        Florencia - Caquetá
+                        Cra. 10 # 5A - 25<br />
+                        Barrio La Avenidas<br />
+                        Florencia - Caquetá<br />
+                        Frente a Medicina Legal<br />
                     </span>
                 </Info>
                 <Info id="schedule" title="Horario de atención">
