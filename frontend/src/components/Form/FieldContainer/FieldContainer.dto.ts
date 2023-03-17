@@ -1,4 +1,4 @@
-export interface FieldProps {
+export interface FieldContainerProps {
     htmlFor: string;
     title: string;
     obligatory?: boolean;

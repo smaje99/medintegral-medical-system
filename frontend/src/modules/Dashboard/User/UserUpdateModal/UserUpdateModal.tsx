@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { HiIdentification } from 'react-icons/hi2';
 import { MdHealthAndSafety, MdPassword } from 'react-icons/md';
@@ -46,8 +45,6 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
     const doctorDataUpdateFormMethods = useForm<DoctorDataUpdateValues>({
         defaultValues: doctorData
     });
-
-    const [medicalLicenses, setMedicalLicenses] = useState(() => doctorData.medicalLicenses);
 
     const handlePersonalDataClose = () => {
         personalDataUpdateFormMethods.reset();
@@ -116,7 +113,7 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
         const idToast = toast.loading('Actualizando datos médicos', getToastConfig());
         try {
             await updateDoctor(
-                personalData.dni, { ...data, medicalLicenses }, session.accessToken
+                personalData.dni, { ...data }, session.accessToken
             );
 
             handleDoctorDataClose();
@@ -131,30 +128,6 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
                 ...getToastUpdateConfig('error')
             });
         }
-    }
-
-    /**
-     * Handle the addition of medical license.
-     * @param event - React.KeyboardEvent<HTMLInputElement>
-     */
-    const handleAddMedicalLicense = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        const { value } = event.currentTarget;
-        if (event.code === 'Comma'
-            && value.match(/RM\s\d{3}-\d{2}/)
-            && !medicalLicenses.includes(value)) {
-            setMedicalLicenses(currentLicenses => [...currentLicenses, value]);
-            event.currentTarget.value = '';
-        }
-    }
-
-    /**
-     * Handle the removal of medical licenses.
-     * @param item - string - the item to be removed from the array.
-     */
-    const handleRemoveMedicalLicense= (item: string) => {
-        setMedicalLicenses(currentLicenses => (
-            currentLicenses.filter(license => license != item)
-        ));
     }
 
     return (
@@ -191,9 +164,6 @@ const UserUpdateModal: React.FC<UserUpdateModalProps> = ({
                         <DoctorDataUpdate
                             onUpdate={handleDoctorDataUpdate}
                             onClose={handleDoctorDataClose}
-                            medicalLicenses={medicalLicenses}
-                            handleAddMedicalLicense={handleAddMedicalLicense}
-                            handleRemoveMedicalLicense={handleRemoveMedicalLicense}
                         />
                     </FormProvider>
                 ) : null}

@@ -1,6 +1,6 @@
 @import '../../../../styles/fonts';
-@import '../../../../styles/mixins';
 @import '../../../../styles/palette';
+
 
 .title {
     color: $white;
@@ -9,177 +9,17 @@
     letter-spacing: .2rem;
 }
 
-.form {
-    display: grid;
-    gap: 1.2rem;
-    grid-template-columns: 1fr;
-    margin-top: 2.4rem;
-
-    & .input {
-        &, &-select {
-            flex: 1;
-            font-size: 12pt;
-            display: inline-block;
-            letter-spacing: 0.1rem;
-            color: $black;
-            background-color: transparent;
-            border-color: transparent;
-            outline: 0;
-
-            &:focus {
-                border-bottom: 1px solid rgba($blue-monochromatic, 0.25);
-            }
-        }
-
-        &-select {
-            text-transform: capitalize;
-        }
-
-        &:-webkit-autofill,
-        &:-webkit-autofill:is(:hover, :focus, :active) {
-            transition: font 0s 10800s;
-            transition: color 0s 10800s;
-            transition: background-color 0s 10800s;
-        }
-
-        &::-webkit-outer-spin-button,
-        &::-webkit-inner-spin-button {
-            appearance: none;
-            margin: 0;
-        }
-
-        &[type=number] {
-            appearance: textfield
-        }
-    }
-
-    & .select {
-        width: 5.2rem;
-        font-size: 12pt;
-        outline: 0;
-        border: none;
-        background-color: transparent;
-    }
-
-    & .select,
-    & .input-select {
-        margin: 0;
-        appearance: none;
-        background-image:
-        url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-        background-repeat: no-repeat;
-        background-position-x: right;
-        background-position-y: center;
-    }
-
-    .textarea {
-        flex: 1;
-        font-size: 12pt;
-        line-height: 1.5;
-        padding: 1rem;
-        background-color: transparent;
-        border: 1px solid $green-blue;
-        border-radius: 5px;
-        box-shadow: 2px 2px 1px rgba($green-blue, .5);
-        outline-color: $green-blue;
-        resize: none;
-
-        &::-webkit-scrollbar {
-            width: 1rem;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: $blue-monochromatic;
-            border-radius: 1rem;
-        }
-
-        &::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
-    }
-
-    & .show-password {
-        display: flex;
-        align-items: center;
-        font-size: 11pt;
-        color: $black;
-        border-color: transparent;
-        background-color: transparent;
-    }
-
-    & > .commands {
-        display: grid;
-        place-content: center;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.2rem;
-        margin: 2.4rem 0;
-    }
-}
-
-.phone {
-    flex: 1;
-}
-
-.phone-input {
-    width: 100% !important;
-    height: 100% !important;
-    font-size: 12pt !important;
-    font-family: $body-font;
-    display: inline-block;
-    letter-spacing: 0.1rem !important;
-    color: $black;
-    background-color: transparent !important;
-    border-color: transparent !important;
-    outline: 0 !important;
-
-    &:focus {
-        border-bottom:
-            1px solid rgba($blue-monochromatic, 0.25) !important;
-    }
-
-    &:-webkit-autofill,
-    &:-webkit-autofill:hover,
-    &:-webkit-autofill:focus,
-    &:-webkit-autofill:active {
-        transition: all 0s 10800s;
-    }
-}
-
-.phone-button {
-    background-color: transparent !important;
-    border-color: transparent !important;
-    outline: 0;
-
-    &> div {
-        &, &:hover, &:focus {
-            background-color: transparent !important;
-        }
-    }
-}
-
-.phone-dropdown {
-    &::-webkit-scrollbar {
-        width: 1rem;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: $blue-monochromatic;
-        border-radius: 1rem;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-}
-
-.box {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 6px 4px;
+.select {
+    width: 5.2rem;
+    font-size: 12pt;
     margin: 0;
-    @include non-list;
-
-    & > li > .badge {
-        font-size: 10pt;
-    }
+    outline: 0;
+    border: none;
+    appearance: none;
+    background-color: transparent;
+    background-image:
+        url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: center;
 }

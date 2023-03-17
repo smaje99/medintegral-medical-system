@@ -69,9 +69,6 @@ export type DoctorDataTable = User['doctor'];
 export type DoctorDataFormProps = {
     onUpdate: (data: DoctorDataUpdateValues) => Promise<void>;
     onClose: () => void;
-    medicalLicenses: string[];
-    handleAddMedicalLicense: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-    handleRemoveMedicalLicense: (item: string) => void;
 };
 
 export type DoctorDataUpdateValues = DoctorUpdate;

@@ -1,8 +1,7 @@
-import { useReducer } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { BsEyeFill, BsEyeSlashFill } from 'react-icons/bs';
 
 import Button from '@Components/Button';
+import { InputField, PasswordField } from '@Components/Form';
 import { Spinner } from '@Components/loaders';
 
 import type { LoginFormValues, LoginFormViewProps } from '../Login.types';
@@ -10,7 +9,6 @@ import type { LoginFormValues, LoginFormViewProps } from '../Login.types';
 import styles from './LoginForm.module.scss';
 
 const LoginFormView = ({ handleLogin }: LoginFormViewProps) => {
-    const [showPassword, handleShowPassword] = useReducer((state: boolean) => !state, false);
     const {
         handleSubmit, register, formState: { isSubmitting }
     } = useFormContext<LoginFormValues>();
@@ -22,33 +20,25 @@ const LoginFormView = ({ handleLogin }: LoginFormViewProps) => {
             autoComplete="on"
         >
             <div className={styles.field}>
-                <input
+                <InputField
                     type="text"
-                    id="username"
-                    className={styles.input}
+                    name="username"
+                    label=""
                     placeholder="Usuario"
                     autoFocus={true}
                     required
                     autoComplete="username"
-                    {...register('username')}
                 />
             </div>
             <div className={styles.field}>
-                <input
-                    type={showPassword ? 'text': 'password'}
-                    id="password"
-                    className={styles.input}
+                <PasswordField
+                    type="password"
+                    name="password"
+                    label=""
                     placeholder="Contraseña"
                     required
                     autoComplete="current-password"
-                    {...register('password')}
                 />
-                <div
-                    className={styles.show_password}
-                    onClick={handleShowPassword}
-                >
-                    {showPassword ? <BsEyeFill /> : <BsEyeSlashFill />}
-                </div>
             </div>
             <label htmlFor="remember-me" className={styles.container}>
                 <input
