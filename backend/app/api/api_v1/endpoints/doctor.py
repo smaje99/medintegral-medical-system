@@ -4,7 +4,7 @@ from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NO
 from app.api.dependencies.auth import get_current_user_with_permissions
 from app.api.dependencies.services import ServiceDependency
 from app.core.types import PermissionAction
-from app.schemas.doctor.doctor import Doctor, DoctorCreate, DoctorUpdate
+from app.schemas.medical.doctor import Doctor, DoctorCreate, DoctorUpdate
 from app.models.user import User as UserModel
 from app.services.doctor import DoctorService
 from app.services.user import UserService

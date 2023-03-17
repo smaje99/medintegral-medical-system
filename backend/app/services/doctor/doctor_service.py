@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from app.models.doctor import Doctor
-from app.schemas.doctor.doctor import DoctorCreate, DoctorUpdate
+from app.models.medical import Doctor
+from app.schemas.medical.doctor import DoctorCreate, DoctorUpdate
 from app.services import BaseService
 
 

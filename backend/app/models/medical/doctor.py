@@ -31,4 +31,4 @@ class Doctor(Base):
         'User', back_populates='doctor', lazy='joined'
     )
 
-    __table_args__ = {'schema': 'doctor'}
+    __table_args__ = {'schema': 'medical'}

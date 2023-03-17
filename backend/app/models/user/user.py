@@ -11,7 +11,7 @@ from app.database.base import Base
 if TYPE_CHECKING:
     from ..person.person import Person
     from .role import Role
-    from ..doctor import Doctor
+    from ..medical import Doctor
 
 
 class User(Base):
