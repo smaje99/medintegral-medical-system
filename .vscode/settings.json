@@ -37,4 +37,6 @@
     "pylint.args": [
         "--rcfile=backend/.pylintrc"
     ],
+    "mypy.configFile": "backend/mypy.ini",
+    "python.analysis.typeCheckingMode": "basic",
 }
