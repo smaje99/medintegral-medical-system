@@ -6,7 +6,7 @@ from app.api.dependencies.services import ServiceDependency
 from app.core.types import PermissionAction
 from app.schemas.medical.doctor import Doctor, DoctorCreate, DoctorUpdate
 from app.models.user import User as UserModel
-from app.services.doctor import DoctorService
+from app.services.medical import DoctorService
 from app.services.user import UserService
 
 

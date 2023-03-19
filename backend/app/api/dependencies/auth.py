@@ -115,7 +115,7 @@ def get_current_user_with_permissions(
         checked on the current user.
 
     Raises:
-        HTTPException: HTTP 401. Unauthorized user.
+        HTTPException: HTTP 403. Unauthorized user.
 
     Returns:
         Callable[[], User]: Current user.
@@ -123,13 +123,15 @@ def get_current_user_with_permissions(
 
     def wrapper(current_user: User = Depends(get_current_active_user)) -> User:
         user = UserInSession.from_orm(current_user)
-        user_actions = set(user.permissions.get(permission, {})) | actions
+        permissions = user.permissions or {}
+        user_actions = set(permissions.get(permission, {})) | actions
 
-        if permission not in user.permissions or len(user_actions) != len(
-            user.permissions.get(permission)
+        if permission not in permissions or len(user_actions) != len(
+            permissions.get(permission, [])
         ):
             raise HTTPException(
-                status_code=HTTP_401_UNAUTHORIZED, detail='Usuario no autorizado'
+                status_code=HTTP_403_FORBIDDEN,
+                detail='El usuario no tiene los permisos necesarios',
             )
 
         return current_user

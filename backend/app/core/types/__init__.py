@@ -4,3 +4,5 @@ from .document_type import DocumentType  # noqa: F401
 from .gender import Gender  # noqa: F401
 from .permission_action import PermissionAction  # noqa: F401
 from .rh_factor import RHFactor  # noqa: F401
+from .service_type import ServiceType  # noqa: F401
+from .session import Session  # noqa: F401
