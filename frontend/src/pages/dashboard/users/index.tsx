@@ -67,8 +67,8 @@ export const getServerSideProps: GetServerSideProps<DataProps> = async (context)
     try {
         users.data = await getAllOfUsers(0, 50, token.accessToken);
     } catch (error) {
-        roles.error = error;
+        users.error = error;
     }
 
-    return { props: { data: { roles, users } } }
+    return { props: { data: { roles, users } } };
 }
