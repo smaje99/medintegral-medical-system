@@ -5,4 +5,4 @@ export interface Doctor {
 
 export type DoctorCreate = Omit<Doctor, 'signature'>;
 
-export type DoctorUpdate = Partial<Omit<Doctor, 'dni'>>
+export type DoctorUpdate = Partial<Omit<Doctor, 'dni'>>;

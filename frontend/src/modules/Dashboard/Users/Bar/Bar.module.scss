@@ -1,99 +1,28 @@
-@import '../../../../styles/animations';
-@import '../../../../styles/fonts';
-@import '../../../../styles/mixins';
+@import '@Styles/palette';
 
-.bar {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+.button {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 10pt;
+    font-weight: 600;
+    letter-spacing: 0.45px;
+    border: none;
+    outline: 0;
+    color: $green-blue-monochromatic;
+    background-color: transparent;
 
-.section {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
-    gap: 1.2rem;
-}
+    &:hover {
+        font-weight: 600;
+        transform: scale(1.1);
+    }
 
-.title {
-    font: 600 22pt $title-font;
-    line-height: 1;
-    letter-spacing: .2rem;
-    margin: 0;
-    padding: 0;
-}
+    &:active {
+        transform: scale(.9)
+    }
 
-.row-size {
-    font: 400 11pt $body-font;
-    letter-spacing: .5px;
-}
-
-.nav {
-    @include non-list;
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: center;
-    align-items: center;
-    gap: 1.2rem;
-
-    & > .item {
-        @include slideInRight;
-
-        & > .button {
-            display: inline-flex;
-            align-items: flex-start;
-            gap: 0.4rem;
-            font-size: 10pt;
-            font-weight: 600;
-            letter-spacing: 0.45px;
-            border: none;
-            outline: 0;
-            color: $green-blue-monochromatic;
-            background-color: transparent;
-
-            &:hover {
-                font-weight: 600;
-                transform: scale(1.1);
-            }
-
-            &:active {
-                transform: scale(.9)
-            }
-
-            &--disable {
-                @extend .button;
-                color: $green-complementary;
-            }
-        }
-
-        & > .search {
-            display: inline-flex;
-            background-color: white;
-            border: 2px solid $blue-monochromatic;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            padding: 2px 4px;
-            gap: 2px;
-
-            & > .input {
-                font-size: 9pt;
-                outline: 0;
-                color: $black;
-                caret-color: $blue-monochromatic;
-                background-color: transparent;
-                border: none;
-
-                &::selection {
-                    color: white;
-                    background-color: $blue-monochromatic;
-                }
-            }
-
-            & > svg {
-                font-size: 10pt;
-                color: $blue-monochromatic;
-            }
-        }
+    &--disable {
+        @extend .button;
+        color: $green-complementary;
     }
 }

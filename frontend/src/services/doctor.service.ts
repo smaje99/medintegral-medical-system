@@ -1,5 +1,5 @@
 import api from '@Api/doctor.api';
-import type { Doctor, DoctorCreate, DoctorUpdate } from '@Types/doctor.model';
+import type { Doctor, DoctorCreate, DoctorUpdate } from '@Types/medical/doctor.model';
 
 import type { APIError } from '@Types/error';
 import type { Token } from '@Types/user/token';

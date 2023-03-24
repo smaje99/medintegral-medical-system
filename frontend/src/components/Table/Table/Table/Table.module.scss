@@ -1,6 +1,6 @@
-@import '../../../styles/animations';
-@import '../../../styles/palette';
-@import '../../../styles/fonts';
+@import '@Styles/animations';
+@import '@Styles/palette';
+@import '@Styles/fonts';
 
 
 .table {
@@ -11,49 +11,18 @@
 }
 
 .head-cell {
+    text-align: left;
     padding: 0 .2rem .6rem .2rem;
     border-bottom: 2px solid $blue-monochromatic;
 
     & > div:first-child {
         font: 600 12pt $title-font;
-        letter-spacing: 0.8px;
+        letter-spacing: 0.85px;
         margin-bottom: .2rem;
 
         &.sorting {
             cursor: pointer;
             user-select: none;
-        }
-    }
-
-    & > div:last-child {
-        & .filter {
-            display: flex;
-            gap: .2rem;
-            justify-content: center;
-            align-items: center;
-        }
-
-        & .filter-input {
-            font-size: 9pt;
-            outline: 0;
-            border-radius: 8px;
-            padding: 2px 0 2px 4px;
-            color: $black;
-            caret-color: $blue-monochromatic;
-            border: 2px solid $blue-monochromatic;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-
-            &:out-of-range {
-                border-color: $green-complementary;
-            }
-
-            &.small {
-                width: 100%;
-            }
-
-            &.large {
-                width: 12rem;
-            }
         }
     }
 }
@@ -72,11 +41,12 @@
     position: relative;
 
     font: 300 10pt $body-font;
+    letter-spacing: 0.25px;
     padding: 1.6rem .2rem;
     transition: .3s all ease;
     overflow-x: hidden;
 
-    & > :first-child::selection {
+    :is(&, :first-child)::selection {
         font-weight: 600;
         color: white;
         background-color: $blue-monochromatic;

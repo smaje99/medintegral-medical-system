@@ -1,0 +1,32 @@
+@import '@Styles/palette';
+
+
+.filter {
+    display: flex;
+    gap: .2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-input {
+    font-size: 9pt;
+    outline: 0;
+    border-radius: 8px;
+    padding: 2px 0 2px 4px;
+    color: $black;
+    caret-color: $blue-monochromatic;
+    border: 2px solid $blue-monochromatic;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    &:out-of-range {
+        border-color: $green-complementary;
+    }
+
+    &.small {
+        width: 100%;
+    }
+
+    &.large {
+        width: 12rem;
+    }
+}

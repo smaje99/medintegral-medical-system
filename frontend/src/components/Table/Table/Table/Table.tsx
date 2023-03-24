@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     getFacetedMinMaxValues,
@@ -8,18 +7,23 @@ import {
     getFacetedUniqueValues,
     getFilteredRowModel,
     getSortedRowModel,
-    RowSelectionState,
-    SortingState,
-    useReactTable
+    type ColumnDef,
+    type ColumnFiltersState,
+    type RowSelectionState,
+    type SortingState,
+    useReactTable,
 } from '@tanstack/react-table';
 
-import { TableProps } from './Table.types';
-import { Filter, fuzzyFilter, startWithFilter } from '../filters';
-import useTable from './useTable';
+import { Filter, fuzzyFilter, startWithFilter } from '@Components/Table/filters';
+import { useTable } from '../hooks';
 
 import styles from './Table.module.scss';
 
-function Table<D extends object = {}>({ columns }: TableProps<D>) {
+export interface Props<D extends object = {}> {
+    columns : ColumnDef<D>[];
+}
+
+function Table<D extends object = {}>({ columns }: Props<D>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -27,7 +31,9 @@ function Table<D extends object = {}>({ columns }: TableProps<D>) {
     const {
         setRowSelection: setRowSelectionProvider,
         setTable,
-        dataForTable: { data }
+        dataForTable: { data },
+        globalFilter,
+        setGlobalFilter
     } = useTable<D>();
 
     const table = useReactTable<D>({
@@ -37,8 +43,15 @@ function Table<D extends object = {}>({ columns }: TableProps<D>) {
             fuzzy: fuzzyFilter,
             startWith: startWithFilter
         },
-        state: { columnFilters, rowSelection, sorting },
+        state: {
+            columnFilters,
+            globalFilter,
+            rowSelection,
+            sorting
+        },
         onColumnFiltersChange: setColumnFilters,
+        onGlobalFilterChange: setGlobalFilter,
+        globalFilterFn: fuzzyFilter,
         onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
@@ -66,11 +79,7 @@ function Table<D extends object = {}>({ columns }: TableProps<D>) {
                 {getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
-                            <th
-                                key={header.id}
-                                className={styles["head-cell"]}
-                                colSpan={header.colSpan}
-                            >
+                            <th key={header.id} className={styles["head-cell"]}>
                                 {header.isPlaceholder ? null : (<>
                                     <div
                                         className={

@@ -10,11 +10,6 @@ export interface DataProps {
     };
 }
 
-export type BarProps = {
-    openCreateModal: () => void;
-    openDisableModal: () => void;
-}
-
 export interface CreateFormModalProps {
     isOpen: boolean;
     close: () => void;

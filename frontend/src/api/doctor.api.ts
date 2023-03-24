@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import type { Token } from '@Types/user/token';
-import type { Doctor, DoctorCreate, DoctorUpdate } from '@Types/doctor.model';
+import type { Doctor, DoctorCreate, DoctorUpdate } from '@Types/medical/doctor.model';
 
 const { NEXT_PUBLIC_API } = process.env;
 const baseURL = NEXT_PUBLIC_API;

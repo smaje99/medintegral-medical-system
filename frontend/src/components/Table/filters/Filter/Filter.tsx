@@ -1,12 +1,16 @@
 import { useMemo } from 'react';
+import type { Column, Table } from '@tanstack/react-table';
 
 import { DebouncedInput } from '@Components/Input';
 
-import type { FilterProps } from './filters.types';
+import styles from './Filter.module.scss';
 
-import styles from '../Table/Table.module.scss';
+export interface Props {
+    column: Column<any, any>;
+    table: Table<any>;
+}
 
-function Filter({ column, table }: FilterProps) {
+function Filter({ column, table }: Props) {
     const firstValue = table
         .getPreFilteredRowModel()
         .flatRows[0]

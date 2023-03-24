@@ -43,6 +43,7 @@
         @include non-link;
         white-space: nowrap;
         letter-spacing: 0.075rem;
+        user-select: none;
 
         color: $blue-monochromatic;
         background-color: $blue-light-shade;

@@ -1,4 +1,4 @@
-import type { Doctor } from '@Types/doctor.model';
+import type { Doctor } from '@Types/medical/doctor.model';
 import type { Person, PersonInUserSession } from '@Types/person';
 import type { Role } from '@Types/user/role';
 import type { Token } from '@Types/user/token';
@@ -18,7 +18,7 @@ export interface User {
 export interface UserInSession extends Omit<User, 'role' | 'person' | 'doctor'> {
     readonly person: PersonInUserSession;
     readonly role: Role['name'];
-    readonly permissions?: Map<string, ('creación' | 'lectura' | 'modificación' | 'deshabilitar')[]>
+    readonly permissions?: Record<string, ('creación' | 'lectura' | 'modificación' | 'deshabilitar')[]>
 }
 
 export interface UserLogin extends Pick<User, 'username'> {

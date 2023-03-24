@@ -1,7 +1,7 @@
 import { NextRouter } from 'next/router';
 
 import type { Data } from '@Types/data-request';
-import type { DoctorUpdate } from '@Types/doctor.model';
+import type { DoctorUpdate } from '@Types/medical/doctor.model';
 import type { Person, PersonUpdate } from '@Types/person';
 import type { Role } from '@Types/user/role';
 import type { User, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
