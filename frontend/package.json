@@ -24,6 +24,7 @@
     "next-auth": "^4.16.4",
     "nookies": "^2.5.2",
     "normalize.css": "^8.0.1",
+    "pretty-bytes": "^6.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.35.0",

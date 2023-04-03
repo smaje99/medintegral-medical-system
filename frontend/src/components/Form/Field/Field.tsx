@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import { FieldContainer } from '..';
 import type { FieldAttributes, FieldType } from './Field.dto';
+import FileField from './FileField';
 import InputField from './InputField';
 import PasswordField from './PasswordField';
 import PhoneField from './PhoneField';
@@ -17,11 +18,12 @@ fieldComponents.set('select', SelectField);
 fieldComponents.set('password', PasswordField);
 fieldComponents.set('textarea', TextAreaField);
 fieldComponents.set('phone', PhoneField);
+fieldComponents.set('file', FileField);
 
 /**
  * Field Factory
  */
-function Field<T = {}>(props: FieldAttributes<T>): JSX.Element {
+function Field<T = {}>({ obligatory, ...props }: FieldAttributes<T>): JSX.Element {
     const FieldComponent = useMemo(() => (
         props.type === 'custom'
             ? props.render
@@ -32,10 +34,10 @@ function Field<T = {}>(props: FieldAttributes<T>): JSX.Element {
         <FieldContainer
             htmlFor={props.name}
             title={props.label}
-            obligatory={props.obligatory ?? props.required}
+            obligatory={obligatory ?? props.required}
             legend={props.legend}
         >
-            <FieldComponent {...props} />
+            <FieldComponent {...{...props, required: props.required ?? obligatory}} />
         </FieldContainer>
     )
 }
