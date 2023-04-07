@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.api.api_v1 import api_router
 from app.core.config import settings
@@ -34,3 +35,5 @@ def startup():
 app.include_router(api_router, prefix=settings.domain.api_version)
 
 app.add_exception_handler(DatabaseException, database_exception_handler)  # type: ignore
+
+app.mount('/files', StaticFiles(directory='files'), name='files')

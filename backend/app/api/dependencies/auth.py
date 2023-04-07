@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Annotated, Callable
 
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
@@ -163,3 +163,10 @@ def get_current_active_superuser(
         )
 
     return current_user
+
+
+CurrentUser = Annotated[User, Depends(get_current_user)]
+
+CurrentActiveUser = Annotated[User, Depends(get_current_active_user)]
+
+CurrentActiveSuperUser = Annotated[User, Depends(get_current_active_superuser)]
