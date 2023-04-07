@@ -1,69 +1,31 @@
 import api from '@Api/specialty.api';
-import type { APIError } from '@Types/error';
 import type {
     Specialty, SpecialtyCreate, SpecialtyUpdate
 } from '@Types/medical/specialty.model';
-import { Token } from '@Types/user/token';
-import { isAxiosError } from '@Utils/axios-error';
+import type { Token } from '@Types/user/token';
 
-export const getSpecialty = async (
+import { withAxiosHandler } from './commons';
+
+export const getSpecialty: (
     id: Specialty['id'], token: Token['accessToken']
-): Promise<Specialty> => {
-    try {
-        const response = await api.get(id, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<Specialty> = withAxiosHandler(
+    async (id, token) => api.get(id, token)
+);
 
-        throw error;
-    }
-}
-
-export const getAllOfSpecialty = async (
+export const getAllOfSpecialty: (
     token: Token['accessToken']
-): Promise<Specialty[]> => {
-    try {
-        const response = await api.getAll(token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<Specialty[]> = withAxiosHandler(
+    async (token) => api.getAll(token)
+);
 
-        throw error;
-    }
-}
-
-export const createSpecialty = async (
+export const createSpecialty: (
     specialty: SpecialtyCreate, token: Token['accessToken']
-): Promise<Specialty> => {
-    try {
-        const response = await api.create(specialty, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<Specialty> = withAxiosHandler(
+    async (specialty, token) => api.create(specialty, token)
+);
 
-        throw error;
-    }
-}
-
-export const updateSpecialty = async (
-    id: Specialty['id'],
-    specialty: SpecialtyUpdate,
-    token: Token['accessToken']
-): Promise<Specialty> => {
-    try {
-        const response = await api.update(id, specialty, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
+export const updateSpecialty: (
+    id: Specialty['id'], specialty: SpecialtyUpdate, token: Token['accessToken']
+) => Promise<Specialty> = withAxiosHandler(
+    async (id, specialty, token) => api.update(id, specialty, token)
+);

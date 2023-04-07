@@ -1,10 +1,8 @@
 import api from '@Api/doctor.api';
 import type { Doctor, DoctorCreate, DoctorUpdate } from '@Types/medical/doctor.model';
-
-import type { APIError } from '@Types/error';
 import type { Token } from '@Types/user/token';
 
-import { isAxiosError } from '@Utils/axios-error';
+import { withAxiosHandler } from './commons';
 
 /**
  * Service to create a new doctor in the API service.
@@ -12,20 +10,11 @@ import { isAxiosError } from '@Utils/axios-error';
  * @param token - Token['accessToken']
  * @returns a Promise that resolves to a Doctor.
  */
-export const createDoctor = async (
+export const createDoctor: (
     doctor: DoctorCreate, token: Token['accessToken']
-): Promise<Doctor> => {
-    try {
-        const response = await api.create(doctor, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
+) => Promise<Doctor> = withAxiosHandler(
+    async (doctor, token) => api.create(doctor, token)
+);
 
 /**
  * Service to update a doctor in the API service.
@@ -33,17 +22,8 @@ export const createDoctor = async (
  * @param token - Token['accessToken']
  * @returns a Promise that resolves to a Doctor.
  */
-export const updateDoctor = async (
+export const updateDoctor: (
     dni: Doctor['dni'], doctor: DoctorUpdate, token: Token['accessToken']
-): Promise<Doctor> => {
-    try {
-        const response = await api.update(dni, doctor, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
+) => Promise<Doctor> = withAxiosHandler(
+    (dni, doctor, token) => api.update(dni, doctor, token)
+);

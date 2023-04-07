@@ -1,125 +1,55 @@
 import api from '@Api/user.api';
-
-import type { APIError } from '@Types/error';
 import type { Token } from '@Types/user/token';
-import type { User, UserInSession, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
+import type {
+    User, UserInSession, UserPasswordUpdate, UserUpdate
+} from '@Types/user/user';
 
-import { isAxiosError } from '@Utils/axios-error';
+import { withAxiosHandler } from './commons';
 
-export const getMe = async (token: Token['accessToken']): Promise<UserInSession> => {
-    try {
-        const response = await api.getMe(token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+export const getMe: (
+    token: Token['accessToken']
+) => Promise<UserInSession> = withAxiosHandler(
+    async (token) => api.getMe(token)
+);
 
-        throw error;
-    }
-}
-
-export const createUser = async (
+export const createUser: (
     dni: User['dni'], role_id: User['role']['id'], token: Token['accessToken']
-): Promise<User> => {
-    try {
-        const response = await api.create(dni, role_id, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<User> = withAxiosHandler(
+    async (dni, role_id, token) => api.create(dni, role_id, token)
+);
 
-        throw error;
-    }
-}
-
-export const getAllOfUsers = async(
+export const getAllOfUsers: (
     skip: number, limit: number, token: Token['accessToken']
-): Promise<User[]> => {
-    try {
-        const response = await api.getAll(skip, limit, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<User[]> = withAxiosHandler(
+    async (skip, limit, token) => api.getAll(skip, limit, token)
+);
 
-        throw error;
-    }
-}
-
-export const getUser = async (
+export const getUser: (
     dni: User['dni'], token: Token['accessToken']
-): Promise<User> => {
-    try {
-        const response = await api.get(dni, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<User> = withAxiosHandler(
+    async (dni, token) => api.get(dni, token)
+);
 
-        throw error;
-    }
-}
-
-export const updateUser = async (
+export const updateUser: (
     dni: User['dni'], user: UserUpdate, token: Token['accessToken']
-): Promise<User> => {
-    try {
-        const response = await api.update(dni, user, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<User> = withAxiosHandler(
+    async (dni, user, token) => api.update(dni, user, token)
+);
 
-        throw error;
-    }
-}
-
-export const changeUserPassword = async (
+export const changeUserPassword: (
     user: UserPasswordUpdate, token: Token['accessToken']
-): Promise<User> => {
-    try {
-        const response = await api.updatePassword(user, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<User> = withAxiosHandler(
+    async (user, token) => api.updatePassword(user, token)
+);
 
-        throw error;
-    }
-}
-
-export const disableUser = async (
+export const disableUser: (
     dni: User['dni'], disable: boolean, token: Token['accessToken']
-): Promise<User> => {
-    try {
-        const response = await api.disable(dni, disable, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+) => Promise<User> = withAxiosHandler(
+    async (dni, disable, token) => api.disable(dni, disable, token)
+);
 
-        throw error;
-    }
-}
-
-export const searchUserByDni = async (
+export const searchUserByDni: (
     dni: User['dni'], token: Token['accessToken']
-): Promise<User[]> => {
-    try {
-        const response = await api.search(dni, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
+) => Promise<User[]> = withAxiosHandler(
+    async (dni, token) => api.search(dni, token)
+);
