@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, Text
-from sqlalchemy.dialects.postgresql import BYTEA, UUID
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -29,8 +29,8 @@ class Specialty(Base):
     # Description of the medical specialty.
     description = Column(Text, nullable=False)
 
-    # Descriptive logo of the medical specialty in the I.P.S.
-    image = Column(BYTEA)
+    # Path of the descriptive logo of the medical specialty in the I.P.S.
+    image = Column(Text, nullable=False)
 
     # Service relationship one to many.
     services: list['Service'] = relationship(  # type: ignore

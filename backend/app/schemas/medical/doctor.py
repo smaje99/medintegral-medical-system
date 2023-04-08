@@ -1,4 +1,6 @@
+from app.core.config import settings
 from fastapi_camelcase import CamelModel
+from pydantic import validator
 
 
 class DoctorBase(CamelModel):
@@ -22,6 +24,14 @@ class DoctorInDBBase(DoctorBase):
 
     dni: int
     signature: str | None = None
+
+    @validator('signature', pre=True)
+    def assemble_signature_with_server_host(  # pylint: disable=E0213, C0116
+        cls, value: str | None
+    ) -> str | None:
+        if value is not None:
+            return f'{settings.domain.server_host}/files/{value}'
+        return None
 
     class Config:  # pylint: disable=C0115
         orm_mode = True

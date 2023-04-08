@@ -28,7 +28,7 @@ def read_specialty(
     * specialty_id (UUID): ID given to retrieve the specialty via a path parameter.
 
     Raises:
-        HTTPException: HTTP error 404. The specialty wasn't found.
+    * HTTPException: HTTP error 404. The specialty wasn't found.
 
     Returns:
         Specialty: The specialty with the given ID.
@@ -51,7 +51,7 @@ def read_specialties(
     '''Retrieve a specialties list.
 
     Returns:
-        list[Specialty]: Specialties list
+    * list[Specialty]: Specialties list
     '''
     return service.get_all(limit=100)  # type: ignore
 
@@ -99,10 +99,10 @@ def update_person(
     * specialty_in (SpecialtyUpdate): Specialty's data to be updated via body parameter.
 
     Raises:
-        HTTPException: HTTP error 404. The specialty wasn't found.
+    * HTTPException: HTTP error 404. The specialty wasn't found.
 
     Returns:
-        Specialty: The specialty's data updated.
+    * Specialty: The specialty's data updated.
     '''
     if not (specialty := service.get(specialty_id)):
         raise HTTPException(

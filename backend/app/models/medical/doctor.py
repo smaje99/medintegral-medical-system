@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import BigInteger, Column, ForeignKey
-from sqlalchemy.dialects.postgresql import BYTEA
+from sqlalchemy import BigInteger, Column, ForeignKey, TEXT
 from sqlalchemy.orm import relationship
 
 from app.database.base import Base
@@ -24,8 +23,8 @@ class Doctor(Base):
         nullable=False,
     )
 
-    # Doctor signature base64 image binaries.
-    signature = Column(BYTEA)
+    # Doctor's signature path.
+    signature = Column(TEXT)
 
     # User relationship one to one.
     user: 'User' = relationship(  # type: ignore
