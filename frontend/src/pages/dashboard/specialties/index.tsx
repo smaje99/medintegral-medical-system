@@ -4,7 +4,8 @@ import { useMemo } from 'react';
 
 import { ProtectedLayout } from '@Components/layouts';
 import { TableProvider } from '@Components/Table/Table';
-import { Bar, Table } from '@Modules/Dashboard/Specialty';
+import useModal from '@Hooks/useModal';
+import { Bar, CreateFormModal, Table } from '@Modules/Dashboard/Specialty';
 import { getAllOfSpecialty } from '@Services/specialty.service'
 import type { Data } from '@Types/data-request';
 import type { Specialty } from '@Types/medical/specialty.model';
@@ -16,6 +17,8 @@ type Props = {
 }
 
 const SpecialtyPage: NextPage<Props> = ({ data }) => {
+    const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
+
     const specialties = useMemo<Data<Specialty[]>>(() => (
         data.specialties
     ), [data.specialties]);
@@ -23,9 +26,11 @@ const SpecialtyPage: NextPage<Props> = ({ data }) => {
     return (
         <main>
             <TableProvider<Specialty> data={specialties}>
-                <Bar />
+                <Bar {...{ openCreateModal }} />
                 <Table />
             </TableProvider>
+
+            <CreateFormModal isOpen={isCreateModal} onClose={closeCreateModal} />
         </main>
     )
 }
