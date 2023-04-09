@@ -3,14 +3,7 @@ import axios from 'axios';
 import type { Token } from '@Types/user/token';
 import type { Doctor, DoctorCreate, DoctorUpdate } from '@Types/medical/doctor.model';
 
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = NEXT_PUBLIC_API;
-
-const headers = (token: Token['accessToken']) => ({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+import { baseURL, headers } from './commons';
 
 export default {
     /**
@@ -20,7 +13,7 @@ export default {
      * @returns a Promise that resolves to a Doctor.
      */
     async create(doctor: DoctorCreate, token: Token['accessToken']) {
-        return axios.post<Doctor>('/doctor', doctor, { baseURL, ...headers(token) })
+        return axios.post<Doctor>('/doctor', doctor, { baseURL, ...headers(token) });
     },
     /**
      * Update a doctor in the API service
@@ -29,7 +22,11 @@ export default {
      * @param token - Token['accessToken']
      * @returns a Promise that resolves to a Doctor.
      */
-    async update(dni: Doctor['dni'], doctor: DoctorUpdate, token: Token['accessToken']) {
-        return axios.put<Doctor>(`/doctor/${dni}`, doctor, { baseURL, ...headers(token) })
+    async update(
+        dni: Doctor['dni'], doctor: DoctorUpdate, token: Token['accessToken']
+    ) {
+        return axios.put<Doctor>(`/doctor/${dni}`, doctor, {
+            baseURL, ...headers(token)
+        });
     }
 }

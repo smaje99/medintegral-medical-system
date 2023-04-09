@@ -4,14 +4,7 @@ import type { Message } from '@Types/message';
 import type { Token } from '@Types/user/token';
 import type { UserInSession } from '@Types/user/user';
 
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = NEXT_PUBLIC_API;
-
-const headers = (token: string) => ({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+import { baseURL, headers } from './commons';
 
 export default {
     async login(username: string, password: string) {
@@ -22,7 +15,9 @@ export default {
         return axios.post<Token>(`${baseURL}/login/access-token`, params);
     },
     async testToken(token: string) {
-        return axios.post<UserInSession>(`${baseURL}/login/test-token`, {}, headers(token));
+        return axios.post<UserInSession>(
+            `${baseURL}/login/test-token`, {}, headers(token)
+        );
     },
     async resetPassword(token: string, new_password: string) {
         return axios.patch<Message>(`${baseURL}/reset-password`, {

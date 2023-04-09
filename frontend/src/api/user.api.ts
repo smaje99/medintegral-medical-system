@@ -1,40 +1,57 @@
 import axios from 'axios';
 
 import type { Token } from '@Types/user/token';
-import type { User, UserInSession, UserPasswordUpdate, UserUpdate } from '@Types/user/user';
+import type {
+    User, UserInSession, UserPasswordUpdate, UserUpdate
+} from '@Types/user/user';
 
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = NEXT_PUBLIC_API;
-
-const headers = (token: Token['accessToken']) => ({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+import { baseURL, headers } from './commons';
 
 export default {
     async getMe(token: Token['accessToken']) {
-        return axios.get<UserInSession>(`${baseURL}/user/me`, headers(token));
+        return axios.get<UserInSession>(`/user/me`, { baseURL, ...headers(token) });
     },
-    async create(dni: User['dni'], role_id: User['role']['id'], token: Token['accessToken']) {
-        return axios.post<User>(`${baseURL}/user/`, { dni, role_id }, headers(token));
+    async create(
+        dni: User['dni'], role_id: User['role']['id'], token: Token['accessToken']
+    ) {
+        return axios.post<User>(`/user/`, { dni, role_id }, {
+            baseURL, ...headers(token)
+        });
     },
     async getAll(skip: number, limit: number, token: Token['accessToken']) {
-        return axios.get<User[]>(`${baseURL}/user/?skip=${skip}&limit=${limit}`, headers(token));
+        return axios.get<User[]>('/user/', {
+            baseURL,
+            params: { skip, limit },
+            ...headers(token)
+        });
     },
     async get(dni: User['dni'], token: Token['accessToken']) {
-        return axios.get<User>(`${baseURL}/user/${dni}`, headers(token));
+        return axios.get<User>(`/user/${dni}`, { baseURL, ...headers(token) });
     },
-    async update(dni: User['dni'], user: UserUpdate, token: Token['accessToken']) {
-        return axios.put<User>(`${baseURL}/user/${dni}`, user, headers(token));
+    async update(
+        dni: User['dni'], user: UserUpdate, token: Token['accessToken']
+    ) {
+        return axios.put<User>(`/user/${dni}`, user, {
+            baseURL, ...headers(token)
+        });
     },
-    async updatePassword(credentials: UserPasswordUpdate, token: Token['accessToken']) {
-        return axios.patch<User>(`${baseURL}/user/password`, credentials, headers(token));
+    async updatePassword(
+        credentials: UserPasswordUpdate, token: Token['accessToken']
+    ) {
+        return axios.patch<User>(`/user/password`, credentials, {
+            baseURL, ...headers(token)
+        });
     },
-    async disable(dni: User['dni'], disable: boolean, token: Token['accessToken']) {
-        return axios.patch<User>(`${baseURL}/user/disable/${dni}`, { disable }, headers(token));
+    async disable(
+        dni: User['dni'], disable: boolean, token: Token['accessToken']
+) {
+        return axios.patch<User>(`/user/disable/${dni}`, { disable }, {
+            baseURL, ...headers(token)
+        });
     },
     async search(dni: User['dni'], token: Token['accessToken']) {
-        return axios.get<User[]>('/user/search', { baseURL, params: { dni }, ...headers(token) });
+        return axios.get<User[]>('/user/search', {
+            baseURL, params: { dni }, ...headers(token)
+        });
     }
 }

@@ -3,23 +3,21 @@ import axios from 'axios';
 import type { Person, PersonCreate, PersonUpdate } from '@Types/person';
 import { Token } from '@Types/user/token';
 
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = NEXT_PUBLIC_API;
-
-const headers = (token: Token['accessToken']) => ({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+import { baseURL, headers } from './commons';
 
 export default {
     async get(dni: Person['dni']) {
-        return axios.get<Person>(`${baseURL}/person/${dni}`)
+        return axios.get<Person>(`/person/${dni}`, { baseURL });
     },
     async create(personObj: PersonCreate) {
-        return axios.post<Person>(`${baseURL}/person/`, personObj);
+        return axios.post<Person>('/person/', personObj, { baseURL });
     },
-    async update(dni: Person['dni'], person: PersonUpdate, token: Token['accessToken']) {
-        return axios.put<Person>(`${baseURL}/person/${dni}`, person, headers(token));
+    async update(
+        dni: Person['dni'], person: PersonUpdate, token: Token['accessToken']
+    ) {
+        return axios.put<Person>(`/person/${dni}`, person, {
+            baseURL,
+            ...headers(token)
+        });
     }
 }

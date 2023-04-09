@@ -2,10 +2,10 @@ import axios from 'axios';
 
 import type { Role } from '@Types/user/role';
 
-const { NEXT_PUBLIC_API: baseURL } = process.env;
+import { baseURL } from './commons';
 
 export default {
     async getAll() {
-        return axios.get<Role[]>(`${baseURL}/role/`)
+        return axios.get<Role[]>('/role/', { baseURL })
     }
 }
