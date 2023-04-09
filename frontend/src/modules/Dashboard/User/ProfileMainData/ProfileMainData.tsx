@@ -12,7 +12,7 @@ import {
 } from '@Components/Button';
 import { InformationTable } from '@Components/Table';
 import type { User } from '@Types/user/user';
-import { formatPhone } from '@Utils/phone';
+import { formatPhone } from '@Utils/formatter';
 
 import UpdateFormModal from '../UserUpdateForm';
 import type { ProfileMainDataProps } from '../User.types';

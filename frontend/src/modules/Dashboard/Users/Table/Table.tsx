@@ -6,11 +6,11 @@ import {
     CopyButton, EmailButton, TelButton, WhatsAppButton
 } from '@Components/Button';
 import { Table as TableTemplate } from '@Components/Table';
-import { IdentificationCell } from '@Components/Table/cells';
+import { TitleCell } from '@Components/Table/cells';
 import { SelectionColumn } from '@Components/Table/columns';
 import { fuzzySort } from '@Components/Table/filters';
 import routes from '@Helpers/routes';
-import { formatPhone } from '@Utils/phone';
+import { formatPhone, formatIdentificationNumber } from '@Utils/formatter';
 
 import type { TableProps, UserDataForTable } from './Table.types';
 
@@ -24,13 +24,13 @@ const Table: React.FC<TableProps> = () => {
         columnHelper.accessor('dni', {
             header: 'Identificación',
             cell: info => (
-                <IdentificationCell
+                <TitleCell
                     href={routes.dashboard.user(info.getValue())}
                     title="ver información general del usuario"
                     isActive={info.row.original.isActive}
                 >
-                    {info.getValue()}
-                </IdentificationCell>
+                    {formatIdentificationNumber(info.getValue())}
+                </TitleCell>
             ),
             filterFn: 'startWith'
         }),

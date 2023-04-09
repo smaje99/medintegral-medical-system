@@ -19,7 +19,7 @@ import {
 import { InformationTable } from '@Components/Table';
 import type { User } from '@Types/user/user';
 import { addDays, dateWithFormat, relativeDateToNow } from '@Utils/date';
-import { formatPhone } from '@Utils/phone';
+import { formatPhone } from '@Utils/formatter';
 
 import type { PersonalDataProps } from '../User.types';
 

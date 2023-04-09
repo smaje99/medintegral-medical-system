@@ -1,1 +1,1 @@
-export { default as IdentificationCell } from './IdentificationCell';
+export { default as TitleCell } from './TitleCell';

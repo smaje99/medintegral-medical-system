@@ -1,13 +1,12 @@
-@import '../../../../styles/mixins';
-@import '../../../../styles/palette';
-
+@import '@Styles/mixins';
+@import '@Styles/palette';
 
 .cell {
     position: relative;
     display: flex;
     align-items: center;
 
-    & > .identification {
+    & > .title {
         display: inline-flex;
         align-self: flex-end;
         gap: 2px;
