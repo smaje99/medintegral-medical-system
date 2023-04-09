@@ -56,7 +56,7 @@ function TableProvider<T extends object = {}>({ data, children }: Props<T>) {
         rowSelectionSize,
         globalFilter,
         setGlobalFilter
-    }), [globalFilter, rowSelection, dataForTable]);
+    }), [globalFilter, rowSelection, dataForTable, data]);
 
     return (
         <TableContext.Provider value={contextValue}>
