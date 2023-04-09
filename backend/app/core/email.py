@@ -79,7 +79,7 @@ def send_reset_password_email(email_to: str, username: str, token: str):
         username (str): Username.
         token (str): JWT reset.
     '''
-    server_host = settings.domain.server_host
+    public_host = settings.domain.public_host
 
     send_email(
         email_to=email_to,
@@ -89,7 +89,7 @@ def send_reset_password_email(email_to: str, username: str, token: str):
             'username': username,
             'email': email_to,
             'valid_hours': settings.email.reset_token_expire_hours,
-            'link': f'{server_host}/recuperar-contraseña?token={token}',
+            'link': f'{public_host}/recuperar-contraseña?token={token}',
         },
     )
 
