@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { ProtectedLayout } from '@Components/layouts';
 import { TableProvider } from '@Components/Table/Table';
 import useModal from '@Hooks/useModal';
-import { Bar, CreateFormModal, Table } from '@Modules/Dashboard/Specialty';
+import { Bar, CreateFormModal, Table } from '@Modules/Dashboard/Specialties';
 import { getAllOfSpecialty } from '@Services/specialty.service'
 import type { Data } from '@Types/data-request';
 import type { Specialty } from '@Types/medical/specialty.model';
@@ -16,7 +16,7 @@ type Props = {
     }
 }
 
-const SpecialtyPage: NextPage<Props> = ({ data }) => {
+const SpecialtiesPage: NextPage<Props> = ({ data }) => {
     const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
 
     const specialties = useMemo<Data<Specialty[]>>(() => (
@@ -36,13 +36,13 @@ const SpecialtyPage: NextPage<Props> = ({ data }) => {
 }
 
 // @ts-ignore: next-line
-SpecialtyPage.getLayout = (page: JSX.Element) => (
+SpecialtiesPage.getLayout = (page: JSX.Element) => (
     <ProtectedLayout title="Especialidades">
         {page}
     </ProtectedLayout>
 )
 
-export default SpecialtyPage;
+export default SpecialtiesPage;
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     const token = await getToken({ req: context.req });

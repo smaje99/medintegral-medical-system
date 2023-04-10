@@ -4,7 +4,7 @@ import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { Table as TableTemplate } from '@Components/Table';
 import { SelectionColumn } from '@Components/Table/columns';
 import { fuzzySort } from '@Components/Table/filters';
-import { Specialty } from '@Types/medical/specialty.model';
+import type { Specialty } from '@Types/medical/specialty.model';
 
 const columnHelper = createColumnHelper<Specialty>();
 
