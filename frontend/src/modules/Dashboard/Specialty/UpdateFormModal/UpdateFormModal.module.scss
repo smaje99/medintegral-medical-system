@@ -1,0 +1,9 @@
+@import '@Styles/fonts';
+@import '@Styles/palette';
+
+.title {
+    color: $white;
+    font: 600 22pt $title-font;
+    line-height: 1;
+    letter-spacing: .2rem;
+}
