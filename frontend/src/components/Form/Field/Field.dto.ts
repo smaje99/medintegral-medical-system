@@ -1,10 +1,11 @@
+import type { ImageProps } from 'next/future/image';
 import type {
     DetailedHTMLProps,
     InputHTMLAttributes,
     SelectHTMLAttributes,
     TextareaHTMLAttributes
-} from "react";
-import type { Path } from "react-hook-form";
+} from 'react';
+import type { Path } from 'react-hook-form';
 
 type InputFieldType = 'text' | 'number' | 'email' | 'date';
 
@@ -58,6 +59,7 @@ export type CustomFieldAttributes<T> = BaseFieldAttributes<T> & {
 export type FileFieldAttributes<T> = Omit<InputFieldAttributes<T>, 'type'> & {
     readonly type: 'file';
     readonly onFileChange: (files: File[]) => void;
+    readonly image?: ImageProps;
 }
 
 export type FieldAttributes<T> = InputFieldAttributes<T>

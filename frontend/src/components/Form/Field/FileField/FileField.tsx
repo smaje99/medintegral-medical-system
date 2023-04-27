@@ -1,3 +1,4 @@
+import Image from 'next/future/image';
 import prettyBytes from 'pretty-bytes';
 import {
     type ChangeEventHandler, useRef, useState, useEffect
@@ -17,7 +18,12 @@ import styles from './FileField.module.scss';
  *  size of the uploaded files and allows users to remove them.
  */
 function FileField<T>({
-    name, type, multiple, onFileChange, ...props
+    name,
+    type,
+    multiple,
+    onFileChange,
+    image,
+    ...props
 }: FileFieldAttributes<T>): JSX.Element {
     const [files, setFiles] = useState<File[]>([]);
     const { register } = useFormContext<T>();
@@ -56,6 +62,7 @@ function FileField<T>({
 
     return (
         <div className={styles.file}>
+            {image ? <Image {...image} className={styles.image} /> : null}
             <div
                 ref={wrapperRef}
                 className={styles['file-wrapper']}
