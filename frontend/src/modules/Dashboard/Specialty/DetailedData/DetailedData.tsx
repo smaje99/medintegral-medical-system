@@ -15,7 +15,7 @@ const DetailedData: React.FC<Props> = ({ specialty }) => {
             <Image
                 src={specialty.image}
                 alt='Imagen de la Especialidad'
-                width={140}
+                width={220}
                 height={160}
                 className={styles.image}
                 priority
