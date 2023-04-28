@@ -1,4 +1,6 @@
+import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { AiFillEdit } from 'react-icons/ai';
 import { FaPlus } from 'react-icons/fa';
 
 import { Search } from '@Components/Input';
@@ -7,6 +9,7 @@ import { Specialty } from '@Types/medical/specialty.model';
 import { hasPermission } from '@Utils/auth';
 
 import styles from './Bar.module.scss';
+import routes from '@Helpers/routes';
 
 type Props = {
     openCreateModal: () => void;
@@ -14,9 +17,16 @@ type Props = {
 
 const Bar: React.FC<Props> = ({ openCreateModal }) => {
     const {
-        globalFilter, setGlobalFilter, rowSelectionSize
+        globalFilter, setGlobalFilter, rowSelectionSize, getSelectedFlatRows
     } = useTable<Specialty>();
     const { data: session } = useSession();
+    const router = useRouter();
+
+    const handleToGoSpecialtyUpdate = () => {
+        const { id } = getSelectedFlatRows()[0].original;
+        const route = routes.dashboard.specialty(id);
+        router.push({ pathname: route, query: { update: true } });
+    }
 
     return (
         <BarTemplate<Specialty> title='Especialidades'>
@@ -37,6 +47,17 @@ const Bar: React.FC<Props> = ({ openCreateModal }) => {
                 >
                     <FaPlus aria-hidden />
                     Crear
+                </button>
+            ) : null}
+            {rowSelectionSize === 1 && hasPermission(session, 'especialidades', 'modificación') ? (
+                <button
+                    className={styles.button}
+                    onClick={handleToGoSpecialtyUpdate}
+                    title='Modificar especialidad'
+                    aria-label='Modificar especialidad'
+                >
+                    <AiFillEdit />
+                    Modificar
                 </button>
             ) : null}
         </BarTemplate>

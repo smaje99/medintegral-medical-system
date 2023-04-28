@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { AiFillEdit } from 'react-icons/ai';
@@ -19,8 +20,11 @@ interface Props {
 const Detailed: React.FC<Props> = ({ specialty }) => {
     const specialtyMemo = useMemo(() => specialty, [specialty]);
 
+    const router = useRouter();
     const { data: session } = useSession();
-    const [isOpenUpdateModal, openUpdateModal, closeUpdateModal] = useModal();
+    const [
+        isOpenUpdateModal, openUpdateModal, closeUpdateModal
+    ] = useModal(!!router.query?.update);
 
     return (
         <>
