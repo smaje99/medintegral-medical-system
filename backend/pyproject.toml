@@ -11,7 +11,7 @@ app = { callable = "app:run" }
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = {extras = ["all"], version = "^0.95.0"}
+fastapi = {extras = ["all"], version = "^0.95.1"}
 pydantic = {extras = ["email"], version = "^1.10.4"}
 sqlalchemy = "1.4.46"
 psycopg2 = "^2.9.5"
