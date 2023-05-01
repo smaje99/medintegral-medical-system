@@ -18,7 +18,7 @@ MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 @router.post('/{directory}', status_code=HTTP_201_CREATED)
 async def store_file(
-    directory: Annotated[Directory, Path(...)],
+    directory: Annotated[Directory, Path()],
     file: Annotated[UploadFile, File(...)],
     service: Service,
     _: CurrentActiveUser,

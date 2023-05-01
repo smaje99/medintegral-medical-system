@@ -14,25 +14,25 @@ from app.services.user import UserService
 
 
 # Handler of protected endpoints.
-reusable_oauth2 = OAuth2PasswordBearer(
+oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=f'{settings.domain.api_version}/login/access-token'
 )
 
 # User service manager for login and authentication.
-get_service = ServiceDependency(UserService)
+Service = Annotated[UserService, Depends(ServiceDependency(UserService))]
 
 
 def get_current_user(
-    service: UserService = Depends(get_service), token: str = Depends(reusable_oauth2)
+    service: Service, token: Annotated[str, Depends(oauth2_scheme)]
 ) -> User:
     '''Retrieve a user by the given token.
 
     Args:
-        service (UserService, optional): Service with initialized database session.
-        token (str, optional): User token to be retrieve.
+        service (Service): Service with initialized database session.
+        token (str): User token to be retrieve.
 
     Raises:
-        HTTPException: HTTP 403. Credentials are not valid.
+        HTTPException: HTTP 401. Credentials are not valid.
         HTTPException: HTTP 404. User cannot be retrieved.
 
     Returns:
@@ -40,7 +40,7 @@ def get_current_user(
     '''
     if not (payload := verify_token(token)):
         raise HTTPException(
-            status_code=HTTP_403_FORBIDDEN,
+            status_code=HTTP_401_UNAUTHORIZED,
             detail='No se puede validar las credenciales',
             headers={"WWW-Authenticate": "Bearer"},
         )
@@ -55,27 +55,32 @@ def get_current_user(
     return user
 
 
-def get_current_active_user(
-    current_user: User = Depends(get_current_user),
-    service: UserService = Depends(get_service),
-) -> User:
+# Handler for the current user dependency
+CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+def get_current_active_user(current_user: CurrentUser, service: Service) -> User:
     '''Check if the current user is active and returns it.
     Otherwise raise an exception.
 
     Args:
-        current_user (User): Get the current user in the system.
-        service (UserService): Service with initialized database session.
+        current_user (CurrentUser): Get the current user in the system.
+        service (Service): Service with initialized database session.
 
     Raises:
-        HTTPException: User isn't active.
+        HTTPException: HTTP 403. User isn't active.
 
     Returns:
         User: Current user.
     '''
     if not service.is_active(current_user):
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail='Usuario inactivo')
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail='Usuario inactivo')
 
     return current_user
+
+
+# Handler for the current active user dependency
+CurrentActiveUser = Annotated[User, Depends(get_current_active_user)]
 
 
 def get_current_user_with_role(role: str) -> Callable[[], User]:
@@ -86,7 +91,7 @@ def get_current_user_with_role(role: str) -> Callable[[], User]:
         role (str): Role to check on the current user.
 
     Raises:
-        HTTPException: HTTP 401. Unauthorized user.
+        HTTPException: HTTP 403. Unauthorized user.
 
     Returns:
         Callable[[], User]: Current user.
@@ -95,7 +100,7 @@ def get_current_user_with_role(role: str) -> Callable[[], User]:
     def wrapper(current_user: User = Depends(get_current_active_user)) -> User:
         if role != current_user.role.name:
             raise HTTPException(
-                status_code=HTTP_401_UNAUTHORIZED, detail='Usuario no autorizado'
+                status_code=HTTP_403_FORBIDDEN, detail='Usuario no autorizado'
             )
 
         return current_user
@@ -140,8 +145,7 @@ def get_current_user_with_permissions(
 
 
 def get_current_active_superuser(
-    current_user: User = Depends(get_current_active_user),
-    service: UserService = Depends(get_service),
+    current_user: CurrentActiveUser, service: Service
 ) -> User:
     '''Check if the current user is a superuser and returns it.
     Otherwise raise an exception.
@@ -151,22 +155,19 @@ def get_current_active_superuser(
         service (UserService): Service with initialized database session.
 
     Raises:
-        HTTPException: User isn't a superuser.
+        HTTPException: HTTP 403. User isn't a superuser.
 
     Returns:
         User: Current user.
     '''
     if not service.is_superuser(current_user):
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=HTTP_403_FORBIDDEN,
             detail='El usuario no tiene privilegios suficientes',
         )
 
     return current_user
 
 
-CurrentUser = Annotated[User, Depends(get_current_user)]
-
-CurrentActiveUser = Annotated[User, Depends(get_current_active_user)]
-
+# Handler for the current active superuser dependency
 CurrentActiveSuperUser = Annotated[User, Depends(get_current_active_superuser)]

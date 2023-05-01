@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Body, Depends, HTTPException, Path
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr, SecretStr
@@ -8,7 +10,7 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from app.api.dependencies.auth import get_current_user
+from app.api.dependencies.auth import CurrentUser
 from app.api.dependencies.services import ServiceDependency
 from app.core.email import send_reset_password_email
 from app.core.exceptions import IncorrectCredentialsException
@@ -17,7 +19,6 @@ from app.core.security.jwt import (
     generate_password_reset_token,
     verify_password_reset_token,
 )
-from app.models.user import User as UserModel
 from app.schemas.common.message import Message
 from app.schemas.user.token import Token, TokenPayloadIn
 from app.schemas.user.user import UserInSession
@@ -26,11 +27,13 @@ from app.services.user import UserService
 
 router = APIRouter()
 
+UserServiceDependency = Annotated[UserService, Depends(ServiceDependency(UserService))]
+
 
 @router.post('/login/access-token')
 def login(
-    service: UserService = Depends(ServiceDependency(UserService)),
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    service: UserServiceDependency,
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     '''OAuth2 compatible token login.
 
@@ -39,7 +42,7 @@ def login(
 
     Raises:
     * HTTPException: HTTP 400. Incorrect credentials.
-    * HTTPException: HTTP 401. User isn't active.
+    * HTTPException: HTTP 403. User isn't active.
     * HTTPException: HTTP 403. Credentials aren't valid.
     * HTTPException: HTTP 404. User not found.
 
@@ -59,19 +62,19 @@ def login(
 
     if not service.is_active(user):
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=HTTP_403_FORBIDDEN,
             detail='Usuario inactivo',
             headers={'WWW-Authenticate': 'Bearer'},
         )
 
     return Token(
-        access_token=create_access_token(TokenPayloadIn(sub=user.dni)),
+        access_token=create_access_token(TokenPayloadIn(sub=str(user.dni))),
         token_type='bearer',
     )
 
 
 @router.post('/login/test-token')
-def test_token(current_user: UserModel = Depends(get_current_user)) -> UserInSession:
+def test_token(current_user: CurrentUser) -> UserInSession:
     '''Test access token of a user.
 
     Returns:
@@ -82,8 +85,8 @@ def test_token(current_user: UserModel = Depends(get_current_user)) -> UserInSes
 
 @router.post('/password-recovery/{email}')
 def recover_password(
-    email: EmailStr = Path(...),
-    service: UserService = Depends(ServiceDependency(UserService)),
+    email: Annotated[EmailStr, Path()],
+    service: UserServiceDependency,
 ) -> Message:
     '''Password recovery via user's email.
 
@@ -111,9 +114,9 @@ def recover_password(
 
 @router.patch('/reset-password')
 def reset_password(
-    token: str = Body(...),
-    new_password: SecretStr = Body(..., alias='newPassword'),
-    service: UserService = Depends(ServiceDependency(UserService)),
+    token: Annotated[str, Body()],
+    new_password: Annotated[SecretStr, Body(alias='newPassword')],
+    service: UserServiceDependency,
 ) -> Message:
     '''Reset an user's password.
 
