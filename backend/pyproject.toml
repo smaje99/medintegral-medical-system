@@ -10,7 +10,7 @@ readme = "README.md"
 app = { callable = "app:run" }
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 fastapi = {extras = ["all"], version = "^0.95.1"}
 pydantic = {extras = ["email"], version = "^1.10.4"}
 sqlalchemy = "1.4.46"
@@ -38,7 +38,7 @@ line-length = 90
 
 [tool.black]
 line-length = 90
-target-version = ['py310']
+target-version = ['py311']
 skip-string-normalization = true
 
 [build-system]
