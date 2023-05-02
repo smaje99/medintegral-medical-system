@@ -45,7 +45,9 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not (user := service.get(id=payload.sub)):  # type: ignore
+    user_id: int = int(payload.sub) if isinstance(payload.sub, (int, str)) else 0
+
+    if not (user := service.get(user_id)):
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND,
             detail='Usuario no encontrado',
