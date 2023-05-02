@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class BloodType(str, Enum):
+class BloodType(StrEnum):
     '''Enum of Blood types.'''
 
     A = 'A'

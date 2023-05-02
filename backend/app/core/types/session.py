@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class Session(str, Enum):
+class Session(StrEnum):
     '''Enum of Session.'''
 
     morning = 'mañana'  # pylint: disable=invalid-name

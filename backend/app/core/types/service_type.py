@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class ServiceType(str, Enum):
+class ServiceType(StrEnum):
     '''Enum of services type.'''
 
     in_of_IPS = 'presencial'  # pylint: disable=invalid-name

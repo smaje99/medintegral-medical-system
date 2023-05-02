@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class Gender(str, Enum):
+class Gender(StrEnum):
     '''Enum of genders.'''
 
     male = 'masculino'  # pylint: disable=invalid-name

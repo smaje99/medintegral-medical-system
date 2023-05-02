@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class DocumentType(str, Enum):
+class DocumentType(StrEnum):
     '''Enum of types of identification documents.'''
 
     civil_registration = 'R.C.'  # pylint: disable=invalid-name
