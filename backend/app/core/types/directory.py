@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class Directory(str, Enum):
+class Directory(StrEnum):
     '''Enum of Directories.'''
 
     SYSTEM = 'system'

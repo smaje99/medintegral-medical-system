@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
@@ -10,12 +11,11 @@ from app.services.user import RoleService
 
 router = APIRouter()
 
+RoleServiceDependency = Annotated[RoleService, Depends(ServiceDependency(RoleService))]
+
 
 @router.get('/{role_id}')
-def read_role(
-    role_id: UUID = Path(...),
-    service: RoleService = Depends(ServiceDependency(RoleService)),
-) -> Role:
+def read_role(role_id: Annotated[UUID, Path()], service: RoleServiceDependency) -> Role:
     '''Retrieve a role by a given ID.
     if the ID doesn't exist then raise a error.
 
@@ -38,9 +38,9 @@ def read_role(
 
 @router.get('/')
 def read_roles(
-    skip: int = Query(default=0, ge=0),
-    limit: int = Query(default=50),
-    service: RoleService = Depends(ServiceDependency(RoleService)),
+    service: RoleServiceDependency,
+    skip: Annotated[int, Query(ge=0)] = 0,
+    limit: Annotated[int, Query()] = 50,
 ) -> list[Role]:
     '''Retrieve a list of roles.
 
@@ -56,8 +56,7 @@ def read_roles(
 
 @router.post('/')
 def create_role(
-    role_in: RoleCreate = Body(...),
-    service: RoleService = Depends(ServiceDependency(RoleService)),
+    service: RoleServiceDependency, role_in: Annotated[RoleCreate, Body()]
 ) -> Role:
     '''Create a role.
 
@@ -72,9 +71,9 @@ def create_role(
 
 @router.put('/{role_id}')
 def update_role(
-    role_id: UUID = Path(...),
-    role_in: RoleUpdate = Body(...),
-    service: RoleService = Depends(ServiceDependency(RoleService)),
+    role_id: Annotated[UUID, Path()],
+    role_in: Annotated[RoleUpdate, Body()],
+    service: RoleServiceDependency,
 ) -> Role:
     '''Update a role with a given ID.
 

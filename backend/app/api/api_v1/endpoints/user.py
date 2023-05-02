@@ -1,24 +1,24 @@
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
+from pydantic import SecretStr
 from starlette.status import (
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
+    HTTP_403_FORBIDDEN,
     HTTP_404_NOT_FOUND,
 )
 
 from app.api.dependencies.auth import (
-    get_current_active_user,
+    CurrentActiveUser,
     get_current_user_with_permissions,
 )
-from app.api.dependencies.person import get_person_if_no_user_exists
+from app.api.dependencies.person import PersonIfNoUserExistsDependency
 from app.api.dependencies.services import ServiceDependency
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import generate_password
 from app.core.types import PermissionAction
-from app.models.user import User as UserModel
-from app.schemas.person.person import Person
 from app.schemas.user.user import (
     User,
     UserCreate,
@@ -31,11 +31,13 @@ from app.services.user import UserService, RoleService
 
 router = APIRouter()
 
+UserServiceDependency = Annotated[UserService, Depends(ServiceDependency(UserService))]
+
+RoleServiceDependency = Annotated[RoleService, Depends(ServiceDependency(RoleService))]
+
 
 @router.get('/me')
-def read_user_me(
-    current_user: UserModel = Depends(get_current_active_user),
-) -> UserInSession:
+def read_user_me(current_user: CurrentActiveUser) -> UserInSession:
     '''Retrieve the current user.
 
     Returns:
@@ -44,13 +46,14 @@ def read_user_me(
     return current_user  # type: ignore
 
 
-@router.get('/search')
+@router.get(
+    '/search',
+    dependencies=[
+        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.read}))
+    ],
+)
 def search_user_by_dni(
-    dni: int = Query(...),
-    current_user: UserModel = Depends(  # pylint: disable=W0613
-        get_current_user_with_permissions('usuarios', {PermissionAction.read})
-    ),
-    service: UserService = Depends(ServiceDependency(UserService)),
+    dni: Annotated[int, Query()], service: UserServiceDependency
 ) -> list[User]:
     '''Search for users by a given DNI.
 
@@ -63,15 +66,20 @@ def search_user_by_dni(
     return service.search_by_dni(dni)  # type: ignore
 
 
-@router.post('/', status_code=HTTP_201_CREATED)
+@router.post(
+    '/',
+    status_code=HTTP_201_CREATED,
+    dependencies=[
+        Depends(
+            get_current_user_with_permissions('usuarios', {PermissionAction.creation})
+        )
+    ],
+)
 def create_user(
-    current_user: UserModel = Depends(  # pylint: disable=W0613
-        get_current_user_with_permissions('usuarios', {PermissionAction.creation})
-    ),
-    person: Person = Depends(get_person_if_no_user_exists),
-    role_id: UUID = Body(..., alias='roleId'),
-    role_service: RoleService = Depends(ServiceDependency(RoleService)),
-    user_service: UserService = Depends(ServiceDependency(UserService)),
+    role_id: Annotated[UUID, Body(alias='roleId')],
+    role_service: RoleServiceDependency,
+    user_service: UserServiceDependency,
+    person: PersonIfNoUserExistsDependency,
 ) -> User:
     '''Create an user and notify the user's email address.
 
@@ -80,19 +88,20 @@ def create_user(
     * roleId (UUID): Role ID to be assigned to the user.
 
     Raises:
-    * HTTPException: HTTP 400. Person doesn't exist.
+    * HTTPException: HTTP 404. Person not found.
     * HTTPException: HTTP 400. User already exists.
+    * HTTPException: HTTP 404. Role not found
 
     Returns:
     * User: User with personal data.
     '''
     if not role_service.contains(role_id):
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST,
+            status_code=HTTP_404_NOT_FOUND,
             detail='El rol a asignar al usuario no existe',
         )
 
-    password = generate_password(person.dni)
+    password = SecretStr(generate_password(person.dni))
     user_in = UserCreate(dni=person.dni, password=password, role_id=role_id)
 
     user = user_service.create(user_in)
@@ -103,11 +112,12 @@ def create_user(
 
 @router.get('/{dni}')
 def read_user(
-    dni: int = Path(...),
-    current_user: User = Depends(
-        get_current_user_with_permissions('usuarios', {PermissionAction.read})
-    ),
-    user_service: UserService = Depends(ServiceDependency(UserService)),
+    dni: Annotated[int, Path()],
+    current_user: Annotated[
+        User,
+        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.read})),
+    ],
+    user_service: UserServiceDependency,
 ) -> User:
     '''Retrieve a user by a given DNI.
     If the given DNI doesn't exist, raise an error.
@@ -130,14 +140,16 @@ def read_user(
     return user  # type: ignore
 
 
-@router.get('/')
+@router.get(
+    '/',
+    dependencies=[
+        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.read}))
+    ],
+)
 def read_users(
-    skip: int = Query(default=0, ge=0),
-    limit: int = Query(default=50),
-    current_user: UserModel = Depends(  # pylint: disable=W0613
-        get_current_user_with_permissions('usuarios', {PermissionAction.read})
-    ),
-    service: UserService = Depends(ServiceDependency(UserService)),
+    service: UserServiceDependency,
+    skip: Annotated[int, Query(ge=0)] = 0,
+    limit: Annotated[int, Query()] = 50,
 ) -> list[User]:
     '''Retrieve a list of users.
 
@@ -153,19 +165,26 @@ def read_users(
 
 @router.put('/{dni}')
 def update_user(
-    dni: int = Path(..., gt=0),
-    user_in: UserUpdate = Body(...),
-    current_user: UserModel = Depends(
-        get_current_user_with_permissions('usuarios', {PermissionAction.update})
-    ),
-    role_service: RoleService = Depends(ServiceDependency(RoleService)),
-    user_service: UserService = Depends(ServiceDependency(UserService)),
+    dni: Annotated[int, Path(gt=0)],
+    user_in: Annotated[UserUpdate, Body()],
+    current_user: Annotated[
+        User,
+        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.update})),
+    ],
+    role_service: RoleServiceDependency,
+    user_service: UserServiceDependency,
 ) -> User:
     '''Update a user's data with a given DNI.
 
     Args:
     * dni: DNI given to retrieve the user to be updated via a path parameter.
     * user_in(UserUpdate): User's data to update via body parameter.
+
+    Raises:
+    * HTTPException: HTTP error 404. User not found.
+    * HTTPException: HTTP error 403. Only the superuser can modify a superuser.
+    * HTTPException: HTTP error 403. The owner user cannot update his role.
+    * HTTPException: HTTP error 404. Role not found.
 
     Returns:
     * User: The user's data updated.
@@ -178,20 +197,20 @@ def update_user(
 
     if user.is_superuser and not current_user.is_superuser:
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=HTTP_403_FORBIDDEN,
             detail='No tienes permiso de modificar a un superusuario',
         )
 
     if user_in.role_id:
         if current_user.dni == dni:
             raise HTTPException(
-                status_code=HTTP_401_UNAUTHORIZED,
+                status_code=HTTP_403_FORBIDDEN,
                 detail='El usuario propietario no puede actualizar su rol',
             )
 
         if not role_service.contains(user_in.role_id):
             raise HTTPException(
-                status_code=HTTP_400_BAD_REQUEST,
+                status_code=HTTP_404_NOT_FOUND,
                 detail='El rol a asignar al usuario no existe',
             )
 
@@ -200,9 +219,9 @@ def update_user(
 
 @router.patch('/password')
 def update_password(
-    user_in: UserUpdatePassword = Body(...),
-    current_user: UserModel = Depends(get_current_active_user),
-    service: UserService = Depends(ServiceDependency(UserService)),
+    user_in: Annotated[UserUpdatePassword, Body()],
+    current_user: CurrentActiveUser,
+    service: UserServiceDependency,
 ) -> User:
     '''Update the current user's password.
 
@@ -226,12 +245,15 @@ def update_password(
 
 @router.patch('/disable/{dni}')
 def disable_user(
-    dni: int = Path(..., ge=0),
-    disable: bool = Body(..., embed=True),
-    current_user: UserModel = Depends(
-        get_current_user_with_permissions('usuarios', {PermissionAction.disable})
-    ),
-    service: UserService = Depends(ServiceDependency(UserService)),
+    dni: Annotated[int, Path(ge=0)],
+    disable: Annotated[bool, Body(embed=True)],
+    current_user: Annotated[
+        User,
+        Depends(
+            get_current_user_with_permissions('usuarios', {PermissionAction.disable})
+        ),
+    ],
+    service: UserServiceDependency,
 ) -> User:
     '''Change the user's status in the system.
     The user can be enabled or disabled.
@@ -242,8 +264,8 @@ def disable_user(
 
     Raises:
     * HTTPException: HTTP error 404. User not found.
-    * HTTPException: HTTP error 401. User is a superuser.
-    * HTTPException: HTTP error 401. Current user is not authorized.
+    * HTTPException: HTTP error 403. User is a superuser.
+    * HTTPException: HTTP error 403. Current user is not authorized.
 
     Returns:
     * User: User with updated status.
@@ -256,13 +278,13 @@ def disable_user(
 
     if user.is_superuser:
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=HTTP_403_FORBIDDEN,
             detail='No tienes permiso de deshabilitar a un superusuario',
         )
 
     if current_user.dni == dni:
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=HTTP_403_FORBIDDEN,
             detail='El usuario propietario no puede cambiar su estado en el sistema',
         )
 

@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class PermissionAction(str, Enum):
+class PermissionAction(StrEnum):
     '''Enum of type of the permission actions.'''
 
     creation = 'creación'  # pylint: disable=invalid-name

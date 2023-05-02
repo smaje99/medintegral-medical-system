@@ -1,26 +1,41 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Body, Depends, HTTPException, Path
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from starlette.status import (
+    HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_409_CONFLICT,
+)
 
 from app.api.dependencies.auth import get_current_user_with_permissions
 from app.api.dependencies.services import ServiceDependency
 from app.core.types import PermissionAction
 from app.schemas.medical.doctor import Doctor, DoctorCreate, DoctorUpdate
-from app.models.user import User as UserModel
 from app.services.medical import DoctorService
 from app.services.user import UserService
 
 
 router = APIRouter()
 
+DoctorServiceDependency = Annotated[
+    DoctorService, Depends(ServiceDependency(DoctorService))
+]
 
-@router.post('/', status_code=HTTP_201_CREATED)
+UserServiceDependency = Annotated[UserService, Depends(ServiceDependency(UserService))]
+
+
+@router.post(
+    '/',
+    status_code=HTTP_201_CREATED,
+    dependencies=[
+        Depends(get_current_user_with_permissions('médicos', {PermissionAction.creation}))
+    ],
+)
 def create_doctor(
-    current_user: UserModel = Depends(  # pylint: disable=W0613
-        get_current_user_with_permissions('médicos', {PermissionAction.creation})
-    ),
-    doctor: DoctorCreate = Body(...),
-    doctor_service: DoctorService = Depends(ServiceDependency(DoctorService)),
-    user_service: UserService = Depends(ServiceDependency(UserService)),
+    doctor: Annotated[DoctorCreate, Body()],
+    doctor_service: DoctorServiceDependency,
+    user_service: UserServiceDependency,
 ) -> Doctor:
     '''Create a doctor.
 
@@ -47,20 +62,22 @@ def create_doctor(
 
     if doctor_service.contains(doctor.dni):
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST, detail='El médico ya está creado'
+            status_code=HTTP_409_CONFLICT, detail='El médico ya está creado'
         )
 
     return doctor_service.create(doctor)  # type: ignore
 
 
-@router.put('/{dni}')
+@router.put(
+    '/{dni}',
+    dependencies=[
+        Depends(get_current_user_with_permissions('médicos', {PermissionAction.update}))
+    ],
+)
 def update_doctor(
-    dni: int = Path(..., gt=0),
-    doctor_in: DoctorUpdate = Body(...),
-    current_user: UserModel = Depends(  # pylint: disable=W0613
-        get_current_user_with_permissions('médicos', {PermissionAction.update})
-    ),
-    service: DoctorService = Depends(ServiceDependency(DoctorService)),
+    dni: Annotated[int, Path(gt=0)],
+    doctor_in: Annotated[DoctorUpdate, Body()],
+    service: DoctorServiceDependency,
 ) -> Doctor:
     '''Update a doctor with a given DNI.
 

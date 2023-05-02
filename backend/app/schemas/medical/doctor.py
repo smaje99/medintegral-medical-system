@@ -1,6 +1,7 @@
-from app.core.config import settings
 from fastapi_camelcase import CamelModel
 from pydantic import validator
+
+from app.core.config import settings
 
 
 class DoctorBase(CamelModel):

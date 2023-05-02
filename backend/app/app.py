@@ -31,6 +31,7 @@ def startup():
     '''Startup event handler.'''
     init_db()
 
+
 app.mount('/files', StaticFiles(directory='files'), name='files')
 
 app.include_router(api_router, prefix=settings.domain.api_version)

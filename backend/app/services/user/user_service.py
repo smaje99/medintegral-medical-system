@@ -4,7 +4,7 @@ from uuid import UUID
 from pydantic import SecretStr
 from sqlalchemy.orm import lazyload, Session
 from sqlalchemy.sql import func
-from sqlalchemy.sql.expression import asc, cast, or_, select, true
+from sqlalchemy.sql.expression import asc, cast, or_, select, true, union
 from sqlalchemy.sql.functions import array_agg
 from sqlalchemy.sql.sqltypes import Text
 
@@ -16,7 +16,7 @@ from app.models.person import Person
 from app.models.user import Permission, Role, RolePermission, User, UserPermission
 from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.user import UserCreate, UserUpdate, UserUpdatePassword
-from app.services import BaseService
+from app.services.common.base import BaseService
 
 
 class UserService(BaseService[User, UserCreate, UserUpdate]):
@@ -151,18 +151,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         '''
         return user.is_superuser
 
-    def contains(self, user_id: int) -> bool:
-        '''Checks if the user model contains the given id.
-
-        Args:
-            user_id (int): The ID of the user to check for.
-
-        Returns:
-            bool: True if the user exists, False otherwise.
-        '''
-        query = self.database.query(User).filter(User.dni == user_id)
-        return self.database.query(query.exists()).scalar()
-
     def contains_by_username(self, username: str) -> bool:
         '''Checks if the user model contains the given username.
 
@@ -222,8 +210,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
                 password=password.get_secret_value(),
             )
 
-    def get(self, id: int) -> User | None:  # pylint: disable=C0103, W0622
-        if user := super().get(id):
+    def get(self, obj_id: int) -> User | None:
+        if user := super().get(obj_id):
             user.permissions = self.get_permissions_for_user(user=user)  # type: ignore
             user.person.age = self.get_age_for_user(user=user)  # type: ignore
 
@@ -253,51 +241,37 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             list[PermissionInUser]: List of permissions.
         '''
-        role_subquery = self.__get_permissions_from(
-            RolePermission, with_id=user.role.id  # type: ignore
-        )
-        user_subquery = self.__get_permissions_from(
-            UserPermission, with_id=user.dni  # type: ignore
-        )
-        permissions_subquery = role_subquery.union(user_subquery).alias('permissions')
+        role_subquery = self.__get_permissions_from(RolePermission, with_id=user.role.id)
+        user_subquery = self.__get_permissions_from(UserPermission, with_id=user.dni)
+        permissions_subquery = union(role_subquery, user_subquery).alias('permissions')
         actions_agg = array_agg(permissions_subquery.c.action).label('actions')
 
         return self.database.execute(
-            select(permissions_subquery.c.name, actions_agg)
+            select([permissions_subquery.c.name, actions_agg])
             .distinct()
             .group_by(permissions_subquery.c.name)
         ).all()
 
     def __get_permissions_from(
-        self, model: RolePermission | UserPermission, *, with_id: int | UUID
+        self, model: type[RolePermission | UserPermission], *, with_id: int | str | UUID
     ):
-        '''Query to fetch the permissions and actions
-        of the given role or user.
+        '''Query to fetch the permissions and actions of the given role or user.
 
         Args:
-            model (RolePermission | UserPermission):
-            Role or user permissions model.
-            with_id (int | UUID): Role or user ID.
+            model (type[RolePermission | UserPermission]): Role or user permissions model.
+            with_id (int | str | UUID): Role or user ID.
 
         Returns:
             subquery: Permissions query.
         '''
         return (
-            select(Permission.name, model.action)  # type: ignore
-            .join(
-                Permission,  # type: ignore
-                model.permission_id == Permission.id,  # type: ignore
-                isouter=True,
-            )
-            .filter(
+            select([Permission.name, model.action], from_obj=model)  # type: ignore
+            .where(
                 with_id
-                == (
-                    model.role_id  # type: ignore
-                    if model.__name__ == 'RolePermission'
-                    else model.user_id  # type: ignore
-                )
+                == (model.role_id if issubclass(model, RolePermission) else model.user_id)
             )
-            .filter(model.is_active == true())
+            .where(model.is_active == true())
+            .outerjoin(Permission, model.permission_id == Permission.id)  # type: ignore
         )
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[User]:

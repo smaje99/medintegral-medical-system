@@ -8,7 +8,7 @@ from sqlalchemy.sql import expression
 from app.core.exceptions import DatabaseException
 from app.models.suggestion import Suggestion
 from app.schemas.suggestion.suggestion import SuggestionCreate, SuggestionUpdate
-from app.services import BaseService
+from app.services.common.base import BaseService
 
 
 # This class is a service that provides CRUD operations for a suggestion model

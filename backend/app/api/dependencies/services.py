@@ -3,7 +3,7 @@ from typing import Generic, Generator, Type, TypeVar
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.database import SessionLocal
-from app.services import BaseService
+from app.services.common.base import BaseService
 
 
 # Service type hinting.
@@ -35,7 +35,7 @@ class ServiceDependency(Generic[ServiceType]):
         '''
         with SessionLocal() as session:
             try:
-                yield self.service.get_service(session)  # type: ignore
+                yield self.service.get_service(session)
             except SQLAlchemyError:
                 session.rollback()
             finally:
