@@ -16,7 +16,7 @@ from app.models.person import Person
 from app.models.user import Permission, Role, RolePermission, User, UserPermission
 from app.schemas.user.permission import PermissionInUser
 from app.schemas.user.user import UserCreate, UserUpdate, UserUpdatePassword
-from app.services import BaseService
+from app.services.common.base import BaseService
 
 
 class UserService(BaseService[User, UserCreate, UserUpdate]):
@@ -151,18 +151,6 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         '''
         return user.is_superuser
 
-    def contains(self, user_id: int) -> bool:
-        '''Checks if the user model contains the given id.
-
-        Args:
-            user_id (int): The ID of the user to check for.
-
-        Returns:
-            bool: True if the user exists, False otherwise.
-        '''
-        query = self.database.query(User).filter(User.dni == user_id)
-        return self.database.query(query.exists()).scalar()
-
     def contains_by_username(self, username: str) -> bool:
         '''Checks if the user model contains the given username.
 
@@ -222,8 +210,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
                 password=password.get_secret_value(),
             )
 
-    def get(self, id: int) -> User | None:  # pylint: disable=C0103, W0622
-        if user := super().get(id):
+    def get(self, obj_id: int) -> User | None:
+        if user := super().get(obj_id):
             user.permissions = self.get_permissions_for_user(user=user)  # type: ignore
             user.person.age = self.get_age_for_user(user=user)  # type: ignore
 
@@ -253,12 +241,8 @@ class UserService(BaseService[User, UserCreate, UserUpdate]):
         Returns:
             list[PermissionInUser]: List of permissions.
         '''
-        role_subquery = self.__get_permissions_from(
-            RolePermission, with_id=user.role.id  # type: ignore
-        )
-        user_subquery = self.__get_permissions_from(
-            UserPermission, with_id=user.dni  # type: ignore
-        )
+        role_subquery = self.__get_permissions_from(RolePermission, with_id=user.role.id)
+        user_subquery = self.__get_permissions_from(UserPermission, with_id=user.dni)
         permissions_subquery = union(role_subquery, user_subquery).alias('permissions')
         actions_agg = array_agg(permissions_subquery.c.action).label('actions')
 

@@ -1,60 +1,38 @@
-from __future__ import annotations
-
-from abc import ABC, abstractmethod
-from typing import Any, Generic, Type, TypeVar
+from abc import ABCMeta
+from typing import Any, Generic
 
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.database import Base
+from app.services.common.base.base import Base
+from app.services.common.typings import ModelType, CreateSchemaType, UpdateSchemaType
 
 
-# Types hinting for the service.
-ModelType = TypeVar('ModelType', bound=Base)  # pylint: disable=C0103
-CreateSchemaType = TypeVar('CreateSchemaType', bound=BaseModel)  # pylint: disable=C0103
-UpdateSchemaType = TypeVar('UpdateSchemaType', bound=BaseModel)  # pylint: disable=C0103
-
-
-class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
-    '''Base class for all services by default as
-    create, update, get, get all and delete
+class BaseCRUD(
+    Base[ModelType],
+    Generic[ModelType, CreateSchemaType, UpdateSchemaType],
+    metaclass=ABCMeta,
+):
+    '''Base class for CRUD operations.
 
     Args:
-        ABC: This class is abstract, it must not be implemented.
-        Generic ([ModelType, CreateSchemaType, UpdateSchemaType]):
-        Models and schemes
-        to be used in the operation of the service.
+        Generic ([ModelType, CreateSchemaType, UpdateSchemaType]): Models
+        and schemes to be used in the operation of the service.
+        Base: Base class to generate services.
+        metaclass (ABCMeta): This class is abstract, it must not be implemented.
     '''
 
-    def __init__(self, model: Type[ModelType], database: Session):
+    def __init__(self, model: type[ModelType], database: Session):
         '''
-        Base class for all services by default as
-        create, update, get, get all and delete.
+        Base class for CRUD operations.
 
         Args:
             model (Type[ModelType]): A SQLAlchemy model class.
-            db (Session): A database session instance.
+            database (Session): A database session instance.
         '''
-        self.model: Type[ModelType] = model
-        self.database: Session = database
+        Base.__init__(self, model, database)
 
-    @classmethod
-    @abstractmethod
-    def get_service(
-        cls: Type[BaseService[ModelType, CreateSchemaType, UpdateSchemaType]],
-        database: Session,
-    ) -> BaseService[ModelType, CreateSchemaType, UpdateSchemaType]:
-        '''Retrieve a service instance
-
-        Args:
-            db (Session): Database session to be used by the service.
-
-        Returns:
-            BaseService: Service initialized.
-        '''
-
-    def get(self, id: Any) -> ModelType | None:  # pylint: disable=C0103, W0622
+    def get(self, obj_id: Any) -> ModelType | None:
         """Retrieve a record using the given id.
 
         Args:
@@ -63,7 +41,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             ModelType: The record retrieved.
         """
-        return self.database.query(self.model).get(id)
+        return self.database.query(self.model).get(obj_id)
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[ModelType]:
         '''Retrieve a list of the records.
@@ -134,7 +112,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return db_obj
 
-    def remove(self, id: Any) -> ModelType:  # pylint: disable=C0103, W0622
+    def remove(self, obj_id: Any) -> ModelType:
         '''Delete a record in the given model.
 
         Args:
@@ -146,7 +124,7 @@ class BaseService(ABC, Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         Returns:
             ModelType: Data deleted in the given model.
         '''
-        obj: ModelType | None = self.get(id)
+        obj: ModelType | None = self.get(obj_id)
 
         if obj is None:
             raise ValueError('Registro no encontrado')

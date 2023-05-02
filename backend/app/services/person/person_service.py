@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.models.person import Person
 from app.schemas.person.person import PersonCreate, PersonUpdate
-from app.services import BaseService
+from app.services.common.base import BaseService
 
 
 class PersonService(BaseService[Person, PersonCreate, PersonUpdate]):
