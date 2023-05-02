@@ -13,22 +13,22 @@
         "--rcfile=backend/.pylintrc"
     ],
     "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/Thumbs.db": true,
+        ".vscode": true,
+        ".VSCodeCounter": true,
         "**/__pycache__": true,
-        "**/venv": true,
+        "**/.DS_Store": true,
+        "**/.git": true,
+        "**/.hg": true,
+        "**/.mypy_cache": true,
         "**/.next": true,
         "**/.storybook": true,
-        "**/package-lock.json": true,
+        "**/.svn": true,
+        "**/CVS": true,
         "**/node_modules": true,
-        ".mypy_cache": true,
-        ".VSCodeCounter": true,
+        "**/package-lock.json": true,
         "**/poetry.lock": true,
-        ".vscode": true
+        "**/Thumbs.db": true,
+        "**/venv": true
     },
     "sonarlint.": "backend/venv/**",
     "flake8.args": [
