@@ -1,6 +1,6 @@
 from typing import Annotated, Callable
 
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
@@ -23,7 +23,7 @@ Service = Annotated[UserService, Depends(ServiceDependency(UserService))]
 
 
 def get_current_user(
-    service: Service, token: Annotated[str, Depends(oauth2_scheme)]
+    service: Service, token: Annotated[str, Security(oauth2_scheme)]
 ) -> User:
     '''Retrieve a user by the given token.
 
@@ -42,16 +42,18 @@ def get_current_user(
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
             detail='No se puede validar las credenciales',
-            headers={"WWW-Authenticate": "Bearer"},
+            headers={'WWW-Authenticate': 'Bearer'},
         )
 
-    user_id: int = int(payload.sub) if isinstance(payload.sub, (int, str)) else 0
+    user_id: int = (
+        int(payload.sub) if payload.sub and isinstance(payload.sub, (int, str)) else 0
+    )
 
     if not (user := service.get(user_id)):
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND,
             detail='Usuario no encontrado',
-            headers={"WWW-Authenticate": "Bearer"},
+            headers={'WWW-Authenticate': 'Bearer'},
         )
 
     return user
