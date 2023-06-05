@@ -39,4 +39,11 @@
     ],
     "mypy.configFile": "backend/mypy.ini",
     "python.analysis.typeCheckingMode": "basic",
+    "black-formatter.importStrategy": "fromEnvironment",
+    "python.formatting.provider": "black",
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.pylanceLspClientEnabled": true,
+    "black-formatter.interpreter": [
+        "C:\\Users\\samaf\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\app-7ttcJKJk-py3.11\\Scripts\\python.exe"
+    ],
 }
