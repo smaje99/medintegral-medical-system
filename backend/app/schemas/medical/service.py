@@ -13,7 +13,6 @@ class ServiceCreate(ServiceBase):
     name: str
     description: str
     cost: float
-    is_active: bool
     specialty_id: UUID
 
 
