@@ -13,6 +13,7 @@ class ServiceCreate(ServiceBase):
     name: str
     description: str
     cost: float
+    duration: int
     specialty_id: UUID
 
 
@@ -22,6 +23,7 @@ class ServiceUpdate(ServiceBase):
     name: str | None = None
     description: str | None = None
     cost: float | None = None
+    duration: int | None = None
     is_active: bool | None = None
     specialty_id: UUID | None = None
 
@@ -33,6 +35,7 @@ class ServiceInDBBase(ServiceBase):
     name: str
     description: str
     cost: float
+    duration: int
     is_active: bool
     specialty_id: UUID
 

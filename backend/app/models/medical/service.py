@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, Column, DECIMAL, ForeignKey, Text
+from sqlalchemy import Boolean, Column, DECIMAL, Integer, ForeignKey, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression, func
@@ -32,6 +32,9 @@ class Service(Base):
 
     # Cost of medical service offered at the I.P.S.
     cost = Column(DECIMAL, nullable=False, server_default='0')
+
+    # Duration in minutes of medical service
+    duration = Column(Integer, nullable=False, server_default='0')
 
     # Service status in the system.
     is_active = Column(Boolean, nullable=False, server_default=expression.true())
