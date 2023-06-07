@@ -4,6 +4,7 @@ from fastapi_camelcase import CamelModel
 from pydantic import validator
 
 from app.core.config import settings
+from app.schemas.medical.service import Service
 
 
 class SpecialtyBase(CamelModel):
@@ -24,7 +25,7 @@ class SpecialtyUpdate(SpecialtyBase):
 
     name: str | None = None
     description: str | None = None
-    image: str | None = None
+    image: str | None = None  # type: ignore
 
 
 class SpecialtyInDBBase(SpecialtyBase):
@@ -46,6 +47,8 @@ class SpecialtyInDBBase(SpecialtyBase):
 
 class Specialty(SpecialtyInDBBase):
     '''Additional properties to return via API.'''
+
+    services: list[Service] | None = None
 
 
 class SpecialtyInDB(SpecialtyInDBBase):

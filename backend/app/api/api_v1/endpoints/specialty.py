@@ -37,7 +37,7 @@ def read_specialty(
     * HTTPException: HTTP error 404. The specialty wasn't found.
 
     Returns:
-        Specialty: The specialty with the given ID.
+    * Specialty: The specialty with the given ID.
     '''
     if not (specialty := service.get(specialty_id)):
         raise HTTPException(

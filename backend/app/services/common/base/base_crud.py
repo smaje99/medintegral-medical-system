@@ -33,14 +33,14 @@ class BaseCRUD(
         Base.__init__(self, model, database)
 
     def get(self, obj_id: Any) -> ModelType | None:
-        """Retrieve a record using the given id.
+        '''Retrieve a record using the given id.
 
         Args:
-            id (Any): identifier of the record to be retrieved.
+            obj_id (Any): identifier of the record to be retrieved.
 
         Returns:
             ModelType: The record retrieved.
-        """
+        '''
         return self.database.query(self.model).get(obj_id)
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[ModelType]:
@@ -67,7 +67,7 @@ class BaseCRUD(
         '''
         # sourcery skip: class-extract-method
         obj_in_data = obj_in.dict()
-        db_obj: ModelType = self.model(**obj_in_data)
+        db_obj: ModelType = self.model(**obj_in_data)  # pyright: ignore
 
         self.database.add(db_obj)
         self.database.commit()
@@ -81,10 +81,9 @@ class BaseCRUD(
         '''Update data of a record in the given model.
 
         Args:
-            db_obj (ModelType): Current data recorded in the given model
-            to be updated.
-            obj_in (UpdateSchemaType | dict[str, Any]): Schema data
-            to be updated in the given model.
+            db_obj (ModelType): Current data recorded in the given model to be updated.
+            obj_in (UpdateSchemaType | dict[str, Any]): Schema data to be updated in
+            the given model.
 
         Raises:
             ValueError: The record doesn't exist in the given model.
@@ -116,7 +115,7 @@ class BaseCRUD(
         '''Delete a record in the given model.
 
         Args:
-            id (Any): identifier of the record to be deleted.
+            obj_id (Any): identifier of the record to be deleted.
 
         Raises:
             ValueError: The record doesn't exist in the given model.

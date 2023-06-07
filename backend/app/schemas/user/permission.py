@@ -44,9 +44,7 @@ class PermissionInUser(CamelModel):
     actions: list[Action]
 
     @validator('actions', pre=True)
-    def actions_transform(  # pylint: disable=C0116, E0213
-        cls, value: list[Action]
-    ):
+    def actions_transform(cls, value: list[Action]):  # pylint: disable=C0116, E0213
         return list(set(value))
 
     class Config:  # pylint: disable=C0115
