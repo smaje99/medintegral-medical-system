@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Security
 from pydantic import SecretStr
 from starlette.status import (
     HTTP_201_CREATED,
@@ -10,15 +10,12 @@ from starlette.status import (
     HTTP_404_NOT_FOUND,
 )
 
-from app.api.dependencies.auth import (
-    CurrentActiveUser,
-    get_current_user_with_permissions,
-)
+from app.api.dependencies.auth import CurrentActiveUser, CurrentUserWithPermissions
 from app.api.dependencies.person import PersonIfNoUserExistsDependency
 from app.api.dependencies.services import ServiceDependency
 from app.core.exceptions import IncorrectCredentialsException
 from app.core.security.pwd import generate_password
-from app.core.types import PermissionAction
+from app.core.types import Action, Permission
 from app.schemas.user.user import (
     User,
     UserCreate,
@@ -48,9 +45,7 @@ def read_user_me(current_user: CurrentActiveUser) -> UserInSession:
 
 @router.get(
     '/search',
-    dependencies=[
-        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.read}))
-    ],
+    dependencies=[Security(CurrentUserWithPermissions(Permission.USERS, {Action.READ}))],
 )
 def search_user_by_dni(
     dni: Annotated[int, Query()], service: UserServiceDependency
@@ -70,9 +65,7 @@ def search_user_by_dni(
     '/',
     status_code=HTTP_201_CREATED,
     dependencies=[
-        Depends(
-            get_current_user_with_permissions('usuarios', {PermissionAction.creation})
-        )
+        Security(CurrentUserWithPermissions(Permission.USERS, {Action.CREATION}))
     ],
 )
 def create_user(
@@ -114,8 +107,7 @@ def create_user(
 def read_user(
     dni: Annotated[int, Path()],
     current_user: Annotated[
-        User,
-        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.read})),
+        User, Security(CurrentUserWithPermissions(Permission.USERS, {Action.READ}))
     ],
     user_service: UserServiceDependency,
 ) -> User:
@@ -142,14 +134,13 @@ def read_user(
 
 @router.get(
     '/',
-    dependencies=[
-        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.read}))
-    ],
+    dependencies=[Security(CurrentUserWithPermissions(Permission.USERS, {Action.READ}))],
 )
 def read_users(
-    service: UserServiceDependency,
+    *,
     skip: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query()] = 50,
+    service: UserServiceDependency,
 ) -> list[User]:
     '''Retrieve a list of users.
 
@@ -166,10 +157,9 @@ def read_users(
 @router.put('/{dni}')
 def update_user(
     dni: Annotated[int, Path(gt=0)],
-    user_in: Annotated[UserUpdate, Body()],
+    user_in: Annotated[UserUpdate, Body(alias='userIn')],
     current_user: Annotated[
-        User,
-        Depends(get_current_user_with_permissions('usuarios', {PermissionAction.update})),
+        User, Security(CurrentUserWithPermissions(Permission.USERS, {Action.UPDATE}))
     ],
     role_service: RoleServiceDependency,
     user_service: UserServiceDependency,
@@ -219,7 +209,7 @@ def update_user(
 
 @router.patch('/password')
 def update_password(
-    user_in: Annotated[UserUpdatePassword, Body()],
+    user_in: Annotated[UserUpdatePassword, Body(alias='userIn')],
     current_user: CurrentActiveUser,
     service: UserServiceDependency,
 ) -> User:
@@ -235,7 +225,7 @@ def update_password(
 
     try:
         return service.update_password(  # type: ignore
-            db_user=current_user, user_in=user_in
+            db_user=current_user, user_in=user_in  # type: ignore
         )
     except (ValueError, IncorrectCredentialsException) as error:
         raise HTTPException(
@@ -248,10 +238,7 @@ def disable_user(
     dni: Annotated[int, Path(ge=0)],
     disable: Annotated[bool, Body(embed=True)],
     current_user: Annotated[
-        User,
-        Depends(
-            get_current_user_with_permissions('usuarios', {PermissionAction.disable})
-        ),
+        User, Security(CurrentUserWithPermissions(Permission.USERS, {Action.DISABLE}))
     ],
     service: UserServiceDependency,
 ) -> User:

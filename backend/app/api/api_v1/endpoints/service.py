@@ -4,9 +4,9 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Security
 from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 
-from app.api.dependencies.auth import get_current_user_with_permissions
+from app.api.dependencies.auth import CurrentUserWithPermissions
 from app.api.dependencies.services import ServiceDependency
-from app.core.types import PermissionAction
+from app.core.types import Action, Permission
 from app.schemas.medical.service import Service, ServiceCreate, ServiceUpdate
 from app.services.medical import ServiceService, SpecialtyService
 
@@ -25,13 +25,14 @@ SpecialtyServiceDependency = Annotated[
 @router.get(
     '/',
     dependencies=[
-        Security(get_current_user_with_permissions('servicios', {PermissionAction.read}))
+        Security(CurrentUserWithPermissions(Permission.SERVICES, {Action.READ}))
     ],
 )
 def read_services_by_specialty(
+    *,
+    specialty_id: Annotated[UUID, Query(alias='specialtyId')] = ...,  # type: ignore
     service_service: ServiceServiceDependency,
     specialty_service: SpecialtyServiceDependency,
-    specialty_id: Annotated[UUID, Query(alias='specialtyId')] = ...,  # type: ignore
 ) -> list[Service]:
     '''Retrieves all active medical services associated with a medical specialty.
 
@@ -55,7 +56,7 @@ def read_services_by_specialty(
 @router.get(
     '/{serviceId}',
     dependencies=[
-        Security(get_current_user_with_permissions('servicios', {PermissionAction.read}))
+        Security(CurrentUserWithPermissions(Permission.SERVICES, {Action.READ}))
     ],
 )
 def read_service(
@@ -86,13 +87,11 @@ def read_service(
     '/',
     status_code=HTTP_201_CREATED,
     dependencies=[
-        Security(
-            get_current_user_with_permissions('servicios', {PermissionAction.creation})
-        )
+        Security(CurrentUserWithPermissions(Permission.SERVICES, {Action.CREATION}))
     ],
 )
 def create_service(
-    service_in: Annotated[ServiceCreate, Body()],
+    service_in: Annotated[ServiceCreate, Body(alias='serviceIn')],
     service_service: ServiceServiceDependency,
     specialty_service: SpecialtyServiceDependency,
 ) -> Service:
@@ -115,7 +114,7 @@ def create_service(
 
     if not specialty_service.contains(service_in.specialty_id):
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail='La especialidad indicada no existe'
+            status_code=HTTP_404_NOT_FOUND, detail='La especialidad no existe'
         )
 
     return service_service.create(service_in)  # type:ignore
@@ -124,14 +123,12 @@ def create_service(
 @router.put(
     '/{serviceId}',
     dependencies=[
-        Security(
-            get_current_user_with_permissions('servicios', {PermissionAction.update})
-        )
+        Security(CurrentUserWithPermissions(Permission.SERVICES, {Action.UPDATE}))
     ],
 )
 def update_service(
     service_id: Annotated[UUID, Path(alias='serviceId')],
-    service_in: Annotated[ServiceUpdate, Body()],
+    service_in: Annotated[ServiceUpdate, Body(alias='serviceIn')],
     service_service: ServiceServiceDependency,
     specialty_service: SpecialtyServiceDependency,
 ) -> Service:
@@ -168,9 +165,7 @@ def update_service(
 @router.patch(
     '/disable/{serviceId}',
     dependencies=[
-        Security(
-            get_current_user_with_permissions('servicios', {PermissionAction.disable})
-        )
+        Security(CurrentUserWithPermissions(Permission.SERVICES, {Action.DISABLE}))
     ],
 )
 def disable_service(

@@ -67,10 +67,11 @@ def login(
             headers={'WWW-Authenticate': 'Bearer'},
         )
 
-    return Token(
-        access_token=create_access_token(TokenPayloadIn(sub=str(user.dni))),
-        token_type='bearer',
-    )
+    sub = str(user.dni)
+    token = TokenPayloadIn(sub=sub)
+    access_token = create_access_token(token)
+
+    return Token(access_token=access_token, token_type='bearer')
 
 
 @router.post('/login/test-token')
@@ -93,6 +94,10 @@ def recover_password(
     Args:
     * email (EmailStr): User's email via path parameter.
 
+    Raise:
+    * HTTPException. HTTP Error 404. User not found.
+    * HTTPException. HTTP Error 403. User inactive.
+
     Returns:
     * Message: Info message.
     '''
@@ -100,6 +105,12 @@ def recover_password(
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND,
             detail='El usuario con este correo electrónico no existe',
+        )
+
+    if not service.is_active(user):
+        raise HTTPException(
+            status_code=HTTP_403_FORBIDDEN,
+            detail=f'El usuario {user.username} está inactivo',
         )
 
     password_reset_token = generate_password_reset_token(email=email)
@@ -125,15 +136,15 @@ def reset_password(
     * newPassword (str): New user's password.
 
     Raises:
-    * HTTPException: HTTP 403. Token invalid.
+    * HTTPException: HTTP 401. Token invalid.
     * HTTPException: HTTP 404. User not found.
-    * HTTPException: HTTP 401. User invalid.
+    * HTTPException: HTTP 403. User invalid.
 
     Returns:
     * Message: Info message.
     '''
     if not (email := verify_password_reset_token(token)):
-        raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail='Token invalido')
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED, detail='Token invalido')
 
     if not (user := service.get_by_email(email)):
         raise HTTPException(
@@ -143,7 +154,7 @@ def reset_password(
 
     if not service.is_active(user):
         raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED,
+            status_code=HTTP_403_FORBIDDEN,
             detail='El usuario con este correo electrónico está inactivo',
         )
 

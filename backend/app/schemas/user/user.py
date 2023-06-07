@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi_camelcase import CamelModel
 from pydantic import SecretStr, validator
 
-from app.core.types import PermissionAction
+from app.core.types import Action
 from app.schemas.medical.doctor import Doctor
 from app.schemas.person.person import Person, PersonInUserSession
 from app.schemas.user.permission import PermissionInUser
@@ -69,12 +69,12 @@ class UserInSession(UserInDBBase):
 
     role: str
     person: PersonInUserSession
-    permissions: dict[str, list[PermissionAction]] | None
+    permissions: dict[str, list[Action]] | None
 
     @validator('permissions', pre=True)
     def get_permissions(  # pylint: disable=C0116, E0213
         cls, value: list[PermissionInUser]
-    ) -> dict[str, list[PermissionAction]]:
+    ) -> dict[str, list[Action]]:
         return {p.name: p.actions for p in value}
 
     @validator('role', pre=True)

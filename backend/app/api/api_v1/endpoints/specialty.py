@@ -1,12 +1,12 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Path
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Security
 from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
 
-from app.api.dependencies.auth import get_current_user_with_permissions
+from app.api.dependencies.auth import CurrentUserWithPermissions
 from app.api.dependencies.services import ServiceDependency
-from app.core.types import PermissionAction
+from app.core.types import Action, Permission
 from app.schemas.medical.specialty import Specialty, SpecialtyCreate, SpecialtyUpdate
 from app.services.medical import SpecialtyService
 
@@ -19,15 +19,14 @@ SpecialtyServiceDependency = Annotated[
 
 
 @router.get(
-    '/{specialty_id}',
+    '/{specialtyId}',
     dependencies=[
-        Depends(
-            get_current_user_with_permissions('especialidades', {PermissionAction.read})
-        )
+        Security(CurrentUserWithPermissions(Permission.SPECIALTIES, {Action.READ}))
     ],
 )
 def read_specialty(
-    specialty_id: Annotated[UUID, Path()], service: SpecialtyServiceDependency
+    specialty_id: Annotated[UUID, Path(alias='specialtyId')],
+    service: SpecialtyServiceDependency,
 ) -> Specialty:
     '''Retrieve a specialty by a given ID.
 
@@ -51,9 +50,7 @@ def read_specialty(
 @router.get(
     '/',
     dependencies=[
-        Depends(
-            get_current_user_with_permissions('especialidades', {PermissionAction.read})
-        )
+        Security(CurrentUserWithPermissions(Permission.SPECIALTIES, {Action.READ}))
     ],
 )
 def read_specialties(service: SpecialtyServiceDependency) -> list[Specialty]:
@@ -69,11 +66,7 @@ def read_specialties(service: SpecialtyServiceDependency) -> list[Specialty]:
     '/',
     status_code=HTTP_201_CREATED,
     dependencies=[
-        Depends(
-            get_current_user_with_permissions(
-                'especialidades', {PermissionAction.creation}
-            )
-        )
+        Security(CurrentUserWithPermissions(Permission.SPECIALTIES, {Action.CREATION}))
     ],
 )
 def create_specialty(
@@ -99,16 +92,14 @@ def create_specialty(
 
 
 @router.put(
-    '/{specialty_id}',
+    '/{specialtyId}',
     dependencies=[
-        Depends(
-            get_current_user_with_permissions('especialidades', {PermissionAction.update})
-        )
+        Security(CurrentUserWithPermissions(Permission.SPECIALTIES, {Action.UPDATE}))
     ],
 )
 def update_person(
-    specialty_id: Annotated[UUID, Path()],
-    specialty_in: Annotated[SpecialtyUpdate, Body()],
+    specialty_id: Annotated[UUID, Path(alias='specialtyId')],
+    specialty_in: Annotated[SpecialtyUpdate, Body(alias='specialtyIn')],
     service: SpecialtyServiceDependency,
 ) -> Specialty:
     '''Update a specialty with a given ID.

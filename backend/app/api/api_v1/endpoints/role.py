@@ -1,11 +1,13 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Security
 from starlette.status import HTTP_404_NOT_FOUND
 
+from app.api.dependencies.auth import CurrentUserWithRole, get_current_active_user
 from app.api.dependencies.services import ServiceDependency
-from app.schemas.user.role import Role, RoleCreate, RoleUpdate
+from app.core.types import Role
+from app.schemas.user.role import Role as RoleSchema, RoleCreate, RoleUpdate
 from app.services.user import RoleService
 
 
@@ -14,8 +16,10 @@ router = APIRouter()
 RoleServiceDependency = Annotated[RoleService, Depends(ServiceDependency(RoleService))]
 
 
-@router.get('/{role_id}')
-def read_role(role_id: Annotated[UUID, Path()], service: RoleServiceDependency) -> Role:
+@router.get('/{roleId}', dependencies=[Security(CurrentUserWithRole(Role.ADMIN))])
+def read_role(
+    role_id: Annotated[UUID, Path(alias='roleId')], service: RoleServiceDependency
+) -> RoleSchema:
     '''Retrieve a role by a given ID.
     if the ID doesn't exist then raise a error.
 
@@ -36,12 +40,13 @@ def read_role(role_id: Annotated[UUID, Path()], service: RoleServiceDependency) 
     return role  # type: ignore
 
 
-@router.get('/')
+@router.get('/', dependencies=[Security(get_current_active_user)])
 def read_roles(
-    service: RoleServiceDependency,
+    *,
     skip: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query()] = 50,
-) -> list[Role]:
+    service: RoleServiceDependency,
+) -> list[RoleSchema]:
     '''Retrieve a list of roles.
 
     Args:
@@ -54,10 +59,10 @@ def read_roles(
     return service.get_all(skip=skip, limit=limit)  # type: ignore
 
 
-@router.post('/')
+@router.post('/', dependencies=[Security(CurrentUserWithRole(Role.ADMIN))])
 def create_role(
-    service: RoleServiceDependency, role_in: Annotated[RoleCreate, Body()]
-) -> Role:
+    role_in: Annotated[RoleCreate, Body(alias='roleIn')], service: RoleServiceDependency
+) -> RoleSchema:
     '''Create a role.
 
     Args:
@@ -69,12 +74,12 @@ def create_role(
     return service.create(role_in)  # type: ignore
 
 
-@router.put('/{role_id}')
+@router.put('/{roleId}', dependencies=[Security(CurrentUserWithRole(Role.ADMIN))])
 def update_role(
-    role_id: Annotated[UUID, Path()],
-    role_in: Annotated[RoleUpdate, Body()],
+    role_id: Annotated[UUID, Path(alias='roleId')],
+    role_in: Annotated[RoleUpdate, Body(alias='roleIn')],
     service: RoleServiceDependency,
-) -> Role:
+) -> RoleSchema:
     '''Update a role with a given ID.
 
     Args:
@@ -82,7 +87,7 @@ def update_role(
     * role_in (RoleUpdate): Role's data to be updated via a body parameter.
 
     Raises:
-    * HTTPException: HTTP 404. The role wasn't found.
+    * HTTPException: HTTP 404. Role not found.
 
     Returns:
     * Role: The Role's data updated.

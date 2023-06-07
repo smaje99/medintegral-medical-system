@@ -1,9 +1,9 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, HTTPException, Path, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Path, Security, UploadFile
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
-from app.api.dependencies.auth import CurrentActiveUser
+from app.api.dependencies.auth import get_current_active_user
 from app.core.types import Directory
 from app.schemas.common.file import File as FileSchema
 from app.services.file import FileService
@@ -16,12 +16,15 @@ Service = Annotated[FileService, Depends(FileService)]
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
 
-@router.post('/{directory}', status_code=HTTP_201_CREATED)
+@router.post(
+    '/{directory}',
+    status_code=HTTP_201_CREATED,
+    dependencies=[Security(get_current_active_user)],
+)
 async def store_file(
     directory: Annotated[Directory, Path()],
     file: Annotated[UploadFile, File(...)],
     service: Service,
-    _: CurrentActiveUser,
 ) -> FileSchema:
     '''Store a file sent by a user.
 

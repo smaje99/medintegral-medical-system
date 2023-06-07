@@ -8,9 +8,9 @@ from starlette.status import (
     HTTP_409_CONFLICT,
 )
 
-from app.api.dependencies.auth import get_current_user_with_permissions
+from app.api.dependencies.auth import CurrentUserWithPermissions
 from app.api.dependencies.services import ServiceDependency
-from app.core.types import PermissionAction
+from app.core.types import Action, Permission
 from app.schemas.medical.doctor import Doctor, DoctorCreate, DoctorUpdate
 from app.services.medical import DoctorService
 from app.services.user import UserService
@@ -29,7 +29,7 @@ UserServiceDependency = Annotated[UserService, Depends(ServiceDependency(UserSer
     '/',
     status_code=HTTP_201_CREATED,
     dependencies=[
-        Depends(get_current_user_with_permissions('médicos', {PermissionAction.creation}))
+        Depends(CurrentUserWithPermissions(Permission.DOCTORS, {Action.CREATION}))
     ],
 )
 def create_doctor(
@@ -71,12 +71,12 @@ def create_doctor(
 @router.put(
     '/{dni}',
     dependencies=[
-        Depends(get_current_user_with_permissions('médicos', {PermissionAction.update}))
+        Depends(CurrentUserWithPermissions(Permission.DOCTORS, {Action.UPDATE}))
     ],
 )
 def update_doctor(
     dni: Annotated[int, Path(gt=0)],
-    doctor_in: Annotated[DoctorUpdate, Body()],
+    doctor_in: Annotated[DoctorUpdate, Body(alias='doctorIn')],
     service: DoctorServiceDependency,
 ) -> Doctor:
     '''Update a doctor with a given DNI.

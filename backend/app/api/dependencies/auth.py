@@ -1,4 +1,4 @@
-from typing import Annotated, Callable
+from typing import Annotated
 
 from fastapi import Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
@@ -6,7 +6,7 @@ from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_404
 
 from app.core.config import settings
 from app.core.security.jwt import verify_token
-from app.core.types import PermissionAction
+from app.core.types import Action, Permission, Role
 from app.api.dependencies.services import ServiceDependency
 from app.models.user import User
 from app.schemas.user.user import UserInSession
@@ -60,7 +60,7 @@ def get_current_user(
 
 
 # Handler for the current user dependency
-CurrentUser = Annotated[User, Depends(get_current_user)]
+CurrentUser = Annotated[User, Security(get_current_user)]
 
 
 def get_current_active_user(current_user: CurrentUser, service: Service) -> User:
@@ -84,59 +84,98 @@ def get_current_active_user(current_user: CurrentUser, service: Service) -> User
 
 
 # Handler for the current active user dependency
-CurrentActiveUser = Annotated[User, Depends(get_current_active_user)]
+CurrentActiveUser = Annotated[User, Security(get_current_active_user)]
 
 
-def get_current_user_with_role(role: str) -> Callable[[], User]:
-    '''Check if the current user has a role and returns it.
+class CurrentUserWithRole:
+    '''Check if the current active user has a role and returns it.
     Otherwise raise an exception.
 
     Args:
-        role (str): Role to check on the current user.
+        role (str): Role to check on the current active user.
 
     Raises:
         HTTPException: HTTP 403. Unauthorized user.
-
-    Returns:
-        Callable[[], User]: Current user.
     '''
 
-    def wrapper(current_user: User = Depends(get_current_active_user)) -> User:
-        if role != current_user.role.name:
+    def __init__(self, role: Role):
+        '''Check if the current active user has a role and returns it.
+        Otherwise raise an exception.
+
+            Args:
+                role (str): Role to check on the current active user.
+        '''
+        self._role = role
+
+    def __call__(self, *, current_user: CurrentActiveUser) -> User:
+        '''Check if the current active user has a role and returns it.
+        Otherwise raise an exception.
+
+            Args:
+                current_user (CurrentActiveUser): Dependency to get the current
+                active user.
+
+            Raises:
+                HTTPException: HTTP 403. Unauthorized user.
+
+            Returns:
+                User: Current active user.
+        '''
+        if self._role != current_user.role.name:
             raise HTTPException(
-                status_code=HTTP_403_FORBIDDEN, detail='Usuario no autorizado'
+                status_code=HTTP_403_FORBIDDEN,
+                detail=f'El usuario {current_user.username} no tiene '
+                + 'los permisos suficientes',
             )
 
         return current_user
 
-    return wrapper
 
-
-def get_current_user_with_permissions(
-    permission: str, actions: set[PermissionAction]
-) -> Callable[[], User]:
-    '''Check if the current user has a permission ans its
+class CurrentUserWithPermissions:
+    '''Check if the current active user has a permission ans its
     actions and returns it. Otherwise raise an exception.
 
     Args:
-        permission (str): Permission to check on the current user.
-        actions (set[PermissionAction]): Permission actions to be
-        checked on the current user.
+        permission (str): Permission to check on the current active user.
+        actions (set[PermissionAction]): Permission actions to be checked
+        on the current active user.
 
     Raises:
         HTTPException: HTTP 403. Unauthorized user.
-
-    Returns:
-        Callable[[], User]: Current user.
     '''
 
-    def wrapper(current_user: User = Depends(get_current_active_user)) -> User:
+    def __init__(self, permission: Permission, actions: set[Action]):
+        '''Check if the current active user has a permission ans its
+        actions and returns it. Otherwise raise an exception.
+
+        Args:
+            permission (str): Permission to check on the current active user.
+            actions (set[PermissionAction]): Permission actions to be checked
+            on the current active user.
+        '''
+        self._permission = permission
+        self._actions = actions
+
+    def __call__(self, *, current_user: CurrentActiveUser) -> User:
+        '''Check if the current user has a permission ans its
+        actions and returns it. Otherwise raise an exception.
+
+        Args:
+            current_user (CurrentActiveUser): Dependency to get the current
+            active user.
+
+        Raises:
+            HTTPException: HTTP 403. Unauthorized user.
+
+            Returns:
+                User: Current active user.
+        '''
         user = UserInSession.from_orm(current_user)
         permissions = user.permissions or {}
-        user_actions = set(permissions.get(permission, {})) | actions
+        user_actions = set(permissions.get(self._permission, {})) | self._actions
 
-        if permission not in permissions or len(user_actions) != len(
-            permissions.get(permission, [])
+        if self._permission not in permissions or len(user_actions) != len(
+            permissions.get(self._permission, [])
         ):
             raise HTTPException(
                 status_code=HTTP_403_FORBIDDEN,
@@ -144,8 +183,6 @@ def get_current_user_with_permissions(
             )
 
         return current_user
-
-    return wrapper
 
 
 def get_current_active_superuser(
@@ -155,7 +192,7 @@ def get_current_active_superuser(
     Otherwise raise an exception.
 
     Args:
-        current_user (User): Get the current user in the system.
+        current_user (CurrentActiveUser): Get the current user in the system.
         service (UserService): Service with initialized database session.
 
     Raises:

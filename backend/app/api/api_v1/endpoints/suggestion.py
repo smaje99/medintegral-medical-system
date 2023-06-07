@@ -1,12 +1,12 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Security
 from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND
 
-from app.api.dependencies.auth import get_current_user_with_permissions
+from app.api.dependencies.auth import CurrentUserWithPermissions
 from app.api.dependencies.services import ServiceDependency
-from app.core.types import PermissionAction
+from app.core.types import Action, Permission
 from app.schemas.suggestion.suggestion import Suggestion, SuggestionCreate
 from app.services.suggestion import SuggestionService
 
@@ -18,9 +18,15 @@ SuggestionServiceDependency = Annotated[
 ]
 
 
-@router.get('/{suggestion_id}')
+@router.get(
+    '/{suggestionId}',
+    dependencies=[
+        Security(CurrentUserWithPermissions(Permission.SUGGESTIONS, {Action.READ}))
+    ],
+)
 def read_suggestion(
-    suggestion_id: Annotated[UUID, Path()], service: SuggestionServiceDependency
+    suggestion_id: Annotated[UUID, Path(alias='suggestionId')],
+    service: SuggestionServiceDependency,
 ) -> Suggestion:
     '''Retrieve a suggestion using a given ID,
     if the given ID doesn't exist then raise a error.
@@ -44,10 +50,11 @@ def read_suggestion(
 
 @router.get('/')
 def read_suggestions(
-    service: SuggestionServiceDependency,
+    *,
     skip: Annotated[int, Query(ge=0)] = 0,
     limit: Annotated[int, Query()] = 50,
     pinned: Annotated[bool, Query()] = False,
+    service: SuggestionServiceDependency,
 ) -> list[Suggestion]:
     '''Retrieve a suggestions list.
 
@@ -70,7 +77,7 @@ def read_suggestions(
 
 @router.post('/', status_code=HTTP_201_CREATED)
 def create_suggestion(
-    suggestion_in: Annotated[SuggestionCreate, Body()],
+    suggestion_in: Annotated[SuggestionCreate, Body(alias='suggestionIn')],
     service: SuggestionServiceDependency,
 ) -> Suggestion:
     '''Create a suggestion
@@ -86,15 +93,13 @@ def create_suggestion(
 
 
 @router.patch(
-    '/{suggestion_id}',
+    '/{suggestionId}',
     dependencies=[
-        Depends(
-            get_current_user_with_permissions('suggestions', {PermissionAction.update})
-        )
+        Security(CurrentUserWithPermissions(Permission.SUGGESTIONS, {Action.UPDATE}))
     ],
 )
 def modify_pinned(
-    suggestion_id: Annotated[UUID, Path()],
+    suggestion_id: Annotated[UUID, Path(alias='suggestionId')],
     pinned: Annotated[bool, Body()],
     service: SuggestionServiceDependency,
 ) -> Suggestion:
