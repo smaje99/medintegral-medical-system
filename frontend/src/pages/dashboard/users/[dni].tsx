@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps<DataProps> = async (context)
     }
 
     try {
-        roles.data = await getAllOfRoles();
+        roles.data = await getAllOfRoles(token.accessToken);
     } catch (error) {
         roles.error = error;
     }

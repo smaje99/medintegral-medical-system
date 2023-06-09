@@ -1,11 +1,12 @@
 import axios from 'axios';
 
 import type { Role } from '@Types/user/role';
+import type { Token } from '@Types/user/token';
 
-import { baseURL } from './commons';
+import { baseURL, headers } from './commons';
 
 export default {
-    async getAll() {
-        return axios.get<Role[]>('/role/', { baseURL })
+    async getAll(token: Token['accessToken']) {
+        return axios.get<Role[]>('/role/', { baseURL, ...headers(token) })
     }
 }

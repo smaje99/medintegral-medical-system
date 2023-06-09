@@ -59,7 +59,7 @@ export const getServerSideProps: GetServerSideProps<DataProps> = async (context)
     const users: DataProps['data']['users'] = {};
 
     try {
-        roles.data = await getAllOfRoles();
+        roles.data = await getAllOfRoles(token.accessToken);
     } catch (error) {
         roles.error = error;
     }
