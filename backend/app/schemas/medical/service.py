@@ -37,7 +37,6 @@ class ServiceInDBBase(ServiceBase):
     cost: float
     duration: int
     is_active: bool
-    specialty_id: UUID
 
     class Config:  # pylint: disable=C0115
         orm_mode = True
@@ -49,3 +48,5 @@ class Service(ServiceInDBBase):
 
 class ServiceInDB(ServiceInDBBase):
     '''Additional properties stored in the database.'''
+
+    specialty_id: UUID
