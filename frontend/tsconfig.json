@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2015",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -22,29 +18,11 @@
     "noImplicitReturns": true,
     "baseUrl": "./",
     "paths": {
-      "@Api/*": ["src/api/*"],
-      "@Components/*": ["src/components/*"],
-      "@Helpers/*": ["src/helpers/*"],
-      "@Hooks/*": ["src/hooks/*"],
-      "@Icons/*": ["public/assets/icons/*"],
-      "@Modules/*": ["src/modules/*"],
-      "@Pictures/*": ["public/assets/pictures/*"],
-      "@Routers/*": ["src/routers/*"],
-      "@Services/*": ["src/services/*"],
-      "@Styles/*": ["src/styles/*"],
-      "@Types/*": ["src/types/*"],
-      "@Utils/*": ["src/utils/*"]
+      "@/icons/*": ["public/assets/icons/*"],
+      "@/pictures/*": ["public/assets/pictures/*"],
+      "@/*": ["src/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".next",
-    ".storybook"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", ".next", ".storybook"]
 }
