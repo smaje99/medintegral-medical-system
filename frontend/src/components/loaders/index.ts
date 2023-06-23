@@ -1,3 +1,1 @@
-import Spinner from './Spinner/index';
-
-export { Spinner };
+export { default as Spinner } from './Spinner';

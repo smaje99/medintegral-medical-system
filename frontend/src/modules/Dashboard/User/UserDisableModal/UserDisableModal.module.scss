@@ -1,29 +1,28 @@
-@import '../../../../styles/fonts';
-@import '../../../../styles/palette';
-
+@import '@/styles/fonts';
+@import '@/styles/palette';
 
 .title {
-    color: $white;
-    font: 700 22pt $title-font;
-    line-height: 1;
-    letter-spacing: .2rem;
+  color: $white;
+  font: 700 22pt $title-font;
+  line-height: 1;
+  letter-spacing: 0.2rem;
 }
 
 .text {
-    color: $white;
-    font-size: 14pt;
-    letter-spacing: 0.4px;
-    line-height: 1.5;
+  color: $white;
+  font-size: 14pt;
+  letter-spacing: 0.4px;
+  line-height: 1.5;
 
-    & > .user {
-        font-weight: 600;
-    }
+  & > .user {
+    font-weight: 600;
+  }
 }
 
 .commands {
-    display: grid;
-    place-content: center;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-    margin: 2.4rem 0;
+  display: grid;
+  place-content: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin: 2.4rem 0;
 }

@@ -1,116 +1,115 @@
-@import '../../styles/palette';
-@import '../../styles/fonts';
-@import '../../styles/mixins';
+@import '@/styles/palette';
+@import '@/styles/fonts';
+@import '@/styles/mixins';
 
 .button {
-    @include non-link;
+  @include non-link;
 
-    display: inline-block;
-    padding: .8rem 3.2rem;
-    border-radius: 1.2rem;
-    transition: transform .25s ease;
+  display: inline-block;
+  padding: 0.8rem 3.2rem;
+  border-radius: 1.2rem;
+  transition: transform 0.25s ease;
 
-    &:active {
-        transform: scale(.9);
-    }
+  &:active {
+    transform: scale(0.9);
+  }
 }
 
 .fit {
-    font-size: 11pt !important;
-    padding: .16rem .6rem;
+  font-size: 11pt !important;
+  padding: 0.16rem 0.6rem;
 }
 
 .floating {
-    font: 700 16pt $body-font;
-    color: $white;
-    background-color: $green-complementary;
-    box-shadow: 0 4px 12px $blue-monochromatic;
-    letter-spacing: 0.045rem;
-    transition: all .3s ease 0;
-    cursor: pointer;
+  font: 700 16pt $body-font;
+  color: $white;
+  background-color: $green-complementary;
+  box-shadow: 0 4px 12px $blue-monochromatic;
+  letter-spacing: 0.045rem;
+  transition: all 0.3s ease 0;
+  cursor: pointer;
 
-    &:hover {
-        background-image:
-            linear-gradient(165deg, $green-complementary 55%, $blue-complementary 100%);
-        box-shadow:
-            0 12px 12px $blue-monochromatic,
-            0 -4px 14px rgba(0, 43, 77, 60%);
-    }
+  &:hover {
+    background-image: linear-gradient(
+      165deg,
+      $green-complementary 55%,
+      $blue-complementary 100%
+    );
+    box-shadow: 0 12px 12px $blue-monochromatic, 0 -4px 14px rgba(0, 43, 77, 60%);
+  }
 }
 
 .primary,
 .secondary {
-    font: 600 12pt $body-font;
-    letter-spacing: 0.07rem;
-    color: $white;
-    border-color: transparent;
-    outline: 0;
+  font: 600 12pt $body-font;
+  letter-spacing: 0.07rem;
+  color: $white;
+  border-color: transparent;
+  outline: 0;
 }
 
 .primary {
-    background-color: $blue;
+  background-color: $blue;
 
-    &:hover {
-        transition: box-shadow 400ms;
-        box-shadow:
-            3px 3px 10px rgba($blue-analogous, .5),
-            -3px -3px 10px rgba($blue-analogous, .5);
-    }
+  &:hover {
+    transition: box-shadow 400ms;
+    box-shadow: 3px 3px 10px rgba($blue-analogous, 0.5),
+      -3px -3px 10px rgba($blue-analogous, 0.5);
+  }
 
-    &-fit {
-        @extend .primary;
-        @extend .fit;
-    }
+  &-fit {
+    @extend .primary;
+    @extend .fit;
+  }
 }
 
 .secondary {
-    background-color: $green-complementary;
+  background-color: $green-complementary;
 
-    &:hover {
-        transition: box-shadow 400ms;
-        box-shadow:
-            3px 3px 10px rgba($green-complementary, .5),
-            -3px -3px 10px rgba($green-complementary, .5);
-    }
+  &:hover {
+    transition: box-shadow 400ms;
+    box-shadow: 3px 3px 10px rgba($green-complementary, 0.5),
+      -3px -3px 10px rgba($green-complementary, 0.5);
+  }
 
-    &-fit {
-        @extend .secondary;
-        @extend .fit;
-    }
+  &-fit {
+    @extend .secondary;
+    @extend .fit;
+  }
 }
 
 .icon {
-    font-size: 18pt;
-    color: $black;
-    border-color: transparent;
-    background-color: transparent;
-    padding: 0;
-    outline: 0;
-    cursor: pointer;
+  font-size: 18pt;
+  color: $black;
+  border-color: transparent;
+  background-color: transparent;
+  padding: 0;
+  outline: 0;
+  cursor: pointer;
 
-    &:hover {
-        filter: drop-shadow(1px 4px 4px rgba($blue-monochromatic, 0.75));
-    }
+  &:hover {
+    filter: drop-shadow(1px 4px 4px rgba($blue-monochromatic, 0.75));
+  }
 }
 
 .cell {
-    font-size: 12pt;
-    line-height: 0;
-    color: $green-blue-monochromatic;
-    background-color: $green-blue-light-shade;
-    border: 1px solid $green-blue;
-    border-radius: 5px;
-    outline: 0;
-    padding: 0.4rem;
-    cursor: pointer;
-    transition: box-shadow 100ms ease-in;
+  font-size: 12pt;
+  line-height: 0;
+  color: $green-blue-monochromatic;
+  background-color: $green-blue-light-shade;
+  border: 1px solid $green-blue;
+  border-radius: 5px;
+  outline: 0;
+  padding: 0.4rem;
+  cursor: pointer;
+  transition: box-shadow 100ms ease-in;
 
-    &:hover {
-        box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, .25);
-    }
+  &:hover {
+    box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, 0.25);
+  }
 
-    &:active {
-        box-shadow: 1px 1px 0 1px rgba(0, 0, 0, .25);
-        transform: scale(0.9);
-    }
+  &:active {
+    box-shadow: 1px 1px 0 1px rgba(0, 0, 0, 0.25);
+    transform: scale(0.9);
+  }
 }

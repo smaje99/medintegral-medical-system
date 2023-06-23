@@ -1,4 +1,2 @@
-import InfoFooter from './InfoFooter';
-import RightsFooter from './RightsFooter';
-
-export { InfoFooter, RightsFooter }
+export { default as InfoFooter } from './InfoFooter';
+export { default as RightsFooter } from './RightsFooter';

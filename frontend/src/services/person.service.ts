@@ -1,21 +1,20 @@
-import api from '@Api/person.api';
-import type { Person, PersonCreate, PersonUpdate } from '@Types/person';
-import { Token } from '@Types/user/token';
+import * as api from '@/api/person.api';
+import type { Person, PersonCreate, PersonUpdate } from '@/types/person';
+import { Token } from '@/types/user/token';
 
 import { withAxiosHandler } from './commons';
 
 export const getPerson: (dni: Person['dni']) => Promise<Person> = withAxiosHandler(
-    (dni) => api.get(dni)
+  (dni) => api.get(dni)
 );
 
-export const createPerson: (
-    personObj: PersonCreate
-) => Promise<Person> = withAxiosHandler(
-    (personObj) => api.create(personObj)
-);
+export const createPerson: (personObj: PersonCreate) => Promise<Person> =
+  withAxiosHandler((personObj) => api.create(personObj));
 
 export const updatePerson: (
-    dni: Person['dni'], person: PersonUpdate, token: Token['accessToken']
-) => Promise<Person> = withAxiosHandler(
-    (dni, person, token) => api.update(dni, person, token)
+  dni: Person['dni'],
+  person: PersonUpdate,
+  token: Token['accessToken']
+) => Promise<Person> = withAxiosHandler((dni, person, token) =>
+  api.update(dni, person, token)
 );

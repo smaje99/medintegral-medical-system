@@ -3,45 +3,44 @@
 @import 'mixins';
 
 @font-face {
-    font-family: Roboto;
-    src:
-        local('Roboto'),
-        url('/assets/fonts/Roboto-Regular.woff2') format('woff2'),
-        url('/public/assets/fonts/Roboto-Regular.woff2') format('woff2');
-    font-display: fallback;
+  font-family: Roboto;
+  src: local('Roboto'), url('/assets/fonts/Roboto-Regular.woff2') format('woff2'),
+    url('/public/assets/fonts/Roboto-Regular.woff2') format('woff2');
+  font-display: fallback;
 }
 
 @font-face {
-    font-family: Oswald;
-    src:
-        local('Oswald'),
-        url('/assets/fonts/oswald-regular.woff2') format('woff2'),
-        url('/public/assets/fonts/oswald-regular.woff2') format('woff2');
-    font-display: fallback;
+  font-family: Oswald;
+  src: local('Oswald'), url('/assets/fonts/oswald-regular.woff2') format('woff2'),
+    url('/public/assets/fonts/oswald-regular.woff2') format('woff2');
+  font-display: fallback;
 }
 
 html {
-    font-size: 62.5%;
-    scroll-behavior: smooth;
+  font-size: 62.5%;
+  scroll-behavior: smooth;
 }
 
 body {
-    font-family: $body-font, sans-serif;
-    color: $black;
-    background: hsla(198, 19%, 89%, 1);
-    background:
-        linear-gradient(135deg, hsla(198, 19%, 89%, 1) 64%, hsla(197, 66%, 85%, 1) 100%);
+  font-family: $body-font, sans-serif;
+  color: $black;
+  background: hsla(198, 19%, 89%, 1);
+  background: linear-gradient(
+    135deg,
+    hsla(198, 19%, 89%, 1) 64%,
+    hsla(197, 66%, 85%, 1) 100%
+  );
 }
 
 body::-webkit-scrollbar {
-    width: 1rem;
+  width: 1rem;
 }
 
 body::-webkit-scrollbar-thumb {
-    background-color: $blue-monochromatic;
-    border-radius: 1rem;
+  background-color: $blue-monochromatic;
+  border-radius: 1rem;
 }
 
 body::-webkit-scrollbar-track {
-    background-color: $blue-light-shade;
+  background-color: $blue-light-shade;
 }

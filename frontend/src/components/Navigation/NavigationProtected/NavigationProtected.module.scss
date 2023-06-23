@@ -1,59 +1,58 @@
-@import '@Styles/fonts';
-@import '@Styles/mixins';
-@import '@Styles/palette';
+@import '@/styles/fonts';
+@import '@/styles/mixins';
+@import '@/styles/palette';
 
 .navigation {
-    min-width: 28rem;
-    box-sizing: border-box;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 2rem;
-    padding: 1.2rem;
-    background-color: $green-blue-analogous;
+  min-width: 28rem;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 2rem;
+  padding: 1.2rem;
+  background-color: $green-blue-analogous;
 }
 
 .section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: .36rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.36rem;
 
-    > hr {
-        width: 100%
-    }
+  > hr {
+    width: 100%;
+  }
 }
 
 .statement {
-    color: $white;
-    font-size: 14pt;
-    font-weight: 600;
-    letter-spacing: .14rem;
-    text-shadow: 2px 4px 4px rgb(0 0 0 / 50%);
+  color: $white;
+  font-size: 14pt;
+  font-weight: 600;
+  letter-spacing: 0.14rem;
+  text-shadow: 2px 4px 4px rgb(0 0 0 / 50%);
 }
 
 .button {
-    font: 600 12pt $body-font;
-    border-color: transparent;
+  font: 600 12pt $body-font;
+  border-color: transparent;
 }
 
 .nav {
-    @include non-list;
+  @include non-list;
 
-    display: grid;
-    place-content: start;
-    gap: 1.2rem;
-    grid-template-columns: 1fr;
+  display: grid;
+  place-content: start;
+  gap: 1.2rem;
+  grid-template-columns: 1fr;
 }
 
 .link {
-    @include non-link;
-    font: 600 12pt $body-font;
-    position: relative;
-    display: inline-block;
-    color: $white;
-    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    letter-spacing: 0.08em;
-    transition: all .3s ease 0s;
-
+  @include non-link;
+  font: 600 12pt $body-font;
+  position: relative;
+  display: inline-block;
+  color: $white;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  letter-spacing: 0.08em;
+  transition: all 0.3s ease 0s;
 }

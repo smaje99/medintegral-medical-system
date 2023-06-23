@@ -1,45 +1,44 @@
-@import '@Styles/animations';
-@import '@Styles/fonts';
-@import '@Styles/mixins';
-
+@import '@/styles/animations';
+@import '@/styles/fonts';
+@import '@/styles/mixins';
 
 .bar {
-    width: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.2rem 0;
+
+  & > .section {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 1.2rem;
+
+    & > .title {
+      font: 600 22pt $title-font;
+      line-height: 1;
+      letter-spacing: 0.2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    & > .row-size {
+      font: 400 11pt $body-font;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  & > .nav {
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    justify-content: center;
     align-items: center;
-    margin: 1.2rem 0;
+    gap: 1.2rem;
 
-    & > .section {
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-end;
-        gap: 1.2rem;
-
-        & > .title {
-            font: 600 22pt $title-font;
-            line-height: 1;
-            letter-spacing: .2rem;
-            margin: 0;
-            padding: 0;
-        }
-
-        & > .row-size {
-            font: 400 11pt $body-font;
-            letter-spacing: .5px;
-        }
+    & > .item {
+      @include non-list;
+      @include slideInRight;
     }
-
-    & > .nav {
-        display: flex;
-        flex-flow: row-reverse nowrap;
-        justify-content: center;
-        align-items: center;
-        gap: 1.2rem;
-
-        & > .item {
-            @include non-list;
-            @include slideInRight;
-        }
-    }
+  }
 }

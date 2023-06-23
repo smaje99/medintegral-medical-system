@@ -1,31 +1,27 @@
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-import { AuthLayout } from '@Components/layouts';
-import { Spinner } from '@Components/loaders';
-import { LoginView } from '@Modules/login';
+import { AuthLayout } from '@/components/layouts';
+import { Spinner } from '@/components/loaders';
+import routes from '@/helpers/routes';
+import { LoginView } from '@/modules/Login';
+import type { NextPageWithLayout } from '@/types/next';
 
-import routes from '@Helpers/routes';
+const Login: NextPageWithLayout = () => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
-const Login = () => {
-    const router = useRouter();
-    const { data: session, status } = useSession();
+  if (status === 'unauthenticated') {
+    return <LoginView />;
+  }
 
-    if (status === 'unauthenticated') {
-        return <LoginView />
-    }
+  if (session) {
+    router.push(routes.dashboard.home);
+  }
 
-    if (session) {
-        router.push(routes.dashboard.home);
-    }
+  return <Spinner full />;
+};
 
-    return <Spinner full />
-}
-
-Login.getLayout = (page: JSX.Element) => (
-    <AuthLayout title="Iniciar sesión">
-        {page}
-    </AuthLayout>
-)
+Login.getLayout = (page) => <AuthLayout title='Iniciar sesión'>{page}</AuthLayout>;
 
 export default Login;

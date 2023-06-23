@@ -1,80 +1,80 @@
-@import '@Styles/animations';
-@import '@Styles/palette';
-@import '@Styles/fonts';
-
+@import '@/styles/animations';
+@import '@/styles/palette';
+@import '@/styles/fonts';
 
 .table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: .7rem;
-    margin-bottom: 1rem;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 0.7rem;
+  margin-bottom: 1rem;
 }
 
 .head-cell {
-    text-align: left;
-    padding: 0 .2rem .6rem .2rem;
-    border-bottom: 2px solid $blue-monochromatic;
+  text-align: left;
+  padding: 0 0.2rem 0.6rem 0.2rem;
+  border-bottom: 2px solid $blue-monochromatic;
 
-    & > div:first-child {
-        font: 600 12pt $title-font;
-        letter-spacing: 0.85px;
-        margin-bottom: .2rem;
+  & > div:first-child {
+    font: 600 12pt $title-font;
+    letter-spacing: 0.85px;
+    margin-bottom: 0.2rem;
 
-        &.sorting {
-            cursor: pointer;
-            user-select: none;
-        }
+    &.sorting {
+      cursor: pointer;
+      user-select: none;
     }
+  }
 }
 
 .row {
-    border-bottom: 2px solid $blue-monochromatic;
-    transition: .3s all ease;
+  border-bottom: 2px solid $blue-monochromatic;
+  transition: 0.3s all ease;
 
-    &:hover, &.active {
-        font-weight: 500;
-        background-color: $blue-light-shade;
-    }
+  &:hover,
+  &.active {
+    font-weight: 500;
+    background-color: $blue-light-shade;
+  }
 }
 
 .cell {
-    position: relative;
+  position: relative;
 
-    font: 300 10pt $body-font;
-    letter-spacing: 0.25px;
-    padding: 1.6rem .2rem;
-    transition: .3s all ease;
-    overflow-x: hidden;
+  font: 300 10pt $body-font;
+  letter-spacing: 0.25px;
+  padding: 1.6rem 0.2rem;
+  transition: 0.3s all ease;
+  overflow-x: hidden;
 
-    :is(&, :first-child)::selection {
-        font-weight: 600;
-        color: white;
-        background-color: $blue-monochromatic;
+  :is(&, :first-child)::selection {
+    font-weight: 600;
+    color: white;
+    background-color: $blue-monochromatic;
+  }
+
+  & div[role='toolbar'] {
+    position: absolute;
+    top: 25%;
+    right: 5px;
+    z-index: 1;
+    visibility: hidden;
+
+    display: inline-flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 0.6rem;
+
+    & > * {
+      visibility: hidden;
     }
+  }
 
-    & div[role=toolbar] {
-        position: absolute;
-        top: 25%;
-        right: 5px;
-        z-index: 1;
-        visibility: hidden;
+  &:hover div[role='toolbar'] {
+    @include slideInRight;
+    visibility: visible;
 
-        display: inline-flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        gap: .6rem;
-
-        & > * {
-            visibility: hidden;
-        }
+    & > * {
+      visibility: visible;
     }
-
-    &:hover div[role=toolbar] {
-        @include slideInRight;
-        visibility: visible;
-
-        & > * {
-            visibility: visible;
-        }
-    }
+  }
 }

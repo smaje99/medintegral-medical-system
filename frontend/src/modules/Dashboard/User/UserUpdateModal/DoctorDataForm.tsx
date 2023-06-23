@@ -1,32 +1,41 @@
 import { useMemo } from 'react';
 
-import type { DoctorDataFormProps, DoctorDataUpdateValues } from '../User.types';
+import { type CommandAttributes, type FieldAttributes, Form } from '@/components/Form';
+import type { DoctorUpdate } from '@/types/medical/doctor.model';
 
-import { type CommandAttributes, type FieldAttributes, Form } from '@Components/Form';
+type Props = {
+  onUpdate: (data: DoctorUpdate) => Promise<void>;
+  onClose: () => void;
+};
 
-const DoctorDataForm: React.FC<DoctorDataFormProps> = ({
-    onUpdate,
-    onClose
-}) => {
-    const data = useMemo<FieldAttributes<DoctorDataUpdateValues>[]>(() => [{
+const DoctorDataForm: React.FC<Props> = ({ onUpdate, onClose }) => {
+  const data = useMemo<FieldAttributes<DoctorUpdate>[]>(
+    () => [
+      {
         type: 'text',
         name: 'signature',
-        label: 'Firma'
-    }], []);
+        label: 'Firma',
+      },
+    ],
+    []
+  );
 
-    const commands = useMemo<CommandAttributes>(() => ({
-        submit: { label: 'Actualizar' },
-        reset: { label: 'Cancelar' }
-    }), []);
+  const commands = useMemo<CommandAttributes>(
+    () => ({
+      submit: { label: 'Actualizar' },
+      reset: { label: 'Cancelar' },
+    }),
+    []
+  );
 
-    return (
-        <Form<DoctorDataUpdateValues>
-            data={data}
-            commands={commands}
-            onSubmit={onUpdate}
-            onReset={onClose}
-        />
-    )
-}
+  return (
+    <Form<DoctorUpdate>
+      data={data}
+      commands={commands}
+      onSubmit={onUpdate}
+      onReset={onClose}
+    />
+  );
+};
 
 export default DoctorDataForm;

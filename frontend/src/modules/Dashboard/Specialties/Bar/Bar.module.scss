@@ -1,28 +1,28 @@
-@import '@Styles/palette';
+@import '@/styles/palette';
 
 .button {
-    display: inline-flex;
-    align-items: flex-start;
-    gap: 0.4rem;
-    font-size: 10pt;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 10pt;
+  font-weight: 600;
+  letter-spacing: 0.45px;
+  border: none;
+  outline: 0;
+  color: $green-blue-monochromatic;
+  background-color: transparent;
+
+  &:hover {
     font-weight: 600;
-    letter-spacing: 0.45px;
-    border: none;
-    outline: 0;
-    color: $green-blue-monochromatic;
-    background-color: transparent;
+    transform: scale(1.1);
+  }
 
-    &:hover {
-        font-weight: 600;
-        transform: scale(1.1);
-    }
+  &:active {
+    transform: scale(0.9);
+  }
 
-    &:active {
-        transform: scale(.9)
-    }
-
-    &--disable {
-        @extend .button;
-        color: $green-complementary;
-    }
+  &--disable {
+    @extend .button;
+    color: $green-complementary;
+  }
 }

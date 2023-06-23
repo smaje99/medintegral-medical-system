@@ -1,32 +1,26 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 
-import type { NavLinkProps } from './NavLink.types';
+type Props = Omit<React.HTMLProps<HTMLAnchorElement>, 'className'> & {
+  className?: string | ((active: boolean) => string);
+};
 
-const NavLink: React.FC<NavLinkProps> = ({ href, className, children, ...props }) => {
-    const { pathname } = useRouter();
-    const [newClassName, setNewClassName] = useState('');
+const NavLink: React.FC<Props> = ({ href, className, children, ...props }) => {
+  const { pathname } = useRouter();
 
-    const isActive = () => href === pathname;
+  const newClassName = useCallback(() => {
+    const isActive = href === pathname;
+    return typeof className === 'function' ? className(isActive) : className;
+  }, [className, href, pathname]);
 
-    const getClassName = () => (
-        typeof className === 'function'
-            ? className(isActive())
-            : className
-    )
-
-    useEffect(() => {
-        setNewClassName(getClassName())
-    }, [className]);
-
-    return (
-        <Link href={href}>
-            <a className={newClassName} {...props}>
-                {children}
-            </a>
-        </Link>
-    )
-}
+  return (
+    <Link href={href}>
+      <a className={newClassName()} {...props}>
+        {children}
+      </a>
+    </Link>
+  );
+};
 
 export default NavLink;

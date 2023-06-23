@@ -1,3 +1,3 @@
 export interface APIError {
-    detail: string;
+  detail: string;
 }

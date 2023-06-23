@@ -1,26 +1,27 @@
+import type { Row, RowSelectionState, Table } from '@tanstack/react-table';
 import { createContext, useCallback, useMemo, useState } from 'react';
-import type { Table, RowSelectionState, Row } from '@tanstack/react-table';
 
-import type { Data } from '@Types/data-request';
+import type { Data } from '@/types/data-request';
 
-type Props<D extends object = {}> = {
-    data: Data<D[]>;
-    children: React.ReactNode;
+type Props<D extends object> = {
+  data: Data<D[]>;
+  children: React.ReactNode;
+};
+
+export interface TableContextType<T extends object> {
+  rowSelection: RowSelectionState;
+  getSelectedFlatRows: () => Row<T>[];
+  setTable: React.Dispatch<React.SetStateAction<Table<T>>>;
+  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
+  dataForTable: Data<T[]>;
+  setDataForTable: React.Dispatch<React.SetStateAction<Data<T[]>>>;
+  rowSelectionSize: number;
+  globalFilter: string;
+  setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export interface TableContextType<T> {
-    rowSelection: RowSelectionState;
-    getSelectedFlatRows: () => Row<T>[];
-    setTable: React.Dispatch<React.SetStateAction<Table<T>>>;
-    setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
-    dataForTable: Data<T[]>;
-    setDataForTable: React.Dispatch<React.SetStateAction<Data<T[]>>>;
-    rowSelectionSize: number;
-    globalFilter: string;
-    setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export const TableContext = createContext<TableContextType<any>>({
+function createTableContext<T extends object>() {
+  return createContext<TableContextType<T>>({
     rowSelection: {},
     getSelectedFlatRows: () => [],
     setTable: () => {},
@@ -30,39 +31,54 @@ export const TableContext = createContext<TableContextType<any>>({
     rowSelectionSize: 0,
     globalFilter: '',
     setGlobalFilter: () => {},
-});
+  });
+}
 
-function TableProvider<T extends object = {}>({ data, children }: Props<T>) {
-    const [dataForTable, setDataForTable] = useState<Data<T[]>>(null);
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>(null);
-    const [globalFilter, setGlobalFilter] = useState<string>('');
-    const [table, setTable] = useState<Table<T>>(null);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const TableContext = createTableContext<any>();
 
-    const getSelectedFlatRows = useCallback<TableContextType<T>['getSelectedFlatRows']>(
-        () => table?.getSelectedRowModel().flatRows, [rowSelection]
-    );
+function TableProvider<T extends object = object>({
+  data,
+  children,
+}: Props<T>): React.JSX.Element {
+  const [dataForTable, setDataForTable] = useState<Data<T[]>>(null);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>(null);
+  const [globalFilter, setGlobalFilter] = useState<string>('');
+  const [table, setTable] = useState<Table<T>>(null);
 
-    const rowSelectionSize = useMemo<TableContextType<T>['rowSelectionSize']>(
-        () => Object.keys(rowSelection ?? {}).length, [rowSelection]
-    );
+  const getSelectedFlatRows = useCallback<TableContextType<T>['getSelectedFlatRows']>(
+    () => table?.getSelectedRowModel().flatRows,
+    [table]
+  );
 
-    const contextValue = useMemo<TableContextType<T>>(() => ({
-        rowSelection,
-        getSelectedFlatRows,
-        setTable,
-        setRowSelection,
-        dataForTable: dataForTable || data,
-        setDataForTable,
-        rowSelectionSize,
-        globalFilter,
-        setGlobalFilter
-    }), [globalFilter, rowSelection, dataForTable, data]);
+  const rowSelectionSize = useMemo<TableContextType<T>['rowSelectionSize']>(
+    () => Object.keys(rowSelection ?? {}).length,
+    [rowSelection]
+  );
 
-    return (
-        <TableContext.Provider value={contextValue}>
-            {children}
-        </TableContext.Provider>
-    )
+  const contextValue = useMemo<TableContextType<T>>(
+    () => ({
+      rowSelection,
+      getSelectedFlatRows,
+      setTable,
+      setRowSelection,
+      dataForTable: dataForTable || data,
+      setDataForTable,
+      rowSelectionSize,
+      globalFilter,
+      setGlobalFilter,
+    }),
+    [
+      rowSelection,
+      getSelectedFlatRows,
+      dataForTable,
+      data,
+      rowSelectionSize,
+      globalFilter,
+    ]
+  );
+
+  return <TableContext.Provider value={contextValue}>{children}</TableContext.Provider>;
 }
 
 export default TableProvider;

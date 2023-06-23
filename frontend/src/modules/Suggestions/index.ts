@@ -1,5 +1,2 @@
-import Form from './Form';
-
-import styles from './Suggestions.module.scss'
-
-export { Form, styles };
+export { default as Form } from './Form';
+export { default as styles } from './Suggestions.module.scss';

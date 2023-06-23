@@ -23,23 +23,28 @@ fieldComponents.set('file', FileField);
 /**
  * Field Factory
  */
-function Field<T = {}>({ obligatory, ...props }: FieldAttributes<T>): JSX.Element {
-    const FieldComponent = useMemo(() => (
-        props.type === 'custom'
-            ? props.render
-            : fieldComponents.get(props.type) as React.FC<FieldAttributes<T>>
-    ), [props.type]);
+function Field<T = object>({
+  obligatory,
+  ...props
+}: FieldAttributes<T>): React.JSX.Element {
+  const FieldComponent = useMemo(
+    () =>
+      props.type === 'custom'
+        ? props.render
+        : (fieldComponents.get(props.type) as React.FC<FieldAttributes<T>>),
+    [props]
+  );
 
-    return (
-        <FieldContainer
-            htmlFor={props.name}
-            title={props.label}
-            obligatory={obligatory ?? props.required}
-            legend={props.legend}
-        >
-            <FieldComponent {...{...props, required: props.required ?? obligatory}} />
-        </FieldContainer>
-    )
+  return (
+    <FieldContainer
+      htmlFor={props.name}
+      title={props.label}
+      obligatory={obligatory ?? props.required}
+      legend={props.legend}
+    >
+      <FieldComponent {...{ ...props, required: props.required ?? obligatory }} />
+    </FieldContainer>
+  );
 }
 
 export default Field;

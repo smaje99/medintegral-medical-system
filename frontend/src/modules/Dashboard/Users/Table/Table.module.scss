@@ -1,14 +1,13 @@
-@import '../../../../styles/mixins';
-@import '../../../../styles/palette';
-
+@import '@/styles/mixins';
+@import '@/styles/palette';
 
 .badge {
-    &-user::selection {
-        color: white !important;
-        background-color: $green-monochromatic !important;
-    }
+  &-user::selection {
+    color: white !important;
+    background-color: $green-monochromatic !important;
+  }
 
-    &-role {
-        user-select: none;
-    }
+  &-role {
+    user-select: none;
+  }
 }

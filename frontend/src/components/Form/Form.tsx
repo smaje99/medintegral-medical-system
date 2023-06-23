@@ -1,28 +1,36 @@
 import { useId } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { type SubmitHandler, useFormContext } from 'react-hook-form';
 
-import Commands from './Commands';
-import Field from './Field';
-import type { FormProps } from './Form.dto';
+import Commands, { type CommandAttributes } from './Commands';
+import Field, { type FieldAttributes } from './Field';
+import styles from './Form.module.scss';
 
-import styles from './Form.module.scss'
+type Props<T> = {
+  readonly data: FieldAttributes<T>[];
+  readonly commands: CommandAttributes;
+} & Omit<
+  React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>,
+  'onSubmit'
+> & {
+    readonly onSubmit?: SubmitHandler<T>;
+  };
 
 /**
  * This component must be wrapped in a FormProvider of react-hook-form
  */
-function Form<T>({ data, commands, onSubmit, ...props }: FormProps<T>) {
-    const { handleSubmit } = useFormContext<T>();
-    const formId = useId();
+function Form<T>({ data, commands, onSubmit, ...props }: Props<T>) {
+  const { handleSubmit } = useFormContext<T>();
+  const formId = useId();
 
-    return (
-        <form {...props} onSubmit={handleSubmit(onSubmit)} className={styles['form']}>
-            {data.map(field => (
-                <Field<T> key={`${formId}-${field.name}`} {...field} />
-            ))}
+  return (
+    <form {...props} onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      {data.map((field) => (
+        <Field<T> key={`${formId}-${field.name}`} {...field} />
+      ))}
 
-            <Commands data={commands} />
-        </form>
-    )
+      <Commands data={commands} />
+    </form>
+  );
 }
 
 export default Form;

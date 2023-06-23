@@ -1,37 +1,36 @@
-@import '../../../styles/palette';
-
+@import '@/styles/palette';
 
 .form {
-    width: 100%;
-    height: max-content;
-    display: grid;
-    gap: 1.6rem;
-    grid-template-columns: 1fr;
+  width: 100%;
+  height: max-content;
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: 1fr;
 }
 
 .field {
-    flex: 1;
-    display: flex;
-    padding: 1rem;
-    border-radius: 1.2rem;
-    background-color: $blue-light-shade;
+  flex: 1;
+  display: flex;
+  padding: 1rem;
+  border-radius: 1.2rem;
+  background-color: $blue-light-shade;
 }
 
 .button {
-    transition: .5s;
+  transition: 0.5s;
 }
 
 .container {
-    display: flex;
-    gap: .8rem;
-    align-items: center;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
 }
 
 .text {
-    color: $white;
-    font-size: 10pt;
+  color: $white;
+  font-size: 10pt;
 }
 
 .checkbox {
-    font-size: 16pt;
+  font-size: 16pt;
 }

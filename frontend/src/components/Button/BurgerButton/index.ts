@@ -1,1 +1,1 @@
-export { default } from './BurgerButton';
+export { type BurgerButtonActions, default } from './BurgerButton';

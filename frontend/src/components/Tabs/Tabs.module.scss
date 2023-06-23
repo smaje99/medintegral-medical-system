@@ -1,39 +1,40 @@
-@import '../../styles/fonts';
-@import '../../styles/palette';
+@import '@/styles/fonts';
+@import '@/styles/palette';
 
 .list {
-    border-color: $green-blue;
+  border-color: $green-blue;
 
-    .tab {
-        font: 600 12pt $title-font;
-        letter-spacing: 0.8px;
-        user-select: none;
+  .tab {
+    font: 600 12pt $title-font;
+    letter-spacing: 0.8px;
+    user-select: none;
 
-        display: inline-flex;
-        align-items: center;
-        flex-wrap: nowrap;
-        gap: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
 
-        &.light {
-            color: $black;
-        }
-
-        &.dark {
-            color: $white;
-        }
-
-        &--selected {
-            color: $green-blue-monochromatic;
-            background-color: $green-blue-light-shade;
-            border-color: $green-blue;
-
-            &.light, &.dark {
-                color: $green-blue-monochromatic;
-            }
-
-            &:focus:after {
-                background-color: $green-blue;
-            }
-        }
+    &.light {
+      color: $black;
     }
+
+    &.dark {
+      color: $white;
+    }
+
+    &--selected {
+      color: $green-blue-monochromatic;
+      background-color: $green-blue-light-shade;
+      border-color: $green-blue;
+
+      &.light,
+      &.dark {
+        color: $green-blue-monochromatic;
+      }
+
+      &:focus:after {
+        background-color: $green-blue;
+      }
+    }
+  }
 }
