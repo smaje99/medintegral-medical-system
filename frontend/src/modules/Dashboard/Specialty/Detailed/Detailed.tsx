@@ -67,7 +67,7 @@ const Detailed: React.FC<Props> = ({ specialty }) => {
             </>,
           ]}
         >
-          <ServiceData data={servicesMemo} />
+          <ServiceData data={servicesMemo} specialtyId={specialtyMemo.data.id} />
         </Tabs>
       </section>
 
