@@ -12,3 +12,5 @@ export interface Service {
 export type ServiceCreate = Omit<Service, 'id' | 'isActive'> & {
   specialtyId: Specialty['id'];
 };
+
+export type ServiceUpdate = Omit<Partial<Service>, 'id'>;
