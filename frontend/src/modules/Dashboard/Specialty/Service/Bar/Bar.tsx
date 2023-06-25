@@ -45,7 +45,7 @@ const Bar: React.FC<Props> = ({ openCreateModal, openUpdateModal, openDisableMod
       {rowSelectionSize === 1 && hasPermission(session, PERMISSION, Actions.UPDATE) ? (
         <button
           className={styles.button}
-          onClick={openCreateModal}
+          onClick={openUpdateModal}
           title='Modificar servicio'
           aria-label='Modificar servicio'
         >
@@ -56,7 +56,7 @@ const Bar: React.FC<Props> = ({ openCreateModal, openUpdateModal, openDisableMod
       {rowSelectionSize > 0 && hasPermission(session, PERMISSION, Actions.DISABLE) ? (
         <button
           className={styles['button--disable']}
-          onClick={openCreateModal}
+          onClick={openDisableModal}
           title='Remover servicio'
           aria-label='Remover servicio'
         >
