@@ -6,7 +6,7 @@ import type { Token } from '@/types/user/token';
 import { baseURL, headers } from './commons';
 
 /**
- * Create a new service the API service.
+ * Create a new medical service the API service.
  * @param service (ServiceCreate)
  * @param token (Token['accessToken'])
  * @returns a Promise that resolves to a Service.
@@ -16,7 +16,7 @@ export async function create(service: ServiceCreate, token: Token['accessToken']
 }
 
 /**
- * Update a service the API service.
+ * Update a medical service the API service.
  * @param serviceId (Service['id'])
  * @param service (ServiceUpdate)
  * @param token (Token['accessToken'])
@@ -31,4 +31,26 @@ export async function update(
     baseURL,
     ...headers(token),
   });
+}
+
+/**
+ * Disable a medical service the API service.
+ * @param serviceId (Service['id'])
+ * @param isDisabled (boolean)
+ * @param token (Token['accessToken'])
+ * @returns a Promise that resolves to a Service.
+ */
+export async function disable(
+  serviceId: Service['id'],
+  isDisabled: boolean,
+  token: Token['accessToken']
+) {
+  return axios.patch<Service>(
+    `/service/disable/${serviceId}`,
+    { disable: isDisabled },
+    {
+      baseURL,
+      ...headers(token),
+    }
+  );
 }

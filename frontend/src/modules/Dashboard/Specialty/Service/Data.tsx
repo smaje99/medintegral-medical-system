@@ -6,6 +6,7 @@ import type { Specialty } from '@/types/medical/specialty.model';
 
 import Bar from './Bar';
 import { ServiceCreateFormModal } from './ServiceCreateFormModal';
+import ServiceDisableModal from './ServiceDisableModal/ServiceDisableModal';
 import ServiceUpdateFormModal from './ServiceUpdateFormModal';
 import Table from './Table';
 
@@ -26,6 +27,7 @@ const Data: React.FC<Props> = ({ data, specialtyId }) => {
         <Table />
 
         <ServiceUpdateFormModal isOpen={isOpenUpdateModal} onClose={closeUpdateModal} />
+        <ServiceDisableModal isOpen={isOpenDisableModal} onClose={closeDisableModal} />
       </TableProvider>
 
       <ServiceCreateFormModal

@@ -22,3 +22,11 @@ export const updateService: (
 ) => Promise<Service> = withAxiosHandler(async (serviceId, service, token) =>
   api.update(serviceId, service, token)
 );
+
+export const disableService: (
+  serviceId: Service['id'],
+  disable: boolean,
+  token: Token['accessToken']
+) => Promise<Service> = withAxiosHandler(async (serviceId, disable, token) =>
+  api.disable(serviceId, disable, token)
+);
