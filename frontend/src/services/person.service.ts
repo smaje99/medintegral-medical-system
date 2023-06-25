@@ -1,46 +1,20 @@
-import api from '@Api/person.api';
-import type { APIError } from '@Types/error';
-import type { Person, PersonCreate, PersonUpdate } from '@Types/person';
-import { Token } from '@Types/user/token';
-import { isAxiosError } from '@Utils/axios-error';
+import * as api from '@/api/person.api';
+import type { Person, PersonCreate, PersonUpdate } from '@/types/person';
+import { Token } from '@/types/user/token';
 
-export const getPerson = async (dni: Person['dni']): Promise<Person> => {
-    try {
-        const response = await api.get(dni);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+import { withAxiosHandler } from './commons';
 
-        throw error;
-    }
-}
+export const getPerson: (dni: Person['dni']) => Promise<Person> = withAxiosHandler(
+  (dni) => api.get(dni)
+);
 
-export const createPerson = async (personObj: PersonCreate): Promise<Person> => {
-    try {
-        const response = await api.create(personObj)
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+export const createPerson: (personObj: PersonCreate) => Promise<Person> =
+  withAxiosHandler((personObj) => api.create(personObj));
 
-        throw error;
-    }
-}
-
-export const updatePerson = async (
-    dni: Person['dni'], person: PersonUpdate, token: Token['accessToken']
-): Promise<Person> => {
-    try {
-        const response = await api.update(dni, person, token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
+export const updatePerson: (
+  dni: Person['dni'],
+  person: PersonUpdate,
+  token: Token['accessToken']
+) => Promise<Person> = withAxiosHandler((dni, person, token) =>
+  api.update(dni, person, token)
+);

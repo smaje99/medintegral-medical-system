@@ -1,19 +1,24 @@
 import { useFormContext } from 'react-hook-form';
 
+import styles from '../Form.module.scss';
 import type { InputFieldAttributes } from './Field.dto';
 
-import styles from '../Form.module.scss';
+function InputField<T>({
+  name,
+  type,
+  ...props
+}: InputFieldAttributes<T>): React.JSX.Element {
+  const { register } = useFormContext();
 
-function InputField<T>({ name, type, ...props }: InputFieldAttributes<T>): JSX.Element {
-    const { register } = useFormContext();
-
-    return <input
-        className={styles['field-input']}
-        {...props}
-        {...register(name)}
-        id={name}
-        type={type}
+  return (
+    <input
+      className={styles['field-input']}
+      {...props}
+      {...register(name)}
+      id={name}
+      type={type}
     />
+  );
 }
 
 export default InputField;

@@ -1,4 +1,4 @@
 export interface LayoutProps {
-    title: string;
-    children: JSX.Element;
+  title: string;
+  children: React.JSX.Element;
 }

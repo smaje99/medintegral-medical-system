@@ -1,4 +1,2 @@
-import ContentCard from './ContentCard';
-import TellCard from './TellCard';
-
-export { ContentCard, TellCard };
+export { default as ContentCard } from './ContentCard';
+export { default as TellCard } from './TellCard';

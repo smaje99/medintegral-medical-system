@@ -1,0 +1,56 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": { "jsx": true },
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "frontend/tsconfig.json"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint/eslint-plugin",
+    "prettier",
+    "simple-import-sort",
+    "react-hooks"
+  ],
+  "settings": {
+    "import/extensions": [".js", ".jsx"],
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      },
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      "alias": true
+    },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    }
+  },
+  "ignorePatterns": ["node_modules", ".next"],
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "max-len": ["error", 90],
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "curly": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/no-unresolved": "off",
+    "import/extensions": "off"
+  }
+}

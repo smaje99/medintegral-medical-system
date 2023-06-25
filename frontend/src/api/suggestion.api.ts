@@ -1,17 +1,17 @@
-import { Suggestion, SuggestionCreate } from '@Types/suggestion';
 import axios from 'axios';
 
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = `${NEXT_PUBLIC_API}/suggestion`;
+import type { Suggestion, SuggestionCreate } from '@/types/suggestion';
 
-export default {
-    async get(id: string) {
-        return axios.get<Suggestion>(`${baseURL}/${id}`);
-    },
-    async getAllOfPinned() {
-        return axios.get<Suggestion[]>(`${baseURL}/?pinned=true`);
-    },
-    async create(suggestionObj: SuggestionCreate) {
-        return axios.post<Suggestion>(`${baseURL}`, suggestionObj);
-    }
+import { baseURL } from './commons';
+
+export async function get(id: Suggestion['id']) {
+  return axios.get<Suggestion>(`/suggestion/${id}`, { baseURL });
+}
+
+export async function getAllOfPinned() {
+  return axios.get<Suggestion[]>('/suggestion/', { baseURL, params: { pinned: true } });
+}
+
+export async function create(suggestionObj: SuggestionCreate) {
+  return axios.post<Suggestion>('/suggestion', suggestionObj, { baseURL });
 }

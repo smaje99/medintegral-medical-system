@@ -1,67 +1,23 @@
-import api from '@Api/login.api';
+import * as api from '@/api/login.api';
+import type { Message } from '@/types/message';
+import type { Token } from '@/types/user/token';
+import type { User, UserInSession, UserLogin } from '@/types/user/user';
 
-import type { APIError } from '@Types/error';
-import type { Message } from '@Types/message';
-import type { Token } from '@Types/user/token';
-import type { User, UserInSession, UserLogin } from '@Types/user/user';
+import { withAxiosHandler } from './commons';
 
-import { isAxiosError } from '@Utils/axios-error';
+export const login: (credentials: UserLogin) => Promise<Token> = withAxiosHandler(
+  ({ username, password }) => api.login(username, password)
+);
 
-export const login = async (credentials: UserLogin): Promise<Token> => {
-    try {
-        const response = await api.login(
-            credentials.username, credentials.password
-        );
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
+export const testToken: (token: Token['accessToken']) => Promise<UserInSession> =
+  withAxiosHandler(async (token) => api.testToken(token));
 
-        throw error;
-    }
-}
+export const resetPassword: (
+  token: Token['accessToken'],
+  newPassword: string
+) => Promise<Message> = withAxiosHandler(async (token, newPassword) =>
+  api.resetPassword(token, newPassword)
+);
 
-export const testToken = async (token: Token['accessToken']): Promise<UserInSession> => {
-    try {
-        const response = await api.testToken(token);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
-
-export const resetPassword = async (
-    token: Token['accessToken'], newPassword: string
-): Promise<Message> => {
-    try {
-        const response = await api.resetPassword(
-            token,
-            newPassword
-        );
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
-
-export const passwordRecovery = async (email: User['person']['email']): Promise<Message> => {
-    try {
-        const response = await api.passwordRecovery(email);
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
+export const passwordRecovery: (email: User['person']['email']) => Promise<Message> =
+  withAxiosHandler(async (email) => api.passwordRecovery(email));

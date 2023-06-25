@@ -1,74 +1,83 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { useMemo } from 'react';
 
-import { ProtectedLayout } from '@Components/layouts';
-import { TableProvider } from '@Components/Table/Table';
-import useModal from '@Hooks/useModal';
+import { ProtectedLayout } from '@/components/layouts';
+import { TableProvider } from '@/components/Table/Table';
+import useModal from '@/hooks/useModal';
 import {
-    Bar, CreateFormModal, styles, Table, UserDataForTable, UsersDisableModal
-} from '@Modules/Dashboard/Users';
-import type { DataProps } from '@Modules/Dashboard/Users/Users.types';
-import { getAllOfRoles } from '@Services/role.service';
-import { getAllOfUsers } from '@Services/user.service';
-import type { Data } from '@Types/data-request';
+  Bar,
+  CreateFormModal,
+  styles,
+  Table,
+  UserDataForTable,
+  UsersDisableModal,
+} from '@/modules/Dashboard/Users';
+import { getAllOfRoles } from '@/services/role.service';
+import { getAllOfUsers } from '@/services/user.service';
+import type { Data } from '@/types/data-request';
+import type { NextPageWithLayout } from '@/types/next';
+import type { Role } from '@/types/user/role';
+import type { User } from '@/types/user/user';
 
-const Users: NextPage<DataProps> = ({ data }) => {
-    const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
-    const [isDisableModal, openDisableModal, closeDisableModal] = useModal();
+type DataProps = {
+  data: {
+    roles: Data<Role[]>;
+    users: Data<User[]>;
+  };
+};
 
-    const users = useMemo<Data<UserDataForTable[]>>(() => ({
-        ...data.users,
-        data: data.users?.data?.map(user => ({ ...user, dni: user.dni.toString() }))
-    }), [data.users]);
+const Users: NextPageWithLayout<DataProps> = ({ data }) => {
+  const [isCreateModal, openCreateModal, closeCreateModal] = useModal();
+  const [isDisableModal, openDisableModal, closeDisableModal] = useModal();
 
-    return (
-        <main className={styles.main}>
-            <TableProvider<UserDataForTable> data={users}>
-                <Bar {...{ openCreateModal, openDisableModal }}  />
-                <Table />
+  const users = useMemo<Data<UserDataForTable[]>>(
+    () => ({
+      ...data.users,
+      data: data.users?.data?.map((user) => ({ ...user, dni: user.dni.toString() })),
+    }),
+    [data.users]
+  );
 
-                <UsersDisableModal
-                    isOpen={isDisableModal}
-                    onClose={closeDisableModal}
-                />
-            </TableProvider>
+  return (
+    <main className={styles.main}>
+      <TableProvider<UserDataForTable> data={users}>
+        <Bar {...{ openCreateModal, openDisableModal }} />
+        <Table />
 
-            <CreateFormModal
-                isOpen={isCreateModal}
-                close={closeCreateModal}
-                roles={data.roles}
-            />
-        </main>
-    )
-}
+        <UsersDisableModal isOpen={isDisableModal} onClose={closeDisableModal} />
+      </TableProvider>
 
-// @ts-ignore: next-line
-Users.getLayout = (page: JSX.Element) => (
-    <ProtectedLayout title="Usuarios">
-        {page}
-    </ProtectedLayout>
-)
+      <CreateFormModal
+        isOpen={isCreateModal}
+        close={closeCreateModal}
+        roles={data.roles}
+      />
+    </main>
+  );
+};
+
+Users.getLayout = (page) => <ProtectedLayout title='Usuarios'>{page}</ProtectedLayout>;
 
 export default Users;
 
 export const getServerSideProps: GetServerSideProps<DataProps> = async (context) => {
-    const token = await getToken({ req: context.req });
+  const token = await getToken({ req: context.req });
 
-    const roles: DataProps['data']['roles'] = {};
-    const users: DataProps['data']['users'] = {};
+  const roles: DataProps['data']['roles'] = {};
+  const users: DataProps['data']['users'] = {};
 
-    try {
-        roles.data = await getAllOfRoles();
-    } catch (error) {
-        roles.error = error;
-    }
+  try {
+    roles.data = await getAllOfRoles(token.accessToken);
+  } catch (error) {
+    roles.error = error;
+  }
 
-    try {
-        users.data = await getAllOfUsers(0, 50, token.accessToken);
-    } catch (error) {
-        roles.error = error;
-    }
+  try {
+    users.data = await getAllOfUsers(0, 50, token.accessToken);
+  } catch (error) {
+    users.error = error;
+  }
 
-    return { props: { data: { roles, users } } }
-}
+  return { props: { data: { roles, users } } };
+};

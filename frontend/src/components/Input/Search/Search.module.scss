@@ -1,0 +1,34 @@
+@import '@/styles/palette';
+
+.search {
+  display: inline-flex;
+  background-color: white;
+  border: 2px solid $blue-monochromatic;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 2px 4px;
+  gap: 2px;
+
+  & > .input {
+    font-size: 9pt;
+    outline: 0;
+    color: $black;
+    caret-color: $blue-monochromatic;
+    background-color: white;
+    border: none;
+
+    &::selection {
+      color: white;
+      background-color: $blue-monochromatic;
+    }
+
+    &:invalid {
+      color: red;
+    }
+  }
+
+  & > svg {
+    font-size: 10pt;
+    color: $blue-monochromatic;
+  }
+}

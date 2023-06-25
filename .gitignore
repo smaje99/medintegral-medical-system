@@ -13,3 +13,7 @@ _codux
 
 venv
 __pycache__
+
+backend/files
+
+.trash

@@ -1,19 +1,8 @@
-import api from '@Api/role.api';
+import * as api from '@/api/role.api';
+import type { Role } from '@/types/user/role';
+import type { Token } from '@/types/user/token';
 
-import type { APIError } from '@Types/error';
-import type { Role } from '@Types/user/role';
+import { withAxiosHandler } from './commons';
 
-import { isAxiosError } from '@Utils/axios-error';
-
-export const getAllOfRoles = async (): Promise<Role[]> => {
-    try {
-        const response = await api.getAll();
-        return response.data;
-    } catch (error) {
-        if (isAxiosError<APIError>(error) && error.response) {
-            throw new Error(error.response.data.detail);
-        }
-
-        throw error;
-    }
-}
+export const getAllOfRoles: (token: Token['accessToken']) => Promise<Role[]> =
+  withAxiosHandler(async (token) => api.getAll(token));

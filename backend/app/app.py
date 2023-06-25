@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.api.api_v1 import api_router
 from app.core.config import settings
@@ -30,6 +31,8 @@ def startup():
     '''Startup event handler.'''
     init_db()
 
+
+app.mount('/files', StaticFiles(directory='files'), name='files')
 
 app.include_router(api_router, prefix=settings.domain.api_version)
 

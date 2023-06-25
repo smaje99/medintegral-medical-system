@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class RHFactor(str, Enum):
+class RHFactor(StrEnum):
     '''Enum of RH factors.'''
 
     present = '+'  # pylint: disable=invalid-name

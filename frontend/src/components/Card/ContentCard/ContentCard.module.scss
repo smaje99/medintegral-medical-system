@@ -1,48 +1,48 @@
-@import '../../../styles/fonts';
-@import '../../../styles/palette';
+@import '@/styles/fonts';
+@import '@/styles/palette';
 
 .card {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
-    justify-items: start;
-    align-items: center;
-    grid-auto-flow: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  justify-items: start;
+  align-items: center;
+  grid-auto-flow: column;
 
-    padding: 1.2rem;
-    background-color: $green-blue-analogous;
-    border-radius: 2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-    transition: all .4s ease-out;
+  padding: 1.2rem;
+  background-color: $green-blue-analogous;
+  border-radius: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.4s ease-out;
 
-    &:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
-    }
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .title {
-    display: inline-block;
-    font: 500 20pt $title-font;
-    letter-spacing: .15rem;
-    text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
-    margin: 0;
-    color: $white;
+  display: inline-block;
+  font: 500 20pt $title-font;
+  letter-spacing: 0.15rem;
+  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+  margin: 0;
+  color: $white;
 }
 
 .content {
-    align-self: start;
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    font-size: 10pt;
-    color: $white;
+  align-self: start;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  font-size: 10pt;
+  color: $white;
 }
 
 .button {
-    justify-self: center;
-    align-self: end;
-    text-align: center;
-    color: $black;
-    background-color: $blue-light-shade;
+  justify-self: center;
+  align-self: end;
+  text-align: center;
+  color: $black;
+  background-color: $blue-light-shade;
 }

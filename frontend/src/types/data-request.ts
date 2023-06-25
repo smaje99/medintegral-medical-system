@@ -1,4 +1,4 @@
-export interface Data<T extends object = {}> {
-    data?: T;
-    error?: Error;
+export interface Data<T extends object = object> {
+  data?: T;
+  error?: Error;
 }

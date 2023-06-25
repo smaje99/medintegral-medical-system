@@ -1,5 +1,2 @@
-import Profile from './Profile';
-
-import styles from './User.module.scss';
-
-export { Profile, styles };
+export { default as Profile } from './Profile';
+export { default as styles } from './User.module.scss';

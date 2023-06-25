@@ -1,12 +1,4 @@
-import LoginForm from './LoginForm';
-import LoginView from './LoginView';
-import RecoverPasswordForm from './RecoverPasswordForm';
-
-import styles from './Login.module.scss'
-
-export {
-    LoginForm,
-    LoginView,
-    RecoverPasswordForm,
-    styles
-};
+export { default as styles } from './Login.module.scss';
+export { default as LoginForm } from './LoginForm';
+export { default as LoginView } from './LoginView';
+export { default as RecoverPasswordForm } from './RecoverPasswordForm';

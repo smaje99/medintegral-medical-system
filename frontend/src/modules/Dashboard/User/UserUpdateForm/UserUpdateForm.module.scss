@@ -1,24 +1,22 @@
-@import '../../../../styles/palette';
-
+@import '@/styles/palette';
 
 .form {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    margin: 0 36% 0 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 0 36% 0 1rem;
 }
 
 .select {
-    width: 100%;
-    margin: 0;
-    outline: 0;
-    border: none;
-    border-bottom: 2px solid $blue-monochromatic;
-    background-color: transparent;
-    appearance: none;
-    background-image:
-        url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-    background-repeat: no-repeat;
-    background-position-x: 100%;
-    background-position-y: 50%;
+  width: 100%;
+  margin: 0;
+  outline: 0;
+  border: none;
+  border-bottom: 2px solid $blue-monochromatic;
+  background-color: transparent;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 50%;
 }

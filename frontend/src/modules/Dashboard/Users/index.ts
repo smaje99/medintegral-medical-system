@@ -1,9 +1,5 @@
 export { default as Bar } from './Bar';
 export { default as CreateFormModal } from './CreateFormModal';
-export { default as Table } from './Table';
-export type { UserDataForTable } from './Table/Table.types';
+export { default as Table, type UserDataForTable } from './Table';
+export { default as styles } from './Users.module.scss';
 export { default as UsersDisableModal } from './UsersDisableModal';
-
-import styles from './Users.module.scss';
-
-export { styles };

@@ -1,103 +1,102 @@
-@import '../../../styles/palette';
-@import '../../../styles/fonts';
-@import '../../../styles/mixins';
-@import '../../../styles/breakpoints';
+@import '@/styles/palette';
+@import '@/styles/fonts';
+@import '@/styles/mixins';
+@import '@/styles/breakpoints';
 
 .footer {
-    width: 95vw;
-    display: flex;
-    gap: 4rem;
-    flex-direction: column;
-    place-content: center;
-    place-items: center;
-    margin: 8rem auto 6rem;
-    overflow-x: hidden;
+  width: 95vw;
+  display: flex;
+  gap: 4rem;
+  flex-direction: column;
+  place-content: center;
+  place-items: center;
+  margin: 8rem auto 6rem;
+  overflow-x: hidden;
 }
 
 .brand {
-    width: 100%;
-    height: max(12rem, 10vh);
-    position: sticky;
-    filter: drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.5));
+  width: 100%;
+  height: max(12rem, 10vh);
+  position: sticky;
+  filter: drop-shadow(4px 4px 12px rgba(0, 0, 0, 0.5));
 }
 
 .group {
-    display: grid;
-    gap: 2rem 8rem;
+  display: grid;
+  gap: 2rem 8rem;
+  grid-template:
+    'address' max-content
+    'schedule' max-content
+    'contact' max-content;
+
+  @include for-size($s) {
     grid-template:
-        "address" max-content
-        "schedule" max-content
-        "contact" max-content;
+      'address schedule' max-content
+      'contact contact' max-content /
+      1fr 1fr;
+  }
 
-    @include for-size($s) {
-        grid-template:
-            "address schedule" max-content
-            "contact contact" max-content /
-            1fr 1fr;
-    }
-
-    @include for-size($m) {
-        grid-template:
-            "address schedule contact" max-content /
-            max-content max-content max-content;
-    }
+  @include for-size($m) {
+    grid-template:
+      'address schedule contact' max-content /
+      max-content max-content max-content;
+  }
 }
 
 #address {
-    grid-area: address;
+  grid-area: address;
 }
 
 #schedule {
-    grid-area: schedule;
+  grid-area: schedule;
 }
 
 #contact {
-    grid-area: contact;
+  grid-area: contact;
 }
 
-
 .title {
-    font: 700 16pt $title-font;
-    letter-spacing: .1rem;
+  font: 700 16pt $title-font;
+  letter-spacing: 0.1rem;
 }
 
 .subinfo,
 .copyright {
-    font-size: 12pt;
-    letter-spacing: .07rem;
+  font-size: 12pt;
+  letter-spacing: 0.07rem;
 }
 
 .info_list {
-    @include non-list;
+  @include non-list;
 
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
-    padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding-left: 0;
 }
 
 .subinfo a {
-    @include non-link;
+  @include non-link;
 
-    color: $black;
+  color: $black;
 
-    &:hover {
-        text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-        transform: scale(1.1);
-        transform-origin: left;
-        transition: transform 0.25s ease;
-    }
+  &:hover {
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    transform: scale(1.1);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
 
-    &:active {
-        color: $blue;
-    }
+  &:active {
+    color: $blue;
+  }
 }
 
-.subinfo a ,
+.subinfo a,
 .copyright {
-    display: inline-block;
+  display: inline-block;
 }
 
 .copyright {
-    text-align: center;
+  text-align: center;
 }

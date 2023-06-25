@@ -1,91 +1,90 @@
-@import '../../../styles/animations';
-@import '../../../styles/fonts';
-@import '../../../styles/palette';
-
+@import '@/styles/animations';
+@import '@/styles/fonts';
+@import '@/styles/palette';
 
 .table {
-    width: 100%;
+  width: 100%;
 
-    & > tbody {
-        display: grid;
-        grid-template-rows: 1fr;
-        gap: 4px;
-        overflow: hidden;
+  & > tbody {
+    display: grid;
+    grid-template-rows: 1fr;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  & .row {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    align-items: center;
+
+    & > .header {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      gap: 6px;
+
+      font: 500 12pt $title-font;
+      letter-spacing: 1px;
+      color: $green-blue-monochromatic;
+      user-select: none;
     }
 
-    & .row {
-        display: grid;
-        grid-template-columns: 25% 75%;
-        align-items: center;
+    & > .cell {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
 
-        & > .header {
-            display: inline-flex;
-            align-items: center;
-            flex-wrap: nowrap;
-            gap: 6px;
-
-            font: 500 12pt $title-font;
-            letter-spacing: 1px;
-            color: $green-blue-monochromatic;
-            user-select: none;
-        }
-
-        & > .cell {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-
-            font: 500 11pt $body-font;
-            letter-spacing: .5px;
-            color: $black;
-            padding: 8px 0 8px 6px;
-            border-radius: 8px;
-        }
-
-        & div[role=toolbar] {
-            position: absolute;
-            right: 5px;
-            z-index: 1;
-            visibility: hidden;
-
-            display: inline-flex;
-            flex-direction: row-reverse;
-            align-items: center;
-            gap: .6rem;
-
-            & > * {
-                visibility: hidden;
-            }
-        }
-
-        &:hover {
-            & > .cell {
-                background-color: darken($color: $white, $amount: 10%);
-            }
-
-            & div[role=toolbar] {
-                @include slideInRight;
-                visibility: visible;
-
-                & > * {
-                    visibility: visible;
-                }
-            }
-        }
+      font: 500 11pt $body-font;
+      letter-spacing: 0.5px;
+      color: $black;
+      padding: 8px 0 8px 6px;
+      border-radius: 8px;
     }
+
+    & div[role='toolbar'] {
+      position: absolute;
+      right: 5px;
+      z-index: 1;
+      visibility: hidden;
+
+      display: inline-flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 0.6rem;
+
+      & > * {
+        visibility: hidden;
+      }
+    }
+
+    &:hover {
+      & > .cell {
+        background-color: darken($color: $white, $amount: 10%);
+      }
+
+      & div[role='toolbar'] {
+        @include slideInRight;
+        visibility: visible;
+
+        & > * {
+          visibility: visible;
+        }
+      }
+    }
+  }
 }
 
 .no-content {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 
-    & > :first-child {
-        color: lighten($color: $black, $amount: 10%);
-    }
+  & > :first-child {
+    color: lighten($color: $black, $amount: 10%);
+  }
 
-    & > :last-child {
-        font-size: 12pt;
-        color: $green-complementary;
-    }
+  & > :last-child {
+    font-size: 12pt;
+    color: $green-complementary;
+  }
 }

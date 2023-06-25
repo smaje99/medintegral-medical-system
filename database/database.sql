@@ -12,4 +12,4 @@ create extension if not exists "unaccent";
 create schema if not exists suggestion;
 create schema if not exists person;
 create schema if not exists "user";
-create schema if not exists doctor;
+create schema if not exists medical;

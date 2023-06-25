@@ -1,25 +1,24 @@
-@import '../../styles/fonts';
-@import '../../styles/palette';
-
+@import '@/styles/fonts';
+@import '@/styles/palette';
 
 .home {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
 }
 
 .brand {
-    width: 100%;
-    height: auto;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 .platform {
-    color: $blue-monochromatic;
-    font: 600 28pt $title-font;
-    letter-spacing: .2rem;
-    text-shadow: 0 2px 6px rgb(0 0 0 / 50%);
-    user-select: none;
+  color: $blue-monochromatic;
+  font: 600 28pt $title-font;
+  letter-spacing: 0.2rem;
+  text-shadow: 0 2px 6px rgb(0 0 0 / 50%);
+  user-select: none;
 }

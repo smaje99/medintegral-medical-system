@@ -1,11 +1,10 @@
 import axios from 'axios';
 
-import type { Role } from '@Types/user/role';
+import type { Role } from '@/types/user/role';
+import type { Token } from '@/types/user/token';
 
-const { NEXT_PUBLIC_API: baseURL } = process.env;
+import { baseURL, headers } from './commons';
 
-export default {
-    async getAll() {
-        return axios.get<Role[]>(`${baseURL}/role/`)
-    }
+export async function getAll(token: Token['accessToken']) {
+  return axios.get<Role[]>('/role/', { baseURL, ...headers(token) });
 }

@@ -1,0 +1,41 @@
+@import '@/styles/fonts';
+@import '@/styles/palette';
+@import '@/styles/shadow';
+
+.container {
+  width: 100%;
+  height: 16rem;
+  display: grid;
+  grid-template:
+    'image title' 40%
+    'image description' auto /
+    30% auto;
+  gap: 0 2rem;
+  border-radius: 1vmax;
+  background-color: $blue-monochromatic;
+  @include box-shadow-elevation-medium($green-blue);
+}
+
+.image {
+  grid-area: image;
+  width: 100%;
+  height: 16rem;
+  object-fit: cover;
+  border-top-left-radius: 1vmax;
+  border-bottom-left-radius: 1vmax;
+}
+
+.title {
+  grid-area: title;
+  font: 500 20pt / 1.5 $title-font;
+  letter-spacing: 0.1rem;
+  color: $white;
+}
+
+.description {
+  grid-area: description;
+  font-size: 13.5pt;
+  font-weight: 300;
+  line-height: 1.5;
+  color: $blue-light-shade;
+}

@@ -1,4 +1,2 @@
-import Table from './Table';
-import InformationTable from './InformationTable';
-
-export { Table, InformationTable };
+export { default as InformationTable } from './InformationTable';
+export { default as Table } from './Table';

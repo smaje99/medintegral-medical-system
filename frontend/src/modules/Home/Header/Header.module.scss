@@ -1,122 +1,122 @@
-@import '../../../styles/breakpoints';
-@import '../../../styles/mixins';
-@import '../../../styles/fonts';
+@import '@/styles/breakpoints';
+@import '@/styles/mixins';
+@import '@/styles/fonts';
 
 .header {
-    width: 100%;
-    height: 100vh;
-    position: sticky;
-    display: flex;
-    gap: 5rem;
-    align-items: center;
-    border-bottom-right-radius: 30% 20%;
-    background-color: $green-blue-analogous;
-    margin: 0;
-    overflow: none;
+  width: 100%;
+  height: 100vh;
+  position: sticky;
+  display: flex;
+  gap: 5rem;
+  align-items: center;
+  border-bottom-right-radius: 30% 20%;
+  background-color: $green-blue-analogous;
+  margin: 0;
+  overflow: none;
 
-    @include for-size($l) {
-        gap: 12;
-    }
+  @include for-size($l) {
+    gap: 12;
+  }
 }
 
 .header > * {
-    color: $white;
+  color: $white;
 }
 
 .image {
-    display: none;
-    width: 50%;
-    min-height: 99vh;
-    border: 1px solid $blue-light-shade;
-    border-bottom-right-radius: 40% 20%;
-    filter: drop-shadow(12px 4px 8px $blue-monochromatic);
+  display: none;
+  width: 50%;
+  min-height: 99vh;
+  border: 1px solid $blue-light-shade;
+  border-bottom-right-radius: 40% 20%;
+  filter: drop-shadow(12px 4px 8px $blue-monochromatic);
 
-    @include for-size($m) {
-        display: initial;
-    }
+  @include for-size($m) {
+    display: initial;
+  }
 }
 
 .container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-    justify-content: center;
-    align-items: center;
-    padding: 0 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0 2rem;
 
-    @include for-size($s) {
-        gap: 2rem;
-        padding: 0 10rem;
-    }
+  @include for-size($s) {
+    gap: 2rem;
+    padding: 0 10rem;
+  }
 
-    @include for-size($m) {
-        padding-right: 6rem;
-    }
+  @include for-size($m) {
+    padding-right: 6rem;
+  }
 }
 
 .title {
-    align-self: flex-start;
-    font-family: $title-font;
-    text-transform: uppercase;
-    letter-spacing: .4rem;
-    user-select: none;
-    text-shadow: 6px 4px 6.4px $blue-monochromatic;
+  align-self: flex-start;
+  font-family: $title-font;
+  text-transform: uppercase;
+  letter-spacing: 0.4rem;
+  user-select: none;
+  text-shadow: 6px 4px 6.4px $blue-monochromatic;
+  padding-bottom: 8rem;
+
+  & .content {
+    display: flex;
+    flex-direction: column;
+
+    & .slice {
+      display: inline-block;
+
+      &:first-child {
+        font-size: 28pt;
+      }
+
+      &:last-child {
+        font-size: 18pt;
+      }
+    }
+  }
+
+  @include for-size($s) {
+    padding-bottom: 0;
+    letter-spacing: 0.6rem;
+
+    & .content > .slice {
+      &:first-child {
+        font-size: 36pt;
+      }
+
+      &:last-child {
+        font-size: 24pt;
+      }
+    }
+  }
+
+  @include for-size($m) {
     padding-bottom: 8rem;
+    letter-spacing: 0.4rem;
+  }
 
-    & .content {
-        display: flex;
-        flex-direction: column;
-
-        & .slice {
-            display: inline-block;
-
-            &:first-child {
-                font-size: 28pt;
-            }
-
-            &:last-child {
-                font-size: 18pt;
-            }
-        }
-    }
-
-    @include for-size($s) {
-        padding-bottom: 0;
-        letter-spacing: .6rem;
-
-        & .content > .slice {
-            &:first-child {
-                font-size: 36pt;
-            }
-
-            &:last-child {
-                font-size: 24pt;
-            }
-        }
-    }
-
-    @include for-size($m) {
-        padding-bottom: 8rem;
-        letter-spacing: .4rem;
-    }
-
-    @include for-size($l) {
-        letter-spacing: .8rem;
-    }
+  @include for-size($l) {
+    letter-spacing: 0.8rem;
+  }
 }
 
 .text {
-    align-self: flex-end;
-    max-width: 55rem;
-    display: inline-block;
-    font-size: 16pt;
-    text-align: right;
-    text-shadow: 8px 4px 12px $blue-monochromatic;
-    line-height: 28px;
-    letter-spacing: 0.045rem;
+  align-self: flex-end;
+  max-width: 55rem;
+  display: inline-block;
+  font-size: 16pt;
+  text-align: right;
+  text-shadow: 8px 4px 12px $blue-monochromatic;
+  line-height: 28px;
+  letter-spacing: 0.045rem;
 }
 
 .button {
-    @include non-link;
+  @include non-link;
 }

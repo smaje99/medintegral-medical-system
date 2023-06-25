@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi_camelcase import CamelModel
 
-from app.core.types import PermissionAction
+from app.core.types import Action
 
 
 class RolePermissionBase(CamelModel):
@@ -11,7 +11,7 @@ class RolePermissionBase(CamelModel):
 
     role_id: UUID
     permission_id: UUID
-    actions: list[PermissionAction]
+    actions: list[Action]
 
 
 class RolePermissionCreate(RolePermissionBase):

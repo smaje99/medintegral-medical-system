@@ -1,47 +1,52 @@
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps } from 'next';
 import { getToken } from 'next-auth/jwt';
 
-import { ProtectedLayout } from '@Components/layouts';
-import { Profile, styles } from '@Modules/Dashboard/User';
-import { DataProps } from '@Modules/Dashboard/User/User.types';
-import { getUser } from '@Services/user.service';
-import { getAllOfRoles } from '@Services/role.service';
+import { ProtectedLayout } from '@/components/layouts';
+import { Profile, styles } from '@/modules/Dashboard/User';
+import { getAllOfRoles } from '@/services/role.service';
+import { getUser } from '@/services/user.service';
+import type { Data } from '@/types/data-request';
+import type { NextPageWithLayout } from '@/types/next';
+import type { Role } from '@/types/user/role';
+import type { User as UserModel } from '@/types/user/user';
 
-const User: NextPage<DataProps> = ({ data }) => {
-    return (
-        <main className={styles.main}>
-            <Profile user={data.user} roles={data.roles} />
-        </main>
-    )
-}
+type DataProps = {
+  readonly data: {
+    readonly user: Data<UserModel>;
+    readonly roles: Data<Role[]>;
+  };
+};
 
-// @ts-ignore: next-line
-User.getLayout = (page: JSX.Element) => (
-    <ProtectedLayout title="Usuario">
-        {page}
-    </ProtectedLayout>
-)
+const UserPage: NextPageWithLayout<DataProps> = ({ data }) => {
+  return (
+    <main className={styles.main}>
+      <Profile user={data.user} roles={data.roles} />
+    </main>
+  );
+};
 
-export default User;
+UserPage.getLayout = (page) => <ProtectedLayout title='Usuario'>{page}</ProtectedLayout>;
+
+export default UserPage;
 
 export const getServerSideProps: GetServerSideProps<DataProps> = async (context) => {
-    const token = await getToken({ req: context.req });
-    const { dni } = context.query;
+  const token = await getToken({ req: context.req });
+  const { dni } = context.query;
 
-    const user: DataProps['data']['user'] = {};
-    const roles: DataProps['data']['roles'] = {};
+  const user: DataProps['data']['user'] = {};
+  const roles: DataProps['data']['roles'] = {};
 
-    try {
-        user.data = await getUser(parseInt(dni as string), token.accessToken);
-    } catch (error) {
-        user.error = error;
-    }
+  try {
+    user.data = await getUser(parseInt(dni as string), token.accessToken);
+  } catch (error) {
+    user.error = error;
+  }
 
-    try {
-        roles.data = await getAllOfRoles();
-    } catch (error) {
-        roles.error = error;
-    }
+  try {
+    roles.data = await getAllOfRoles(token.accessToken);
+  } catch (error) {
+    roles.error = error;
+  }
 
-    return { props: { data: { user, roles } } };
-}
+  return { props: { data: { user, roles } } };
+};

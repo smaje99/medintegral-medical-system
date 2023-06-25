@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class CivilStatus(str, Enum):
+class CivilStatus(StrEnum):
     '''Enum of Civil status.'''
 
     single = 'soltero'  # pylint: disable=invalid-name

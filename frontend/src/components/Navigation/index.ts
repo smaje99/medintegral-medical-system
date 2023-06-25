@@ -1,5 +1,3 @@
-import MenuModal from './MenuModal';
-import Navbar from './Navbar';
-import NavigationProtected from './NavigationProtected'
-
-export { MenuModal, Navbar, NavigationProtected };
+export { default as MenuModal } from './MenuModal';
+export { default as Navbar } from './Navbar';
+export { default as NavigationProtected } from './NavigationProtected';

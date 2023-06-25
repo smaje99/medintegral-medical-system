@@ -1,26 +1,40 @@
 import { forwardRef, useImperativeHandle, useReducer } from 'react';
 
-import type { BurgerButtonProps } from './BuggerButton.types';
-
 import styles from './BurgerButton.module.scss';
 
-const BurgerButton = forwardRef(({ className, onEvent }: BurgerButtonProps, ref) => {
-    const [isActive, handleBurger] = useReducer((state) => {
-        const newState = !state;
-        onEvent && onEvent(newState);
-        return newState;
+interface Props
+  extends React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
+  onEvent?: (active: boolean) => void;
+}
+
+export interface BurgerButtonActions {
+  handleBurger: () => void;
+}
+
+type HandleBurgerReducer = (state: boolean) => boolean;
+
+const BurgerButton = forwardRef<BurgerButtonActions, Props>(
+  function BurgerButtonComponent({ className, onEvent }: Props, ref) {
+    const [isActive, handleBurger] = useReducer<HandleBurgerReducer>((state) => {
+      const newState = !state;
+      onEvent?.(newState);
+      return newState;
     }, false);
 
     useImperativeHandle(ref, () => ({ handleBurger }), []);
 
     return (
-        <div>
-            <button
-                className={`${styles.burger} ${isActive && styles.open} ${className}`}
-                onClick={handleBurger}
-            ></button>
-        </div>
-    )
-})
+      <div>
+        <button
+          className={`${styles.burger} ${isActive && styles.open} ${className}`}
+          onClick={handleBurger}
+        ></button>
+      </div>
+    );
+  }
+);
 
 export default BurgerButton;

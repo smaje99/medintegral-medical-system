@@ -1,25 +1,22 @@
 import axios from 'axios';
 
-import type { Person, PersonCreate, PersonUpdate } from '@Types/person';
-import { Token } from '@Types/user/token';
+import type { Person, PersonCreate, PersonUpdate } from '@/types/person';
+import type { Token } from '@/types/user/token';
 
-const { NEXT_PUBLIC_API } = process.env;
-const baseURL = NEXT_PUBLIC_API;
+import { baseURL, headers } from './commons';
 
-const headers = (token: Token['accessToken']) => ({
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+export async function get(dni: Person['dni']) {
+  return axios.get<Person>(`/person/${dni}`, { baseURL });
+}
 
-export default {
-    async get(dni: Person['dni']) {
-        return axios.get<Person>(`${baseURL}/person/${dni}`)
-    },
-    async create(personObj: PersonCreate) {
-        return axios.post<Person>(`${baseURL}/person/`, personObj);
-    },
-    async update(dni: Person['dni'], person: PersonUpdate, token: Token['accessToken']) {
-        return axios.put<Person>(`${baseURL}/person/${dni}`, person, headers(token));
-    }
+export async function create(personObj: PersonCreate) {
+  return axios.post<Person>('/person/', personObj, { baseURL });
+}
+
+export async function update(
+  dni: Person['dni'],
+  person: PersonUpdate,
+  token: Token['accessToken']
+) {
+  return axios.put<Person>(`/person/${dni}`, person, { baseURL, ...headers(token) });
 }

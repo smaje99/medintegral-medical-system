@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi_camelcase import CamelModel
 from pydantic import validator
 
-from app.core.types import PermissionAction
+from app.core.types import Action
 
 
 class PermissionBase(CamelModel):
@@ -41,12 +41,10 @@ class PermissionInUser(CamelModel):
     '''Properties to return via user API.'''
 
     name: str
-    actions: list[PermissionAction]
+    actions: list[Action]
 
     @validator('actions', pre=True)
-    def actions_transform(  # pylint: disable=C0116, E0213
-        cls, value: list[PermissionAction]
-    ):
+    def actions_transform(cls, value: list[Action]):  # pylint: disable=C0116, E0213
         return list(set(value))
 
     class Config:  # pylint: disable=C0115

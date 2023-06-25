@@ -1,37 +1,36 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
 
-import { RightsFooter } from '@Components/Footer';
-import { NavigationProtected } from '@Components/Navigation';
-
-import type { LayoutProps } from './Layout.types';
+import { RightsFooter } from '@/components/Footer';
+import { NavigationProtected } from '@/components/Navigation';
 
 import styles from './Layout.module.scss';
+import type { LayoutProps } from './Layout.types';
 
-const ProtectedLayout = ({ title, children }: LayoutProps) => {
-    /** Add home class to the root element. */
-    useEffect(() => {
-        const rootElement = document.getElementById('__next');
+const ProtectedLayout: React.FC<LayoutProps> = ({ title, children }) => {
+  /** Add home class to the root element. */
+  useEffect(() => {
+    const rootElement = document.getElementById('__next');
 
-        rootElement.classList.add(styles.protected);
+    rootElement.classList.add(styles.protected);
 
-        return () => {
-            rootElement.classList.remove(styles.protected)
-        };
-    }, []);
+    return () => {
+      rootElement.classList.remove(styles.protected);
+    };
+  }, []);
 
-    return (
-        <>
-            <Head>
-                <title>{title} | Medintegral IPS SAS</title>
-            </Head>
-            <NavigationProtected />
-            <div className={styles.container}>
-                {children}
-                <RightsFooter />
-            </div>
-        </>
-    )
-}
+  return (
+    <>
+      <Head>
+        <title>{title} | Medintegral IPS SAS</title>
+      </Head>
+      <NavigationProtected />
+      <div className={styles.container}>
+        {children}
+        <RightsFooter />
+      </div>
+    </>
+  );
+};
 
 export default ProtectedLayout;

@@ -1,21 +1,23 @@
-from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
+from typing import Annotated
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Security
 from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND
 
-from app.api.dependencies.auth import get_current_user
+from app.api.dependencies.auth import get_current_active_user
 from app.api.dependencies.services import ServiceDependency
-from app.models.user import User
 from app.schemas.person.person import Person, PersonCreate, PersonUpdate
 from app.services.person import PersonService
 
 
 router = APIRouter()
 
+PersonServiceDependency = Annotated[
+    PersonService, Depends(ServiceDependency(PersonService))
+]
+
 
 @router.get('/{dni}')
-def read_person(
-    dni: int = Path(...),
-    service: PersonService = Depends(ServiceDependency(PersonService)),
-) -> Person:
+def read_person(dni: Annotated[int, Path()], service: PersonServiceDependency) -> Person:
     '''Retrieve a person by a given DNI,
     if the given DNI doesn't exist then raise a error.
 
@@ -38,12 +40,12 @@ def read_person(
     return person  # type: ignore
 
 
-@router.get('/')
+@router.get('/', dependencies=[Security(get_current_active_user)])
 def read_people(
-    skip: int = Query(default=0, ge=0),
-    limit: int = Query(default=50),
-    service: PersonService = Depends(ServiceDependency(PersonService)),
-    current_user: User = Depends(get_current_user),  # pylint: disable=W0613
+    *,
+    skip: Annotated[int, Query(ge=0)] = 0,
+    limit: Annotated[int, Query()] = 50,
+    service: PersonServiceDependency,
 ) -> list[Person]:
     '''Retrieve a people list.
 
@@ -64,8 +66,8 @@ def read_people(
 
 @router.post('/', status_code=HTTP_201_CREATED)
 def create_person(
-    person_in: PersonCreate = Body(...),
-    service: PersonService = Depends(ServiceDependency(PersonService)),
+    person_in: Annotated[PersonCreate, Body(alias='personIn')],
+    service: PersonServiceDependency,
 ) -> Person:
     '''Create a person
 
@@ -79,12 +81,11 @@ def create_person(
     return service.create(person_in)  # type: ignore
 
 
-@router.put('/{dni}')
+@router.put('/{dni}', dependencies=[Security(get_current_active_user)])
 def update_person(
-    dni: int = Path(...),
-    person_in: PersonUpdate = Body(...),
-    service: PersonService = Depends(ServiceDependency(PersonService)),
-    current_user: User = Depends(get_current_user),  # pylint: disable=W0613
+    dni: Annotated[int, Path()],
+    person_in: Annotated[PersonUpdate, Body(alias='personIn')],
+    service: PersonServiceDependency,
 ) -> Person:
     '''Update a person with a given DNI.
 

@@ -1,5 +1,2 @@
-import ethicalPrinciples from './ethicalPrinciples';
-
-import styles from './About.module.scss';
-
-export { ethicalPrinciples, styles };
+export { default as styles } from './About.module.scss';
+export { default as ethicalPrinciples } from './ethicalPrinciples';

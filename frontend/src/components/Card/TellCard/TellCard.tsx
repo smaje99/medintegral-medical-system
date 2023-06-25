@@ -1,19 +1,21 @@
-import { useMemo } from 'react';
+import { relativeDateToNow } from '@/utils/date';
 
 import styles from './TellCard.module.scss';
-import type { TellCardProps } from '../Card.types';
 
-const TellCard: React.FC<TellCardProps> = ({ opinion, createdAt }) => {
-    const date = useMemo(() => new Date(createdAt).toLocaleDateString(), [createdAt]);
+type Props = {
+  readonly opinion: string;
+  readonly createdAt: Date;
+};
 
-    return (
-        <section className={styles.card}>
-            <p className={styles.content}>{opinion}</p>
-            <span className={styles.detail}>
-                {date}
-            </span>
-        </section>
-    )
-}
+const TellCard: React.FC<Props> = ({ opinion, createdAt }) => {
+  const date = relativeDateToNow(createdAt);
+
+  return (
+    <section className={styles.card}>
+      <p className={styles.content}>{opinion}</p>
+      <span className={styles.detail}>{date}</span>
+    </section>
+  );
+};
 
 export default TellCard;

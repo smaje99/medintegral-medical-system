@@ -44,6 +44,7 @@ class DomainSettings(BaseSettings):
 
     api_version: str
     server_host: str
+    public_host: str
 
     backend_cors_origins: str | list[AnyHttpUrl | str] = ['*']
 
@@ -122,4 +123,4 @@ class Settings(BaseSettings):
         case_sensitive = False
 
 
-settings = Settings()
+settings = Settings()  # type: ignore

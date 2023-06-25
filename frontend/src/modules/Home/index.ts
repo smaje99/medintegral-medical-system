@@ -1,18 +1,7 @@
-import AboutUs from './AboutUs';
-import Header from './Header';
-import items from './items';
-import Layout from './Layout';
-import Maps from './Maps';
-import TellUs from './TellUs';
-
-import styles from './Home.module.scss';
-
-export {
-    AboutUs,
-    Header,
-    items,
-    Layout,
-    Maps,
-    styles,
-    TellUs
-}
+export { default as AboutUs } from './AboutUs';
+export { default as Header } from './Header';
+export { default as styles } from './Home.module.scss';
+export { default as items } from './items';
+export { default as Layout } from './Layout';
+export { default as Maps } from './Maps';
+export { default as TellUs } from './TellUs';

@@ -1,92 +1,93 @@
-@import '../../../styles/mixins';
-@import '../../../styles/breakpoints';
+@import '@/styles/mixins';
+@import '@/styles/breakpoints';
+@import '@/styles/fonts';
 
 .navbar {
-    width: 98%;
-    display: flex;
-    place-content: baseline space-around;
-    align-items: center;
-    flex-flow: row nowrap;
-    position: fixed;
-    top: 1.2rem;
-    left: 50%;
-    z-index: 10;
-    background-color: hsla(198, 19%, 89%, .75);
-    box-shadow: 2rem 1.2rem 2rem -.6rem rgba(0, 0, 0, .4);
-    backdrop-filter: blur(.45rem);
-    border-radius: 1rem;
-    transform: translate(-50%, 0);
+  width: 98%;
+  display: flex;
+  place-content: baseline space-around;
+  align-items: center;
+  flex-flow: row nowrap;
+  position: fixed;
+  top: 1.2rem;
+  left: 50%;
+  z-index: 10;
+  background-color: hsla(198, 19%, 89%, 0.75);
+  box-shadow: 2rem 1.2rem 2rem -0.6rem rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(0.45rem);
+  border-radius: 1rem;
+  transform: translate(-50%, 0);
 }
 
 .brand {
-    width: 100%;
-    height: 6rem;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+  width: 100%;
+  height: 6rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 .nav {
-    @include non-list;
+  @include non-list;
 
-    display: flex;
-    place-content: center space-between;
-    align-items: center;
-    gap: 4rem;
+  display: flex;
+  place-content: center space-between;
+  align-items: center;
+  gap: 4rem;
 }
 
 .item {
-    &:nth-child(-n+4) {
-        display: none;
+  &:nth-child(-n + 4) {
+    display: none;
+  }
+
+  @include for-size($s) {
+    &:nth-child(4) {
+      display: inherit;
+    }
+  }
+
+  @include for-size($m) {
+    &:last-child {
+      display: none;
     }
 
-    @include for-size($s) {
-        &:nth-child(4) {
-            display: inherit;
-        }
+    &:nth-child(-n + 3) {
+      display: inherit;
     }
-
-    @include for-size($m) {
-        &:last-child {
-            display: none;
-        }
-
-        &:nth-child(-n+3) {
-            display: inherit;
-        }
-    }
+  }
 }
 
 .link,
 .login {
-    @include non-link;
-    font: 600 12pt Roboto;
+  @include non-link;
+  font: 600 12pt $body-font;
 }
 
 .link {
-    position: relative;
-    display: inline-block;
-    color: $black;
-    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    letter-spacing: 0.08em;
-    transition: all .3s ease 0s;
+  position: relative;
+  display: inline-block;
+  color: $black;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  letter-spacing: 0.08em;
+  transition: all 0.3s ease 0s;
 
-    &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: -3px;
-        width: 100%;
-        height: 3px;
-        background-color: $green-blue-monochromatic;
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform .25s ease-out;
-    }
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 3px;
+    background-color: $green-blue-monochromatic;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease-out;
+  }
 
-    &:hover::before {
-        transform: scaleX(1);
-    }
+  &:hover::before {
+    transform: scaleX(1);
+  }
 }
 
 .active::before {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }

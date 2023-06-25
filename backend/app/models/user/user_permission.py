@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression, func
 
-from app.core.types import PermissionAction
+from app.core.types import Action
 from app.database.base import Base
 
 
@@ -35,7 +35,7 @@ class UserPermission(Base):
 
     # User Permission actions.
     action = Column(
-        Enum(PermissionAction, values_callable=lambda obj: [e.value for e in obj]),
+        Enum(Action, values_callable=lambda obj: [e.value for e in obj]),
         nullable=False,
     )
 
