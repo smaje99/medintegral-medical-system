@@ -1,9 +1,9 @@
 from uuid import UUID
 
-from sqlalchemy.orm import selectinload, Session
-from sqlalchemy.sql import func
+from sqlalchemy.orm import Session
+from sqlalchemy.sql import func, true
 
-from app.models.medical import Specialty
+from app.models.medical import Specialty, Service
 from app.schemas.medical.specialty import SpecialtyCreate, SpecialtyUpdate
 from app.services.common.base import BaseService
 
@@ -29,12 +29,18 @@ class SpecialtyService(BaseService[Specialty, SpecialtyCreate, SpecialtyUpdate])
         Returns:
             Specialty: The specialty retrieved.
         '''
-        return (
-            self.database.query(Specialty)
-            .options(selectinload(Specialty.services))
-            .filter(Specialty.id == obj_id)
-            .first()
-        )
+        specialty = self.database.query(Specialty).filter(Specialty.id == obj_id).first()
+
+        if specialty:
+            services = (
+                self.database.query(Service)
+                .filter(Service.specialty_id == specialty.id)
+                .filter(Service.is_active == true())
+                .all()
+            )
+            specialty.services = services
+
+        return specialty
 
     def contains_by_name(self, name: str) -> bool:
         '''Checks if the specialty model contains the given name.
