@@ -18,6 +18,7 @@ export interface TableContextType<T extends object> {
   rowSelectionSize: number;
   globalFilter: string;
   setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
+  getObjectsFromSelectedRows: () => T[];
 }
 
 function createTableContext<T extends object>() {
@@ -31,6 +32,7 @@ function createTableContext<T extends object>() {
     rowSelectionSize: 0,
     globalFilter: '',
     setGlobalFilter: () => {},
+    getObjectsFromSelectedRows: () => [],
   });
 }
 
@@ -56,6 +58,10 @@ function TableProvider<T extends object = object>({
     [rowSelection]
   );
 
+  const getObjectsFromSelectedRows = useCallback<
+    TableContextType<T>['getObjectsFromSelectedRows']
+  >(() => getSelectedFlatRows()?.map((row) => row.original) ?? [], [getSelectedFlatRows]);
+
   const contextValue = useMemo<TableContextType<T>>(
     () => ({
       rowSelection,
@@ -67,6 +73,7 @@ function TableProvider<T extends object = object>({
       rowSelectionSize,
       globalFilter,
       setGlobalFilter,
+      getObjectsFromSelectedRows,
     }),
     [
       rowSelection,
@@ -75,6 +82,7 @@ function TableProvider<T extends object = object>({
       data,
       rowSelectionSize,
       globalFilter,
+      getObjectsFromSelectedRows,
     ]
   );
 
