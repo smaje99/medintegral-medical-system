@@ -35,24 +35,22 @@ const CreateFormModal: React.FC<Props> = ({ isOpen, close, roles }) => {
   const [isPersonCreated, setPersonCreated] = useState(false);
 
   const formMethods = useForm<UserCreateFormValues>();
-  const { getValues, setValue, reset } = formMethods;
+  const { getValues, reset } = formMethods;
 
   const searchPerson = async () => {
     const dni = getValues('dni');
     setPersonLoading(true);
     try {
       const { bloodType, rhFactor, ...person } = await getPerson(dni);
+      const personFound = {
+        bloodType: bloodType ? `${bloodType}${rhFactor}` : '',
+        ...person,
+      };
+
       setPersonCreated(true);
-      reset(
-        {
-          bloodType: bloodType ? `${bloodType}${rhFactor}` : '',
-          ...person,
-        },
-        { keepDefaultValues: true }
-      );
+      reset(personFound, { keepDefaultValues: true });
     } catch (error) {
-      reset();
-      setValue('dni', dni);
+      reset({ dni });
       setPersonCreated(false);
     } finally {
       setPersonLoading(false);
