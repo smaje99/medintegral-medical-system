@@ -14,10 +14,10 @@ export const getMe: (token: Token['accessToken']) => Promise<UserInSession> =
 
 export const createUser: (
   dni: User['dni'],
-  role_id: User['role']['id'],
+  roleId: User['role']['id'],
   token: Token['accessToken']
-) => Promise<User> = withAxiosHandler(async (dni, role_id, token) =>
-  api.create(dni, role_id, token)
+) => Promise<User> = withAxiosHandler(async (dni, roleId, token) =>
+  api.create(dni, roleId, token)
 );
 
 export const getAllOfUsers: (

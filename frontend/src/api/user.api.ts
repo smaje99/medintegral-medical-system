@@ -16,12 +16,12 @@ export async function getMe(token: Token['accessToken']) {
 
 export async function create(
   dni: User['dni'],
-  role_id: User['role']['id'],
+  roleId: User['role']['id'],
   token: Token['accessToken']
 ) {
   return axios.post<User>(
     '/user/',
-    { dni, role_id },
+    { dni, roleId },
     {
       baseURL,
       ...headers(token),

@@ -85,12 +85,16 @@ const CreateFormModal: React.FC<Props> = ({ isOpen, close, roles }) => {
     const isDoctor =
       roles?.data?.filter((role) => role.id === roleId)[0].name === 'médico';
 
+    const token = session.accessToken;
+
     try {
-      const { 1: user } = await Promise.all([
-        !isPersonCreated && createPerson(newPerson),
-        createUser(person.dni, roleId, session.accessToken),
-        isDoctor && createDoctor({ dni: person.dni }, session.accessToken),
-      ]);
+      if (!isPersonCreated) {
+        await createPerson(newPerson);
+      }
+      const user = await createUser(person.dni, roleId, token);
+      if (isDoctor) {
+        await createDoctor({ dni: person.dni }, token);
+      }
 
       handleClose();
       toast.update(idToast, {
@@ -100,7 +104,7 @@ const CreateFormModal: React.FC<Props> = ({ isOpen, close, roles }) => {
       router.replace(router.asPath);
     } catch (error) {
       toast.update(idToast, {
-        render: error.message ?? 'EL usuario no pudo crearse',
+        render: (error as Error).message ?? 'El usuario no pudo crearse',
         ...getToastUpdateConfig('error'),
       });
     }
