@@ -25,6 +25,19 @@ DoctorServiceDependency = Annotated[
 UserServiceDependency = Annotated[UserService, Depends(ServiceDependency(UserService))]
 
 
+@router.get(
+    '/',
+    dependencies=[Depends(CurrentUserWithPermissions(Permission.DOCTORS, {Action.READ}))],
+)
+def get_doctors(doctor_service: DoctorServiceDependency) -> list[Doctor]:
+    '''Retrieve all doctors.
+
+    Returns:
+    * list[Doctor]: List of doctors.
+    '''
+    return doctor_service.get_all()  # type: ignore
+
+
 @router.post(
     '/',
     status_code=HTTP_201_CREATED,
