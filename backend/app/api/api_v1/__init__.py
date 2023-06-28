@@ -6,6 +6,7 @@ from .endpoints import (
     login,
     person,
     role,
+    service_doctor,
     service,
     specialty,
     suggestion,
@@ -24,3 +25,6 @@ api_router.include_router(doctor.router, prefix='/doctor', tags=['doctor'])
 api_router.include_router(specialty.router, prefix='/specialty', tags=['specialty'])
 api_router.include_router(files.router, prefix='/files', tags=['files'])
 api_router.include_router(service.router, prefix='/service', tags=['service'])
+api_router.include_router(
+    service_doctor.router, prefix='/service/doctor', tags=['service-doctor']
+)

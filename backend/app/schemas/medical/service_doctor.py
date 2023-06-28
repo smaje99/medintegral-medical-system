@@ -5,31 +5,27 @@ from fastapi_camelcase import CamelModel
 from app.core.types import ServiceType, Session
 
 
-class DoctorBase(CamelModel):
+class ServiceDoctorBase(CamelModel):
     '''Share properties.'''
 
 
-class DoctorCreate(DoctorBase):
+class ServiceDoctorCreate(ServiceDoctorBase):
     '''Properties to received via API on creation.'''
 
     service_id: UUID
     doctor_id: UUID
     service_type: ServiceType
     session: Session
-    is_active: bool
 
 
-class DoctorUpdate(DoctorBase):
+class ServiceDoctorUpdate(ServiceDoctorBase):
     '''Properties to received via API on update.'''
 
-    service_id: UUID | None = None
-    doctor_id: UUID | None = None
     service_type: ServiceType | None = None
     session: Session | None = None
-    is_active: bool | None = None
 
 
-class DoctorInDBBase(DoctorBase):
+class ServiceDoctorInDBBase(ServiceDoctorBase):
     '''Shared properties by model stored in database.'''
 
     id: UUID
@@ -43,9 +39,9 @@ class DoctorInDBBase(DoctorBase):
         orm_mode = True
 
 
-class Doctor(DoctorInDBBase):
+class ServiceDoctor(ServiceDoctorInDBBase):
     '''Additional properties to return via API.'''
 
 
-class DoctorInDB(DoctorInDBBase):
+class ServiceDoctorInDB(ServiceDoctorInDBBase):
     '''Additional properties stored in the database.'''

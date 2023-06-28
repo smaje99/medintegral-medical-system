@@ -9,3 +9,4 @@ class Permission(StrEnum):
     DOCTORS = 'médicos'
     SPECIALTIES = 'especialidades'
     SUGGESTIONS = 'sugerencias'
+    SERVICES_DOCTORS = 'servicios-médicos'
