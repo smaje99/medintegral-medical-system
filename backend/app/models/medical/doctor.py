@@ -7,7 +7,6 @@ from app.database.base import Base
 
 
 if TYPE_CHECKING:
-    from .service_doctor import ServiceDoctor
     from ..user import User
 
 
@@ -29,11 +28,6 @@ class Doctor(Base):
     # User relationship one to one.
     user: 'User' = relationship(  # type: ignore
         'User', back_populates='doctor', lazy='joined'
-    )
-
-    # Service-Doctor relationship one to many.
-    services_doctors: list['ServiceDoctor'] = relationship(  # type: ignore
-        'ServiceDoctor', backref='service-doctor', lazy='joined'
     )
 
     __table_args__ = {'schema': 'medical'}

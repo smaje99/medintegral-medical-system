@@ -1,17 +1,9 @@
-from typing import TYPE_CHECKING
-
 from sqlalchemy import BigInteger, Boolean, Column, Enum, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression, func
 
 from app.core.types import ServiceType, Session
 from app.database.base import Base
-
-
-if TYPE_CHECKING:
-    from .doctor import Doctor
-    from .service import Service
 
 
 class ServiceDoctor(Base):
@@ -50,15 +42,5 @@ class ServiceDoctor(Base):
 
     # Record status in the system
     is_active = Column(Boolean, nullable=False, server_default=expression.true())
-
-    # Service relationship many to one.
-    service: 'Service' = relationship(  # type: ignore
-        'Service', back_populates='services_doctors'
-    )
-
-    # Doctor relationship many to one.
-    doctor: 'Doctor' = relationship(  # type: ignore
-        'Doctor', back_populates='services_doctors'
-    )
 
     __table_args__ = {'schema': 'medical'}

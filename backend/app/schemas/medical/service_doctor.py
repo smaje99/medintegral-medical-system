@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi_camelcase import CamelModel
 
 from app.core.types import ServiceType, Session
+from app.schemas.person.person import Person
 
 
 class ServiceDoctorBase(CamelModel):
@@ -13,7 +14,7 @@ class ServiceDoctorCreate(ServiceDoctorBase):
     '''Properties to received via API on creation.'''
 
     service_id: UUID
-    doctor_id: UUID
+    doctor_id: int
     service_type: ServiceType
     session: Session
 
@@ -30,7 +31,7 @@ class ServiceDoctorInDBBase(ServiceDoctorBase):
 
     id: UUID
     service_id: UUID
-    doctor_id: UUID
+    doctor_id: int
     service_type: ServiceType
     session: Session
     is_active: bool
@@ -45,3 +46,18 @@ class ServiceDoctor(ServiceDoctorInDBBase):
 
 class ServiceDoctorInDB(ServiceDoctorInDBBase):
     '''Additional properties stored in the database.'''
+
+
+class DoctorInService(CamelModel):
+    '''ServiceDoctor schema with doctor personal data.
+    This schema is used to associate doctors to a medical service.
+    '''
+
+    id: UUID
+    service_type: ServiceType
+    session: Session
+    is_active: bool
+    person: Person
+
+    class Config:  # pylint: disable=C0115
+        orm_mode = True

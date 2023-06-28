@@ -2,6 +2,8 @@ from uuid import UUID
 
 from fastapi_camelcase import CamelModel
 
+from app.schemas.medical.service_doctor import DoctorInService
+
 
 class ServiceBase(CamelModel):
     '''Share properties.'''
@@ -44,6 +46,8 @@ class ServiceInDBBase(ServiceBase):
 
 class Service(ServiceInDBBase):
     '''Additional properties to return via API.'''
+
+    doctors: list[DoctorInService]
 
 
 class ServiceInDB(ServiceInDBBase):
