@@ -64,3 +64,19 @@ class ServiceService(BaseService[Service, ServiceCreate, ServiceUpdate]):
         '''
         update_data = {'is_active': not disable}
         return self.update(db_obj=service, obj_in=update_data)
+
+    def is_active(self, service_id: UUID) -> bool:
+        '''Checks if the medical service is active.
+
+        Args:
+            service_id (UUID): Identifier of the medical service.
+
+        Returns:
+            bool: True if the medical service is active, False otherwise.
+        '''
+
+        return (
+            self.database.query(Service.is_active)
+            .filter(Service.id == service_id)
+            .scalar()
+        )

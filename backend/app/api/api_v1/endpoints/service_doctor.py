@@ -2,11 +2,15 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Security
-from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
+from fastapi.responses import JSONResponse
+from starlette.status import (
+    HTTP_200_OK, HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
+)
 
 from app.api.dependencies.auth import CurrentUserWithPermissions
 from app.api.dependencies.services import ServiceDependency
-from app.core.types import Action, Permission
+from app.core.exceptions import SessionConflict, MixingSession
+from app.core.types import Action, Permission, Session
 from app.schemas.medical.service_doctor import (
     ServiceDoctor,
     ServiceDoctorCreate,
@@ -32,7 +36,10 @@ ServiceServiceDependency = Annotated[
 
 @router.post(
     '/',
-    status_code=HTTP_201_CREATED,
+    responses={
+        HTTP_200_OK: {'model': ServiceDoctor},
+        HTTP_201_CREATED: {'model': ServiceDoctor},
+    },
     dependencies=[
         Security(
             CurrentUserWithPermissions(Permission.SERVICES_DOCTORS, {Action.CREATION})
@@ -60,25 +67,53 @@ def create_service_doctor(
     * HTTPException: HTTP error 500. Internal error.
 
     Returns:
-    * ServiceDoctor: Service-doctor created.
+    * ServiceDoctor: Service-doctor created or updated according to hierarchy.
     '''
 
-    if not doctor_service.contains(service_doctor_in.doctor_id):
+    if not doctor_service.contains(
+        service_doctor_in.doctor_id
+    ) or not doctor_service.is_active(service_doctor_in.doctor_id):
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail='El médico indicado no existe'
         )
 
-    if not service_service.contains(service_doctor_in.service_id):
+    if not service_service.contains(
+        service_doctor_in.service_id
+    ) or not service_service.is_active(service_doctor_in.service_id):
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail='El servicio indicado no existe'
         )
 
-    if service_doctor_service.contains_active_by_service_and_doctor(
+    if service_doctor_list := service_doctor_service.get_all_by_service_and_doctor(
         service_doctor_in.service_id, service_doctor_in.doctor_id
     ):
-        raise HTTPException(
-            status_code=HTTP_409_CONFLICT, detail='El médico ya tiene este servicio'
-        )
+        try:
+            service_doctor_service.check_session_and_service_type_hierarchy(
+                service_doctor_in.session,
+                service_doctor_in.service_type,
+                service_doctor_list,
+            )
+        except SessionConflict as error:
+            raise HTTPException(
+                status_code=HTTP_409_CONFLICT,
+                detail='Ya existe un médico asociado al servicio indicado',
+            ) from error
+        except MixingSession:
+            service_doctor_updated = service_doctor_service.update_doctor_session(
+                service_doctor_list[0], Session.FULL_DAY
+            )
+
+            return JSONResponse(  # type: ignore
+                status_code=HTTP_200_OK,
+                content={
+                    'id': str(service_doctor_updated.id),
+                    'serviceId': str(service_doctor_updated.service_id),
+                    'doctorId': service_doctor_updated.doctor_id,
+                    'serviceType': service_doctor_updated.service_type,
+                    'session': service_doctor_updated.session,
+                    'isActive': service_doctor_updated.is_active,
+                }
+            )
 
     return service_doctor_service.create(service_doctor_in)  # type: ignore
 

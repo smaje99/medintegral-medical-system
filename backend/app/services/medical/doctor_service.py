@@ -26,3 +26,15 @@ class DoctorService(BaseService[Doctor, DoctorCreate, DoctorUpdate]):
             .slice(skip, limit)
             .all()
         )
+
+    def is_active(self, doctor_id: int) -> bool:
+        '''Checks if a doctor is active.
+
+        Args:
+            doctor_id (int): Doctor's id.
+
+        Returns:
+            bool: True if doctor is active, False otherwise.
+        '''
+
+        return self.database.query(User.is_active).filter(User.dni == doctor_id).scalar()
