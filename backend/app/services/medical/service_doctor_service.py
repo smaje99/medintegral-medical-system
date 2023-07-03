@@ -86,7 +86,8 @@ class ServiceDoctorService(
         # Check if session is already assigned in doctors' session
         if any(session_in_doctors) or (
             # Check if doctor's session is completed
-            (len_of_doctors_in_service := len(doctors_in_service)) > 1
+            (len_of_doctors_in_service := len(doctors_in_service))
+            > 1
         ):
             raise SessionConflict()
 

@@ -4,7 +4,10 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Security
 from fastapi.responses import JSONResponse
 from starlette.status import (
-    HTTP_200_OK, HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_409_CONFLICT
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_404_NOT_FOUND,
+    HTTP_409_CONFLICT,
 )
 
 from app.api.dependencies.auth import CurrentUserWithPermissions
@@ -112,7 +115,7 @@ def create_service_doctor(
                     'serviceType': service_doctor_updated.service_type,
                     'session': service_doctor_updated.session,
                     'isActive': service_doctor_updated.is_active,
-                }
+                },
             )
 
     return service_doctor_service.create(service_doctor_in)  # type: ignore

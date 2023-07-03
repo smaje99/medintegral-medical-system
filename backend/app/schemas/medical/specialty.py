@@ -48,8 +48,12 @@ class SpecialtyInDBBase(SpecialtyBase):
 class Specialty(SpecialtyInDBBase):
     '''Additional properties to return via API.'''
 
-    services: list[Service] | None = None
-
 
 class SpecialtyInDB(SpecialtyInDBBase):
     '''Additional properties stored in the database.'''
+
+
+class SpecialtyWithServices(SpecialtyInDBBase):
+    '''Additional properties to return via API.'''
+
+    services: list[Service]

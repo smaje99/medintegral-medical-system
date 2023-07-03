@@ -7,7 +7,12 @@ from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_409_CONF
 from app.api.dependencies.auth import CurrentUserWithPermissions
 from app.api.dependencies.services import ServiceDependency
 from app.core.types import Action, Permission
-from app.schemas.medical.specialty import Specialty, SpecialtyCreate, SpecialtyUpdate
+from app.schemas.medical.specialty import (
+    Specialty,
+    SpecialtyCreate,
+    SpecialtyUpdate,
+    SpecialtyWithServices,
+)
 from app.services.medical import SpecialtyService
 
 
@@ -27,7 +32,7 @@ SpecialtyServiceDependency = Annotated[
 def read_specialty(
     specialty_id: Annotated[UUID, Path(alias='specialtyId')],
     service: SpecialtyServiceDependency,
-) -> Specialty:
+) -> SpecialtyWithServices:
     '''Retrieve a specialty by a given ID.
 
     Args:
