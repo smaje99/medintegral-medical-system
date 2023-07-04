@@ -54,3 +54,14 @@ class ServiceInDB(ServiceInDBBase):
     '''Additional properties stored in the database.'''
 
     specialty_id: UUID
+
+
+class ServiceWithSpecialty(Service):
+    '''Additional properties to return via API.'''
+
+    specialty: 'Specialty'
+
+
+from app.schemas.medical.specialty import Specialty  # pylint: disable=C0413  # noqa: E402
+
+ServiceWithSpecialty.update_forward_refs()

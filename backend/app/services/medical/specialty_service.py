@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, noload
 from sqlalchemy.sql import func, true
 
 from app.models.medical import Specialty, Service, ServiceDoctor, Doctor
@@ -31,7 +31,9 @@ class SpecialtyService(BaseService[Specialty, SpecialtyCreate, SpecialtyUpdate])
         Returns:
             Specialty: The specialty retrieved.
         '''
-        specialty = self.database.query(Specialty).get(obj_id)
+        specialty = (
+            self.database.query(Specialty).options(noload(Specialty.services)).get(obj_id)
+        )
 
         if specialty:
             services = self.__get_services_by_specialty(specialty.id)
@@ -75,6 +77,7 @@ class SpecialtyService(BaseService[Specialty, SpecialtyCreate, SpecialtyUpdate])
 
         return (
             self.database.query(Service)
+            .options(noload(Service.specialty))
             .filter(Service.specialty_id == specialty_id)
             .filter(Service.is_active == true())
             .all()

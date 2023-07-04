@@ -7,7 +7,12 @@ from starlette.status import HTTP_201_CREATED, HTTP_404_NOT_FOUND, HTTP_409_CONF
 from app.api.dependencies.auth import CurrentUserWithPermissions
 from app.api.dependencies.services import ServiceDependency
 from app.core.types import Action, Permission
-from app.schemas.medical.service import Service, ServiceCreate, ServiceUpdate
+from app.schemas.medical.service import (
+    Service,
+    ServiceCreate,
+    ServiceUpdate,
+    ServiceWithSpecialty,
+)
 from app.services.medical import ServiceService, SpecialtyService
 
 
@@ -62,7 +67,7 @@ def read_services_by_specialty(
 def read_service(
     service_id: Annotated[UUID, Path(alias='serviceId')],
     service: ServiceServiceDependency,
-) -> Service:
+) -> ServiceWithSpecialty:
     '''Retrieve a medical service by a given ID.
     If the given DNI doesn't exist, raise an error.
 
@@ -77,7 +82,7 @@ def read_service(
     '''
     if not (service_obj := service.get(service_id)):
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail='El servicio medico no existe'
+            status_code=HTTP_404_NOT_FOUND, detail='El servicio médico no existe'
         )
 
     return service_obj  # type: ignore
