@@ -3,6 +3,7 @@
 .vscode/cspell.json
 
 package-lock.json
+pnpm-lock.yaml
 dist
 node_modules
 .next
@@ -17,3 +18,4 @@ __pycache__
 backend/files
 
 .trash
+.delete
