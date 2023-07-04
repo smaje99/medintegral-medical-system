@@ -14,6 +14,7 @@ const routes = {
     user: (dni: number | string) => `/dashboard/users/${dni}`,
     specialties: '/dashboard/specialties',
     specialty: (id: string) => `/dashboard/specialties/${id}`,
+    service: (id: string) => `/dashboard/services/${id}`,
   } as const,
 } as const;
 

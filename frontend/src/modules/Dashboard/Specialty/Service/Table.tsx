@@ -3,12 +3,12 @@ import { useMemo } from 'react';
 
 import { CopyButton } from '@/components/Button';
 import { Table as TableTemplate } from '@/components/Table';
+import { RightCell, TitleCell } from '@/components/Table/cells';
 import { SelectionColumn } from '@/components/Table/columns';
 import { fuzzySort } from '@/components/Table/filters';
+import routes from '@/helpers/routes';
 import type { Service } from '@/types/medical/service.model';
 import { formatCurrency } from '@/utils/formatter';
-
-import styles from './Table.module.scss';
 
 const columnHelper = createColumnHelper<Service>();
 
@@ -18,14 +18,18 @@ const Table: React.FC = () => {
       SelectionColumn<Service>(),
       columnHelper.accessor('name', {
         header: 'Servicio',
-        cell: (info) => (
-          <>
-            <span className={styles.title}>{info.getValue()}</span>
-            <div role='toolbar'>
-              <CopyButton textToCopy={info.getValue()} />
-            </div>
-          </>
-        ),
+        cell: (info) => {
+          const { id } = info.row.original;
+
+          return (
+            <TitleCell
+              href={routes.dashboard.service(id)}
+              title='ver información general del servicio'
+            >
+              {info.getValue()}
+            </TitleCell>
+          );
+        },
         filterFn: 'fuzzy',
         sortingFn: fuzzySort,
       }),
@@ -43,13 +47,11 @@ const Table: React.FC = () => {
       }),
       columnHelper.accessor('duration', {
         header: 'Duración',
-        cell: (info) => <span className={styles.number}>{info.getValue()} minutos</span>,
+        cell: (info) => <RightCell>{info.getValue()} minutos</RightCell>,
       }),
       columnHelper.accessor('cost', {
         header: 'Precio',
-        cell: (info) => (
-          <span className={styles.number}>{formatCurrency(info.getValue())}</span>
-        ),
+        cell: (info) => <RightCell>{formatCurrency(info.getValue())}</RightCell>,
       }),
     ],
     []
