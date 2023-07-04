@@ -5,7 +5,8 @@ from sqlalchemy.sql.expression import true
 
 from app.core.exceptions import SessionConflict, MixingSession
 from app.core.types import Session, ServiceType
-from app.models.medical.service_doctor import ServiceDoctor
+from app.models.medical import ServiceDoctor, Service, Doctor
+from app.models.user import User
 from app.schemas.medical.service_doctor import ServiceDoctorCreate, ServiceDoctorUpdate
 from app.services.common.base.base_service import BaseService
 
@@ -117,3 +118,42 @@ class ServiceDoctorService(
 
         update_data = {'session': session}
         return self.update(db_obj=service_doctor, obj_in=update_data)
+
+    def get_all_by_service(self, service_id: UUID) -> list[ServiceDoctor]:
+        '''Get all service-doctor relationships for a service.
+
+        Args:
+            service_id (UUID): Service id.
+
+        Returns:
+            list[ServiceDoctor]: Service-doctor relationships.
+        '''
+
+        return (
+            self.database.query(ServiceDoctor)
+            .outerjoin(Doctor, ServiceDoctor.doctor_id == Doctor.dni)
+            .outerjoin(User, Doctor.dni == User.dni)
+            .filter(ServiceDoctor.service_id == service_id)
+            .filter(ServiceDoctor.is_active == true())
+            .filter(User.is_active == true())
+            .all()
+        )
+
+    def get_all_by_doctor(self, doctor_id: int) -> list[ServiceDoctor]:
+        '''Get all service-doctor relationships for a doctor.
+
+        Args:
+            doctor_id (int): Doctor id.
+
+        Returns:
+            list[ServiceDoctor]: Service-doctor relationships.
+        '''
+
+        return (
+            self.database.query(ServiceDoctor)
+            .outerjoin(Service, ServiceDoctor.service_id == Service.id)
+            .filter(ServiceDoctor.doctor_id == doctor_id)
+            .filter(ServiceDoctor.is_active == true())
+            .filter(Service.is_active == true())
+            .all()
+        )

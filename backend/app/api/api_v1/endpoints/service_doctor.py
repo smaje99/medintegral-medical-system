@@ -1,11 +1,12 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Path, Security
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Security
 from fastapi.responses import JSONResponse
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
     HTTP_409_CONFLICT,
 )
@@ -35,6 +36,66 @@ ServiceDoctorServiceDependency = Annotated[
 ServiceServiceDependency = Annotated[
     ServiceService, Depends(ServiceDependency(ServiceService))
 ]
+
+
+@router.get(
+    '/{serviceIdOrDoctorId}',
+    dependencies=[
+        Security(CurrentUserWithPermissions(Permission.SERVICES_DOCTORS, {Action.READ}))
+    ],
+)
+def get_all_by_service_or_doctor(
+    service_id_or_doctor_id: Annotated[UUID | int, Path(alias='serviceIdOrDoctorId')],
+    is_service: Annotated[bool, Query(alias='service')],
+    is_doctor: Annotated[bool, Query(alias='doctor')],
+    *,
+    service_service: ServiceServiceDependency,
+    doctor_service: DoctorServiceDependency,
+    service_doctor_service: ServiceDoctorServiceDependency,
+) -> list[ServiceDoctor]:
+    '''Get all service-doctors by service or doctor.
+
+    Args:
+    * serviceIdOrDoctorId (UUID | int): Service or doctor id.
+    * isService (bool): Flag to indicate if the id is a service id.
+    * isDoctor (bool): Flag to indicate if the id is a doctor id.
+
+    Raises:
+    * HTTPException: HTTP error 400. Invalid combination of flags.
+    * HTTPException: HTTP error 404. Service not found.
+    * HTTPException: HTTP error 404. Doctor not found.
+    * HTTPException: HTTP error 403. Insufficient permissions.
+
+    Returns:
+    * list[ServiceDoctor]: List of service-doctors.
+    '''
+    if is_service and is_doctor:
+        raise HTTPException(
+            status_code=HTTP_400_BAD_REQUEST,
+            detail='No se puede indicar ambas opciones',
+        )
+
+    if is_service and isinstance(service_id_or_doctor_id, UUID):
+        if not service_service.contains(service_id_or_doctor_id):
+            raise HTTPException(
+                status_code=HTTP_404_NOT_FOUND, detail='El servicio indicado no existe'
+            )
+
+        return service_doctor_service.get_all_by_service(  # type: ignore
+            service_id_or_doctor_id
+        )
+
+    if is_doctor and isinstance(service_id_or_doctor_id, int):
+        if not doctor_service.contains(service_id_or_doctor_id):
+            raise HTTPException(
+                status_code=HTTP_404_NOT_FOUND, detail='El médico indicado no existe'
+            )
+
+        return service_doctor_service.get_all_by_doctor(  # type: ignore
+            service_id_or_doctor_id
+        )
+
+    return []
 
 
 @router.post(
