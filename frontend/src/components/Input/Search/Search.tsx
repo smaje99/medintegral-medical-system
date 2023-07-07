@@ -4,7 +4,7 @@ import { FaSearch } from 'react-icons/fa';
 import DebouncedInput from '../DebouncedInput';
 import styles from './Search.module.scss';
 
-type Props = {
+export type Props = {
   readonly name: string;
   readonly onChange: (value: string | number) => void;
   readonly value: string | number;
@@ -13,7 +13,7 @@ type Props = {
   'onChange'
 >;
 
-const Search: React.FC<Props> = ({ name, ...props }) => {
+export const Search: React.FC<Props> = ({ name, ...props }) => {
   return (
     <label htmlFor={name} className={styles.search}>
       <FaSearch aria-hidden />
@@ -28,5 +28,3 @@ const Search: React.FC<Props> = ({ name, ...props }) => {
     </label>
   );
 };
-
-export default Search;

@@ -1,1 +1,1 @@
-export { default } from './Search';
+export { Search, type Props as SearchProps } from './Search';

@@ -1,4 +1,11 @@
+@import '@/styles/animations';
+@import '@/styles/mixins';
 @import '@/styles/palette';
+
+.item {
+  @include non-list;
+  @include slideInRight;
+}
 
 .button {
   display: inline-flex;

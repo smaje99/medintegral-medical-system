@@ -1,10 +1,11 @@
-import { useId } from 'react';
+import { Permissions } from '@/helpers/permissions';
 
-import { useTable } from '../hooks';
+import { PermissionProvider, useTable } from '../hooks';
 import styles from './Bar.module.scss';
 
 type Props = {
   title: string;
+  permission: Permissions;
   children: React.ReactNode | React.ReactNode[];
 };
 
@@ -12,10 +13,12 @@ type Props = {
  * This component displays the table navigation bar.
  * The children will be displayed in reverse.
  */
-function Bar<T>({ title, children }: Props): JSX.Element {
+function Bar<T extends object>({
+  title,
+  permission,
+  children,
+}: Props): React.JSX.Element {
   const { rowSelectionSize } = useTable<T>();
-
-  const itemsId = useId();
 
   return (
     <section className={styles.bar}>
@@ -30,15 +33,7 @@ function Bar<T>({ title, children }: Props): JSX.Element {
         ) : null}
       </section>
       <ul className={styles.nav}>
-        {Array.isArray(children) ? (
-          children.filter(Boolean).map((child, idx) => (
-            <li key={`${itemsId}-${idx}`} className={styles.item}>
-              {child}
-            </li>
-          ))
-        ) : (
-          <li className={styles.item}>{children}</li>
-        )}
+        <PermissionProvider permission={permission}>{children}</PermissionProvider>
       </ul>
     </section>
   );

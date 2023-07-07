@@ -1,6 +1,5 @@
-@import '@/styles/animations';
 @import '@/styles/fonts';
-@import '@/styles/mixins';
+@import '@/styles/palette';
 
 .bar {
   width: 100%;
@@ -35,10 +34,5 @@
     justify-content: center;
     align-items: center;
     gap: 1.2rem;
-
-    & > .item {
-      @include non-list;
-      @include slideInRight;
-    }
   }
 }
