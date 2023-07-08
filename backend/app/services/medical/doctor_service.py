@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import true
 
 from app.models.medical import Doctor
+from app.models.person import Person
 from app.models.user import User
 from app.schemas.medical.doctor import DoctorCreate, DoctorUpdate
 from app.services.common.base import BaseService
@@ -20,8 +21,9 @@ class DoctorService(BaseService[Doctor, DoctorCreate, DoctorUpdate]):
 
     def get_all(self, *, skip: int = 0, limit: int = 50) -> list[Doctor]:
         return (
-            self.database.query(Doctor)
-            .join(User)
+            self.database.query(Doctor.dni, Doctor.signature, Person.name, Person.surname)
+            .join(User, Doctor.dni == User.dni)
+            .join(Person, User.dni == Person.dni)
             .filter(User.is_active == true())
             .slice(skip, limit)
             .all()

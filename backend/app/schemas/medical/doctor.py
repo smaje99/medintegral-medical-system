@@ -41,6 +41,9 @@ class DoctorInDBBase(DoctorBase):
 class Doctor(DoctorInDBBase):
     '''Additional properties to return via API.'''
 
+    name: str | None = None
+    surname: str | None = None
+
 
 class DoctorInDB(DoctorInDBBase):
     '''Additional properties stored in the database.'''
