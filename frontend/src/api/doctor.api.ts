@@ -6,6 +6,15 @@ import type { Token } from '@/types/user/token';
 import { baseURL, headers } from './commons';
 
 /**
+ * Get all the doctors in the API service.
+ * @param token Token['accessToken']
+ * @returns a Promise that resolves to a Doctor[].
+ */
+export async function getAll(token: Token['accessToken']) {
+  return axios.get<Doctor[]>('/doctor', { baseURL, ...headers(token) });
+}
+
+/**
  * Create a new doctor in the API service.
  * @param doctor - DoctorCreate - this is the object that will be sent to the server
  * @param token - Token['accessToken']

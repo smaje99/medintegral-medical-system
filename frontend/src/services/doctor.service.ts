@@ -5,6 +5,14 @@ import type { Token } from '@/types/user/token';
 import { withAxiosHandler } from './commons';
 
 /**
+ * Service to get all doctors in the API service.
+ * @param token - Token['accessToken']
+ * @returns a Promise that resolves to an array of Doctors.
+ */
+export const getAllDoctors: (token: Token['accessToken']) => Promise<Doctor[]> =
+  withAxiosHandler(async (token) => api.getAll(token));
+
+/**
  * Service to create a new doctor in the API service.
  * @param doctor - DoctorCreate
  * @param token - Token['accessToken']
