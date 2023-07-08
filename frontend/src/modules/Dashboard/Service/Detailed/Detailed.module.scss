@@ -1,0 +1,66 @@
+@import '@/styles/fonts';
+@import '@/styles/palette';
+
+.container {
+  width: min(8in, 80%);
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  margin: 2rem auto;
+}
+
+.commands-container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 2rem;
+
+  & > .name {
+    font: 600 28pt $title-font;
+    line-height: 1.15;
+    letter-spacing: 0.1rem;
+    margin: 0;
+  }
+
+  & > .commands {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1.6rem;
+    justify-content: flex-start;
+    align-items: center;
+
+    & > .disabled {
+      font-size: 11pt;
+      font-weight: 600;
+      letter-spacing: 0.56px;
+      color: $green-complementary;
+      user-select: none;
+    }
+
+    & > .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 10pt;
+      font-weight: 500;
+      letter-spacing: 0.45px;
+      color: $green-blue-monochromatic;
+      background-color: transparent;
+      border: none;
+      outline: 0;
+
+      &:hover {
+        font-weight: 600;
+        transform: scale(1.1);
+      }
+
+      &:active {
+        transform: scale(0.9);
+      }
+
+      &--disable {
+        @extend .button;
+        color: $green-complementary;
+      }
+    }
+  }
+}

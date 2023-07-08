@@ -1,12 +1,11 @@
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { type CommandAttributes, type FieldAttributes, Form } from '@/components/Form';
 import { Modal } from '@/components/Modal';
-import { useTable } from '@/components/Table/Table';
 import getToastConfig from '@/helpers/toast.config';
 import { updateService } from '@/services/service.service';
 import type { Service, ServiceUpdate } from '@/types/medical/service.model';
@@ -16,16 +15,13 @@ import styles from './ServiceUpdateFormModal.module.scss';
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  service: Service;
 };
 
-const ServiceUpdateFormModal: React.FC<Props> = ({ isOpen, onClose }) => {
+const ServiceUpdateFormModal: React.FC<Props> = ({ isOpen, onClose, service }) => {
   const router = useRouter();
   const { data: session } = useSession();
-  const formMethods = useForm<ServiceUpdate>();
-  const { getObjectsFromSelectedRows, rowSelectionSize, getSelectedFlatRows } =
-    useTable<Service>();
-
-  const serviceSelected = getObjectsFromSelectedRows()[0];
+  const formMethods = useForm<ServiceUpdate>({ defaultValues: service });
 
   const data = useMemo<FieldAttributes<ServiceUpdate>[]>(
     () => [
@@ -62,13 +58,12 @@ const ServiceUpdateFormModal: React.FC<Props> = ({ isOpen, onClose }) => {
   );
 
   const handleClose = () => {
-    getSelectedFlatRows().forEach((row) => row.toggleSelected());
     formMethods.reset();
     onClose();
   };
 
   const handleUpdate: SubmitHandler<ServiceUpdate> = async (formData) => {
-    const { id: serviceId } = serviceSelected;
+    const { id: serviceId } = service;
     const token = session.accessToken;
 
     await toast.promise<Service, Error, string>(
@@ -92,11 +87,6 @@ const ServiceUpdateFormModal: React.FC<Props> = ({ isOpen, onClose }) => {
       getToastConfig()
     );
   };
-
-  useEffect(
-    () => formMethods.reset(serviceSelected),
-    [formMethods, rowSelectionSize, serviceSelected]
-  );
 
   return (
     <Modal
