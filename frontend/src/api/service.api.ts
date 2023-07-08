@@ -1,9 +1,27 @@
 import axios from 'axios';
 
-import { Service, ServiceCreate, ServiceUpdate } from '@/types/medical/service.model';
+import {
+  Service,
+  ServiceCreate,
+  ServiceUpdate,
+  ServiceWithSpecialty,
+} from '@/types/medical/service.model';
 import type { Token } from '@/types/user/token';
 
 import { baseURL, headers } from './commons';
+
+/**
+ * Get a medical service by its ID in the API service.
+ * @param serviceId (Service['id'])
+ * @param token (Token['accessToken'])
+ * @returns a Promise that resolves to a ServiceWithSpecialty.
+ */
+export async function get(serviceId: Service['id'], token: Token['accessToken']) {
+  return axios.get<ServiceWithSpecialty>(`/service/${serviceId}`, {
+    baseURL,
+    ...headers(token),
+  });
+}
 
 /**
  * Create a new medical service the API service.

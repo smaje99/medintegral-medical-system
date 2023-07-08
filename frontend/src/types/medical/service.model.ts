@@ -1,3 +1,4 @@
+import { DoctorInService } from './doctor.model';
 import type { Specialty } from './specialty.model';
 
 export interface Service {
@@ -14,3 +15,8 @@ export type ServiceCreate = Omit<Service, 'id' | 'isActive'> & {
 };
 
 export type ServiceUpdate = Omit<Partial<Service>, 'id'>;
+
+export type ServiceWithSpecialty = Service & {
+  readonly doctors: DoctorInService[];
+  readonly specialty: Specialty;
+};

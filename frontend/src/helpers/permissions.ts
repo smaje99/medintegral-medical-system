@@ -9,4 +9,5 @@ export enum Permissions {
   SPECIALTIES = 'especialidades',
   USERS = 'usuarios',
   SERVICES = 'servicios',
+  SERVICES_DOCTORS = 'servicios-médicos',
 }

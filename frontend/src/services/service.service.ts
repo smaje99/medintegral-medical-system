@@ -3,10 +3,18 @@ import type {
   Service,
   ServiceCreate,
   ServiceUpdate,
+  ServiceWithSpecialty,
 } from '@/types/medical/service.model';
 import type { Token } from '@/types/user/token';
 
 import { withAxiosHandler } from './commons';
+
+export const getService: (
+  serviceId: Service['id'],
+  token: Token['accessToken']
+) => Promise<ServiceWithSpecialty> = withAxiosHandler(async (serviceId, token) =>
+  api.get(serviceId, token)
+);
 
 export const createService: (
   service: ServiceCreate,
