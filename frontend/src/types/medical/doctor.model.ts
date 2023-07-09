@@ -1,4 +1,5 @@
 import { Person } from '../person';
+import { Service } from './service.model';
 
 export interface Doctor {
   readonly dni: number;
@@ -11,13 +12,20 @@ export type DoctorCreate = Omit<Doctor, 'signature' | 'name' | 'surname'>;
 
 export type DoctorUpdate = Partial<Omit<Doctor, 'dni' | 'name' | 'surname'>>;
 
-export interface DoctorInService {
+export interface ServiceDoctor {
   readonly id: string;
+  readonly serviceId: Service['id'];
+  readonly doctorId: Doctor['dni'];
   readonly serviceType: ServiceType;
   readonly session: Session;
   readonly isActive: boolean;
-  readonly person: Person;
 }
+
+export type DoctorInService = Omit<ServiceDoctor, 'serviceId' | 'doctorId'> & {
+  readonly person: Person;
+};
+
+export type DoctorInServiceCreate = Omit<ServiceDoctor, 'id' | 'isActive'>;
 
 export enum ServiceType {
   IN_OF_IPS = 'presencial',
