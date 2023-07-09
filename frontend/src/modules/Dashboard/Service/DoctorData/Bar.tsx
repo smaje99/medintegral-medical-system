@@ -6,9 +6,11 @@ import { Actions, Permissions } from '@/helpers/permissions';
 
 import { DoctorInServiceForTable } from './Table';
 
-type Props = object;
+type Props = {
+  readonly openCreateModal: () => void;
+};
 
-const Bar: React.FC<Props> = () => {
+const Bar: React.FC<Props> = ({ openCreateModal }) => {
   const { globalFilter, setGlobalFilter } = useTable();
 
   return (
@@ -28,6 +30,7 @@ const Bar: React.FC<Props> = () => {
         itemType='button'
         action={Actions.CREATE}
         canView={(rowSelectionSize) => rowSelectionSize === 0}
+        onClick={openCreateModal}
         title='Asociar un médico al servicio médico'
         aria-label='Asociar un médico al servicio médico'
       >

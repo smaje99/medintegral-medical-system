@@ -10,6 +10,7 @@ import { Tabs } from '@/components/Tabs';
 import { Actions, Permissions } from '@/helpers/permissions';
 import useModal from '@/hooks/useModal';
 import type { Data } from '@/types/data-request';
+import type { Doctor } from '@/types/medical/doctor.model';
 import type { ServiceWithSpecialty } from '@/types/medical/service.model';
 import { hasPermission } from '@/utils/auth';
 
@@ -21,12 +22,13 @@ import styles from './Detailed.module.scss';
 
 type Props = {
   readonly service: Data<ServiceWithSpecialty>;
+  readonly doctors: Data<Doctor[]>;
   readonly router: NextRouter;
 };
 
 const PERMISSION = Permissions.SERVICES;
 
-const Detailed: React.FC<Props> = ({ service, router }) => {
+const Detailed: React.FC<Props> = ({ service, doctors, router }) => {
   const doctorsInService = useMemo<Data<DoctorInServiceForTable[]>>(
     () => ({
       data:
@@ -85,7 +87,11 @@ const Detailed: React.FC<Props> = ({ service, router }) => {
             </>,
           ]}
         >
-          <DoctorData data={doctorsInService} />
+          <DoctorData
+            serviceId={service.data.id}
+            data={doctorsInService}
+            doctors={doctors.data}
+          />
         </Tabs>
       </section>
 
