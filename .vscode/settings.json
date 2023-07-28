@@ -23,7 +23,8 @@
     "**/poetry.lock": true,
     "**/Thumbs.db": true,
     "**/venv": true,
-    "**/.trash": true
+    "**/.trash": true,
+    "**/pnpm-lock.yaml": true
   },
   "sonarlint.": "backend/venv/**",
   "flake8.args": ["--rcfile=backend/.flake8"],
@@ -38,5 +39,13 @@
     "C:\\Users\\samaf\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\app-7ttcJKJk-py3.11\\Scripts\\python.exe"
   ],
   "prettier.configPath": "frontend/.prettierrc",
-  "workbench.colorCustomizations": {}
+  "workbench.colorCustomizations": {},
+  "javascript.validate.enable": false,
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.enable": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+  },
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay"
 }
