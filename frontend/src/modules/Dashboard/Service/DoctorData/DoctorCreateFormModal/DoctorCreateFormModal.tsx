@@ -74,7 +74,7 @@ const DoctorCreateFormModal: React.FC<Props> = ({
         required: true,
       },
     ],
-    [doctors]
+    [doctors],
   );
 
   const commands = useMemo<CommandAttributes>(
@@ -82,7 +82,7 @@ const DoctorCreateFormModal: React.FC<Props> = ({
       submit: { label: 'Asociar' },
       reset: { label: 'Cancelar' },
     }),
-    []
+    [],
   );
 
   const handleClose = () => {
@@ -112,7 +112,7 @@ const DoctorCreateFormModal: React.FC<Props> = ({
           },
         },
       },
-      getToastConfig()
+      getToastConfig(),
     );
   };
 
