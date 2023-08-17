@@ -1,0 +1,42 @@
+{
+  "python.linting.enabled": true,
+  "python.linting.mypyEnabled": true,
+  "python.linting.mypyArgs": ["--rcfile=backend/mypy.ini"],
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["--rcfile=backend/.flake8"],
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": ["--rcfile=backend/.pylintrc"],
+  "files.exclude": {
+    ".vscode": true,
+    ".VSCodeCounter": true,
+    "**/__pycache__": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.mypy_cache": true,
+    "**/.next": true,
+    "**/.storybook": true,
+    "**/.svn": true,
+    "**/CVS": true,
+    "**/node_modules": true,
+    "**/package-lock.json": true,
+    "**/poetry.lock": true,
+    "**/Thumbs.db": true,
+    "**/venv": true,
+    "**/.trash": true
+  },
+  "sonarlint.": "backend/venv/**",
+  "flake8.args": ["--rcfile=backend/.flake8"],
+  "pylint.args": ["--rcfile=backend/.pylintrc"],
+  "mypy.configFile": "backend/mypy.ini",
+  "python.analysis.typeCheckingMode": "basic",
+  "black-formatter.importStrategy": "fromEnvironment",
+  "python.formatting.provider": "black",
+  "python.analysis.autoFormatStrings": true,
+  "python.analysis.pylanceLspClientEnabled": true,
+  "black-formatter.interpreter": [
+    "C:\\Users\\samaf\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\app-7ttcJKJk-py3.11\\Scripts\\python.exe"
+  ],
+  "prettier.configPath": "frontend/.prettierrc",
+  "workbench.colorCustomizations": {}
+}
