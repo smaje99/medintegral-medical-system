@@ -1,0 +1,8 @@
+{
+  "printWidth": 90,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
+  "tailwindConfig": "./tailwind.config.js",
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
