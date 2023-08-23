@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
-import './globals.css';
+import 'normalize.css';
+import '@/styles/globals.scss';
 
 export const metadata: Metadata = {
   title: 'Medintegral IPS S.A.S',
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
     'agenda médica',
     'medicina integral',
     'Caquetá',
-    'sugerencias'
+    'sugerencias',
   ],
   openGraph: {
     title: 'Medintegral IPS S.A.S',
