@@ -14,6 +14,10 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
+    fontFamily: {
+      heading: ['Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      body: ['Nunito', 'ui-sans-serif', 'system-ui', 'sans-serif']
+    }
   },
   plugins: [],
 }
