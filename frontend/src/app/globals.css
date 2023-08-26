@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: 'Roboto';
+    src:
+      local('Roboto'),
+      local('Roboto-Regular'),
+      url('/assets/fonts/Roboto-Regular.woff2') format('woff2'),
+      url('/public/assets/fonts/Roboto-Regular.woff2') format('woff2');
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Nunito';
+    src:
+      local('Nunito'),
+      local('Nunito Regular'),
+      local('Nunito-Regular'),
+      url('/assets/fonts/Nunito-Regular.woff2') format('woff2'),
+      url('/public/assets/fonts/Nunito-Regular.woff2') format('woff2');
+    font-display: swap;
+  }
+}
+
+@layer base {
+  :root {
+    --background: #e4e6ee;
+    --foreground: #1b1c1e;
+
+    --muted: #dfefff;
+    --muted-foreground: #1b1c1e;
+
+    --popover: #e4e6ee;
+    --popover-foreground: #1b1c1e;
+
+    --card: #e4e6ee;
+    --card-foreground: #1b1c1e;
+
+    --border: #808cb1;
+    --input: #808cb1;
+
+    --primary: #0a91ed;
+    --primary-foreground: #fdfcfa;
+
+    --secondary: #14d37b;
+    --secondary-foreground: #fdfcfa;
+
+    --accent: #d2d6e3;
+    --accent-foreground: ;
+
+    --destructive: #f53fa3;
+    --destructive-foreground: #fdfcfa;
+
+    --ring: #b6bdd2;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: #242c46;
+    --foreground: #fdfcfa;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: #07294a;
+
+    --popover: #242c46;
+    --popover-foreground: #fdfcfa;
+
+    --card: #242c46;
+    --card-foreground: #fdfcfa;
+
+    --border: #495a8f;
+    --input: #495a8f;
+
+    --primary: #34abfc;
+    --primary-foreground: #1b1c1e;
+
+    --secondary: #3deb9a;
+    --secondary-foreground: #1b1c1e;
+
+    --accent: #37446b;
+    --accent-foreground: ;
+
+    --destructive: #fb6bbe;
+    --destructive-foreground: #1b1c1e;
+
+    --ring: #37446b;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply font-body;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
