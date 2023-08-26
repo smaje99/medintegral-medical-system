@@ -22,7 +22,8 @@
     "@typescript-eslint/eslint-plugin",
     "prettier",
     "simple-import-sort",
-    "react-hooks"
+    "react-hooks",
+    "tailwindcss"
   ],
   "settings": {
     "import/extensions": [".js", ".jsx"],

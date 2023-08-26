@@ -37,6 +37,6 @@
   "black-formatter.interpreter": [
     "C:\\Users\\samaf\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\app-7ttcJKJk-py3.11\\Scripts\\python.exe"
   ],
-  "prettier.configPath": "frontend/.prettierrc",
+  "prettier.configPath": "frontend/prettier.config.js",
   "workbench.colorCustomizations": {}
 }
