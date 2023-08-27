@@ -57,7 +57,8 @@
     "tailwindcss/no-custom-classname": ["warn", {
       "whitelist": [
         "((\\w+)\\-)*(border|input|ring|background|foreground)",
-        "((\\w+)\\-)*(primary|secondary|destructive|muted|accent|popover|card)(\\-foreground)?(\\/(\\d+))?"
+        "((\\w+)\\-)*(primary|secondary|destructive|muted|accent|popover|card)(\\-foreground)?(\\/(\\d+))?",
+        "((\\w+)\\-)*(primary|secondary|tertiary|success|warning|error|surface)\\-(\\d{2,3})"
       ]
     }]
   }
