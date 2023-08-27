@@ -37,7 +37,16 @@ const buttonVariants = cva(
         `,
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        link: 'text-primary cursor-pointer underline-offset-4 hover:underline',
+        floating: `
+          bg-primary
+          text-primary-50 dark:text-primary-950
+          hover:bg-primary-600 dark:hover:bg-primary-300
+          active:bg-primary-700 dark:active:bg-primary-500
+          cursor-pointer
+          font-bold
+          tracking-wide
+        `,
       },
       size: {
         default: 'h-10 px-4 py-2',
