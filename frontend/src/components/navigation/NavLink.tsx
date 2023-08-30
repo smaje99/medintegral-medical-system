@@ -2,14 +2,17 @@
 
 import Link, { type LinkProps } from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
+
+import { cn } from '@/lib/utils';
 
 type Props = LinkProps & {
-  children: React.ReactNode;
-  className: string | ((active: boolean) => string);
+  className?: string;
+  activeClassName?: string;
+  children: ReactNode;
 };
 
-const NavLink: React.FC<Props> = ({ className, children, ...props }) => {
+const NavLink: React.FC<Props> = ({ className, activeClassName, children, ...props }) => {
   const pathname = usePathname();
 
   const isActive = useMemo<boolean>(
@@ -17,13 +20,10 @@ const NavLink: React.FC<Props> = ({ className, children, ...props }) => {
     [pathname, props.href],
   );
 
-  const newClassName = useMemo<string>(
-    () => (typeof className === 'function' ? className(isActive) : className),
-    [isActive, className],
-  );
+  const classNameProp = [className, isActive && activeClassName];
 
   return (
-    <Link className={newClassName} {...props}>
+    <Link className={cn(classNameProp)} {...props}>
       {children}
     </Link>
   );
