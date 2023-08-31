@@ -2,6 +2,7 @@ import 'normalize.css';
 import './globals.css';
 
 import type { Metadata } from 'next';
+import { Provider as BalancerProvider } from 'react-wrap-balancer';
 
 import { ThemeProvider } from '@/components/theme-provider';
 
@@ -38,7 +39,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang='es'>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <BalancerProvider>{children}</BalancerProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
