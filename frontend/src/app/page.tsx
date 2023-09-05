@@ -1,6 +1,6 @@
 import { Header } from './sections';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <Header />
