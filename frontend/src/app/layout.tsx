@@ -25,10 +25,6 @@ export const metadata: Metadata = {
     'Caquetá',
     'sugerencias',
   ],
-  openGraph: {
-    title: 'Medintegral IPS S.A.S',
-    description: 'Plataforma médica de Medintegral IPS S.A.S',
-  },
 };
 
 type RootLayoutProps = {
