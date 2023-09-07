@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -141,7 +143,7 @@ const config: Config = {
         },
       },
       borderRadius: {
-        lg: 'hsl(var(--radius))',
+        lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
@@ -168,7 +170,11 @@ const config: Config = {
       body: ['Nunito', 'ui-sans-serif', 'system-ui', 'sans-serif'],
     },
   },
-  plugins: [require('tailwindcss-animate'), require('tailwindcss-animated')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('tailwindcss-animate'),
+    require('tailwindcss-animated'),
+  ],
 };
 
 export default config;
