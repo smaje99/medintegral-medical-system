@@ -61,7 +61,8 @@
         "((\\w+)\\-)*(primary|secondary|tertiary|success|warning|error|surface)\\-(\\d{2,3})(\\/(\\d{1,3}))?",
         "h-screen-d",
         "(\\w+)*animate\\-((in|out)|(\\w+\\-(up|left|down|right)))",
-        "(\\w+)*slide\\-(in|out)\\-(to|from)\\-(top|right|bottom|left)"
+        "(\\w+)*slide\\-(in|out)\\-(to|from)\\-(top|right|bottom|left)",
+        "bg-medintegral"
       ]
     }]
   }

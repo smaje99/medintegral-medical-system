@@ -164,6 +164,9 @@ const config: Config = {
       height: {
         'screen-d': '100dvh',
       },
+      backgroundImage: {
+        medintegral: "url('/assets/icons/medintegral.svg')",
+      },
     },
     fontFamily: {
       heading: ['Roboto', 'ui-sans-serif', 'system-ui', 'sans-serif'],
