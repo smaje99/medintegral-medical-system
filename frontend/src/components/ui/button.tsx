@@ -47,6 +47,15 @@ const buttonVariants = cva(
           font-bold
           tracking-wide
         `,
+        'floating-secondary': `
+          bg-secondary
+          text-secondary-50 dark:text-secondary-950
+          hover:bg-secondary-600 dark:hover:bg-secondary-300
+          active:bg-secondary-700 dark:active:bg-secondary-500
+          cursor-pointer
+          font-bold
+          tracking-wide
+        `,
       },
       size: {
         default: 'h-10 px-4 py-2',

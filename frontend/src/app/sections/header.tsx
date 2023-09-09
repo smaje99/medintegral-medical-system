@@ -31,7 +31,12 @@ export default function Header() {
             atención médica integral y personalizada para tu cuidado
           </Balancer>
         </p>
-        <Button variant='floating' size='lg' className='mt-4 text-base ' asChild>
+        <Button
+          variant='floating-secondary'
+          size='lg'
+          className='mt-4 text-lg tracking-wider'
+          asChild
+        >
           <Link href='#'>Agenda tu cita ahora</Link>
         </Button>
       </section>
