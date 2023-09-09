@@ -1,6 +1,6 @@
 const currentYear = new Date().getFullYear();
 
-const MedintegralRights: React.FC = () => (
+export const MedintegralRights: React.FC = () => (
   <span className='inline-block w-full select-none text-center text-xs tracking-wide'>
     &copy; {currentYear} - Medicina Integral del Caquetá IPS S.A.S
   </span>
