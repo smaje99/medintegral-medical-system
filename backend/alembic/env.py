@@ -7,6 +7,11 @@ from sqlalchemy import pool
 
 from alembic import context
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -29,13 +34,14 @@ target_metadata = None
 
 
 def get_url():
+    '''Get postgresql connection url'''
     host = os.getenv('POSTGRES__HOST', 'localhost')
     port = os.getenv('POSTGRES__PORT', '5432')
-    db = os.getenv('POSTGRES__DB', 'postgres')
+    database = os.getenv('POSTGRES__DB', 'postgres')
     user = os.getenv('POSTGRES__UID', 'postgres')
     password = os.getenv('POSTGRES__PWD', '')
 
-    return f'postgresql://{user}:{password}@{host}:{port}/{db}'
+    return f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
 
 
 def run_migrations_offline() -> None:

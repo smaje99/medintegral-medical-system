@@ -21,6 +21,8 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 fastapi-camelcase = "^1.0.5"
 pydantic-settings = "^2.0.3"
 asyncpg = "^0.28.0"
+psycopg2 = "^2.9.8"
+python-dotenv = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
