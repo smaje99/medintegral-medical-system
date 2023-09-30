@@ -30,6 +30,9 @@
     "pylint.args": [
         "--rcfile=backend/.pylintrc"
     ],
+    "pylint.interpreter": [
+        "C:\\Users\\samaf\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\app-JH63kX8G-py3.11\\Scripts\\python.exe"
+    ],
     "python.analysis.autoFormatStrings": true,
     "python.analysis.pylanceLspClientEnabled": true,
     "python.analysis.typeCheckingMode": "basic",
@@ -38,11 +41,11 @@
     "python.linting.flake8Args": [
         "--rcfile=backend/.flake8"
     ],
-    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Enabled": false,
     "python.linting.mypyArgs": [
         "--rcfile=backend/mypy.ini"
     ],
-    "python.linting.mypyEnabled": true,
+    "python.linting.mypyEnabled": false,
     "python.linting.pylintArgs": [
         "--rcfile=backend/.pylintrc"
     ],
