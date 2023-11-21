@@ -20,7 +20,8 @@
         "**/Thumbs.db": true,
         "**/venv": true,
         ".vscode": true,
-        ".VSCodeCounter": true
+        ".VSCodeCounter": true,
+        "**/.ruff_cache": true
     },
     "flake8.args": [
         "--rcfile=backend/.flake8"
@@ -28,15 +29,9 @@
     "mypy.configFile": "backend/mypy.ini",
     "mypy.runUsingActiveInterpreter": true,
     "prettier.configPath": "frontend/prettier.config.js",
-    "pylint.args": [
-        "--rcfile=backend/.pylintrc"
-    ],
-    "pylint.interpreter": [
-        "C:\\Users\\samaf\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\app-JH63kX8G-py3.11\\Scripts\\python.exe"
-    ],
     "python.analysis.autoFormatStrings": true,
     "python.analysis.pylanceLspClientEnabled": true,
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "strict",
     "python.formatting.provider": "black",
     "python.linting.enabled": true,
     "python.linting.flake8Args": [
@@ -52,5 +47,15 @@
     ],
     "python.linting.pylintEnabled": true,
     "sonarlint.": "backend/venv/**",
-    "workbench.colorCustomizations": {}
+    "workbench.colorCustomizations": {},
+    "python.analysis.autoImportCompletions": true,
+    "ruff.interpreter": [
+      "C:\\Users\\samaf\\AppData\\Local\\pypoetry\\Cache\\virtualenvs\\app-JH63kX8G-py3.11\\Scripts\\python.exe"
+    ],
+    "ruff.lint.args": [
+      "--config=backend/pyproject.toml"
+    ],
+    "ruff.format.args": [
+        "--config=backend/pyproject.toml"
+    ]
 }
