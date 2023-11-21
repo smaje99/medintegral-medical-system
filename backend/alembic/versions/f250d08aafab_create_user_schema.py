@@ -1,10 +1,10 @@
-"""create user schema
+'''create user schema.
 
 Revision ID: f250d08aafab
 Revises: 2868a987ef68
 Create Date: 2023-09-30 06:00:24.931595
 
-"""
+'''
 from typing import Sequence, Union
 
 from alembic import op
@@ -18,10 +18,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    '''Creates the user schema'''
-    op.execute('CREATE SCHEMA IF NOT EXISTS "user";')  # pylint: disable=E1101
+  '''Creates the user schema.'''
+  op.execute('CREATE SCHEMA IF NOT EXISTS "user";')  # pylint: disable=E1101
 
 
 def downgrade() -> None:
-    '''Drops the user schema'''
-    op.execute('DROP SCHEMA IF EXISTS "user";')  # pylint: disable=E1101
+  '''Drops the user schema.'''
+  op.execute('DROP SCHEMA IF EXISTS "user";')  # pylint: disable=E1101
