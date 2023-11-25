@@ -1,13 +1,18 @@
+from typing_extensions import override
+
+from .orm_role_entity import OrmRoleEntity
 from app.context.shared.infrastructure.persistence.sqlalchemy import OrmDao
 
-from .orm_role_entity import Role
+
+__all__ = ('OrmRoleDao',)
 
 
-class OrmRoleDao(OrmDao[Role]):
-    '''SQLAlchemy ORM implementation of ORM DAO.'''
+class OrmRoleDao(OrmDao[OrmRoleEntity]):
+  '''SQLAlchemy ORM implementation of ORM DAO.'''
 
-    def __new__(cls, *args, **kwargs):
-        instance = super().__new__(cls)
-        instance.__entity = Role
+  @override
+  def __new__(cls, *args, **kwargs):
+    instance = super().__new__(cls)
+    instance._entity = OrmRoleEntity
 
-        return instance
+    return instance

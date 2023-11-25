@@ -3,60 +3,66 @@ from typing import Generic, TypeVar
 from uuid import UUID
 
 
-Entity = TypeVar('Entity')
+__all__ = ('DAO',)
 
 
-class DAO(Generic[Entity], metaclass=ABCMeta):
-    '''Generic DAO interface'''
+EntityBase = TypeVar('EntityBase')
 
-    @abstractmethod
-    async def save(self, entity: Entity) -> Entity:
-        '''Create a new entity
 
-        Args:
-            entity (Entity): Entity to create.
+class DAO(Generic[EntityBase], metaclass=ABCMeta):
+  '''Generic DAO interface.'''
 
-        Returns:
-            Entity: Created entity.
-        '''
+  @abstractmethod
+  async def save(self, entity: EntityBase) -> EntityBase:
+    '''Create a new entity.
 
-    @abstractmethod
-    async def update(self, entity: Entity) -> Entity:
-        '''Update an entity
+    Args:
+        entity (EntityBase): Entity to create.
 
-        Args:
-            entity (Entity | dict[str, Any]): Entity to update.
+    Returns:
+        EntityBase: Created entity.
+    '''
 
-        Returns:
-            Entity: Updated entity.
-        '''
+  @abstractmethod
+  async def update(self, entity: EntityBase) -> EntityBase:
+    '''Update an entity.
 
-    @abstractmethod
-    async def search(self, entity_id: UUID) -> Entity | None:
-        '''Search an entity
+    Args:
+        entity (EntityBase | dict[str, Any]): Entity to update.
 
-        Args:
-            entity_id (UUID): Entity id.
+    Returns:
+        EntityBase: Updated entity.
+    '''
 
-        Returns:
-            Entity: Found entity.
-        '''
+  @abstractmethod
+  async def search(self, entity_id: UUID) -> EntityBase | None:
+    '''Search an entity.
 
-    @abstractmethod
-    async def search_all(self) -> list[Entity]:
-        '''Search all entities
+    Args:
+        entity_id (UUID): Entity id.
 
-        Returns:
-            list[Entity]: Found entities.
-        '''
+    Returns:
+        EntityBase: Found entity.
+    '''
 
-    @abstractmethod
-    async def delete(self, entity: Entity) -> Entity:
-        '''Delete an entity
+  @abstractmethod
+  async def filter(self, *expressions) -> list[EntityBase]:
+    '''Filter entities.
 
-        Args:
-            entity (Entity): Entity to delete.
+    Args:
+        *expressions (tuple[Any]): Expressions to filter.
 
-        Returns:
-            Entity: Deleted entity.
-        '''
+    Returns:
+        list[EntityBase]: Filtered entities.
+    '''
+
+  @abstractmethod
+  async def delete(self, entity: EntityBase) -> EntityBase:
+    '''Delete an entity.
+
+    Args:
+        entity (EntityBase): Entity to delete.
+
+    Returns:
+        EntityBase: Deleted entity.
+    '''

@@ -2,57 +2,89 @@ from abc import ABCMeta
 from typing import TypeVar
 from uuid import UUID
 
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql.expression import select
+from sqlalchemy.sql.expression import BinaryExpression, select
+from typing_extensions import override
 
 from app.context.shared.domain import DAO
+from app.context.shared.domain.errors import DaoError
 from app.database import Base
 
 
-Entity = TypeVar('Entity', bound=Base)
+__all__ = ('OrmDao',)
 
 
-class OrmDao(DAO[Entity], metaclass=ABCMeta):
-    '''Abstract SQLAlchemy ORM DAO'''
+EntityBase = TypeVar('EntityBase', bound=Base)
 
-    def __init__(self, database: AsyncSession):
-        '''Abstract SQLAlchemy ORM DAO constructor.
 
-        Args:
-            database (AsyncSession): Database session.
-        '''
-        self.__entity: type[Entity]
-        self._database = database
+class OrmDao(DAO[EntityBase], metaclass=ABCMeta):
+  '''Abstract SQLAlchemy ORM DAO.'''
 
-    async def __upsert(self, entity: Entity) -> Entity:
-        '''Save or update an entity.
+  def __init__(self, database: AsyncSession):
+    '''Abstract SQLAlchemy ORM DAO constructor.
 
-        Args:
-            entity (Entity): Entity to upsert.
+    Args:
+        database (AsyncSession): Database session.
+    '''
+    self._entity: type[EntityBase]
+    self._database = database
 
-        Returns:
-            Entity: Upserted entity.
-        '''
-        self._database.add(entity)
-        self._database.commit()
-        self._database.refresh(entity)
+  async def __upsert(self, entity: EntityBase) -> EntityBase:
+    '''Save or update an entity.
 
-        return entity
+    Args:
+        entity (Entity): Entity to upsert.
 
-    async def save(self, entity: Entity) -> Entity:
-        return await self.__upsert(entity)
+    Returns:
+        Entity: Upserted entity.
+    '''
+    self._database.add(entity)
+    await self._database.commit()
+    await self._database.refresh(entity)
 
-    async def update(self, entity: Entity) -> Entity:
-        return await self.__upsert(entity)
+    return entity
 
-    async def search(self, entity_id: UUID) -> Entity | None:
-        return self._database.get(self.__entity, entity_id)
+  @override
+  async def save(self, entity: EntityBase):
+    try:
+      return await self.__upsert(entity)
+    except SQLAlchemyError as error:
+      raise DaoError.save_operation_failed() from error
 
-    async def search_all(self) -> list[Entity]:
-        return self._database.scalars(select(self.__entity)).all()
+  @override
+  async def update(self, entity: EntityBase) -> EntityBase:
+    try:
+      return await self.__upsert(entity)
+    except SQLAlchemyError as error:
+      raise DaoError.update_operation_failed() from error
 
-    async def delete(self, entity: Entity) -> Entity:
-        self._database.delete(entity)
-        self._database.commit()
+  @override
+  async def search(self, entity_id: UUID) -> EntityBase | None:
+    try:
+      return await self._database.get(self._entity, entity_id)
+    except SQLAlchemyError as error:
+      raise DaoError.retrieve_operation_failed() from error
 
-        return entity
+  @override
+  async def filter(self, *expressions: BinaryExpression) -> list[EntityBase]:
+    try:
+      query = select(self._entity)
+
+      if expressions:
+        query = query.where(*expressions)
+
+      result = await self._database.scalars(query)
+      return list(result.all())
+    except SQLAlchemyError as error:
+      raise DaoError.retrieve_operation_failed() from error
+
+  @override
+  async def delete(self, entity: EntityBase) -> EntityBase:
+    try:
+      await self._database.delete(entity)
+      await self._database.commit()
+    except SQLAlchemyError as error:
+      raise DaoError.delete_operation_failed() from error
+
+    return entity
