@@ -1,10 +1,13 @@
 from pydantic import BaseModel
 
-from .objects import RoleName, RoleDescription
+from app.context.user.role.domain.objects import RoleDescription, RoleName
+
+
+__all__ = ('RoleSaveDTO',)
 
 
 class RoleSaveDTO(BaseModel):
-    '''Role create DTO'''
+  '''Role create DTO.'''
 
-    name: RoleName
-    description: RoleDescription
+  name: RoleName
+  description: RoleDescription

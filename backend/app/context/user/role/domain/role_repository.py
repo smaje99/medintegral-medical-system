@@ -1,19 +1,22 @@
 from abc import ABCMeta, abstractmethod
 
-from .role_model import Role
-from .role_dto import RoleSaveDTO
+from app.context.user.role.domain.role import Role
+from app.context.user.role.domain.role_dto import RoleSaveDTO
+
+
+__all__ = ('RoleRepository',)
 
 
 class RoleRepository(metaclass=ABCMeta):
-    '''Role repository interface'''
+  '''Role repository interface.'''
 
-    @abstractmethod
-    async def save(self, role_in: RoleSaveDTO) -> Role:
-        '''Save a new role.
+  @abstractmethod
+  async def save(self, role_in: RoleSaveDTO) -> Role:
+    '''Save a new role.
 
-        Args:
-            role (Role): Role to save.
+    Args:
+        role_in (RoleSaveDTO): Role to save.
 
-        Returns:
-            Role: Saved role.
-        '''
+    Returns:
+        Role: Saved role.
+    '''

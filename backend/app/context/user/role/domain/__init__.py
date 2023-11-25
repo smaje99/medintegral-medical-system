@@ -1,5 +1,7 @@
+from .objects import RoleId
+from .role import Role
 from .role_dto import RoleSaveDTO
-from .role_model import Role
 from .role_repository import RoleRepository
 
-from .objects import RoleId
+
+__all__ = ('Role', 'RoleId', 'RoleSaveDTO', 'RoleRepository')
