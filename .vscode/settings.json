@@ -30,23 +30,7 @@
     "mypy.runUsingActiveInterpreter": true,
     "prettier.configPath": "frontend/prettier.config.js",
     "python.analysis.autoFormatStrings": true,
-    "python.analysis.pylanceLspClientEnabled": true,
-    "python.analysis.typeCheckingMode": "strict",
-    "python.formatting.provider": "black",
-    "python.linting.enabled": true,
-    "python.linting.flake8Args": [
-        "--rcfile=backend/.flake8"
-    ],
-    "python.linting.flake8Enabled": false,
-    "python.linting.mypyArgs": [
-        "--rcfile=backend/mypy.ini"
-    ],
-    "python.linting.mypyEnabled": false,
-    "python.linting.pylintArgs": [
-        "--rcfile=backend/.pylintrc"
-    ],
-    "python.linting.pylintEnabled": true,
-    "sonarlint.": "backend/venv/**",
+    "python.analysis.typeCheckingMode": "basic",
     "workbench.colorCustomizations": {},
     "python.analysis.autoImportCompletions": true,
     "ruff.interpreter": [
