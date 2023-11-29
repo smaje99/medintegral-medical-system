@@ -5,17 +5,14 @@ from sqlalchemy.sql import func
 from sqlalchemy.types import String, Text, Uuid
 
 from app.database import Base
+from app.database.mixins import IdentifierMixin
 
 
 __all__ = ('OrmRoleEntity',)
 
 
-class OrmRoleEntity(Base):
+class OrmRoleEntity(Base, IdentifierMixin):
   '''Role entity of ORM.'''
-
-  id: Mapped[UUID] = mapped_column(
-    Uuid, primary_key=True, nullable=False, server_default=func.uuid_generate_v4()
-  )
 
   name: Mapped[str] = mapped_column(String(20), nullable=False, unique=True)
 
