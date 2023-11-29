@@ -6,7 +6,7 @@ from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 __all__ = ('Base',)
 
 
-class Base(AsyncAttrs, MappedAsDataclass, DeclarativeBase):
+class Base(AsyncAttrs, MappedAsDataclass, DeclarativeBase, init=False):
   '''Base class for all SQLAlchemy models.
 
   The class models must have a name that starts with "Orm" and ends with "Model".
