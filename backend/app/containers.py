@@ -14,7 +14,9 @@ class ApplicationContainer(DeclarativeContainer):
   config = Configuration()
 
   database = Singleton(
-    PostgresDatabase, db_uri=config.postgres.uri, echo=config.postgres.echo
+    PostgresDatabase,
+    db_uri=config.postgres.uri.as_(str),
+    echo=config.postgres.echo,
   )
 
   role = Container(RoleContainer, database=database)

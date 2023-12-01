@@ -1,6 +1,7 @@
 from typing import cast
 
 from pydantic import AnyHttpUrl, PostgresDsn, SecretStr, ValidationInfo, field_validator
+from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,7 +14,7 @@ class PostgresSettings(BaseSettings):
   host: str
   port: int
   uid: str
-  pwd: str
+  pwd: SecretStr
   db: str
 
   echo: bool = False
@@ -24,25 +25,21 @@ class PostgresSettings(BaseSettings):
   @classmethod
   def assemble_uri(cls, _: str, info: ValidationInfo) -> PostgresDsn | None:
     '''Assemble the URI of the Postgres database connection.'''
-    context = info.context
+    data = info.data
 
-    if context is None:
-      return None
-
-    password = context.get('pwd', '')
+    password = data.get('pwd', '')
     password = (
       password.get_secret_value() if isinstance(password, SecretStr) else password
     )
 
-    scheme = 'postgresql+asyncpg'
-    username = context.get('uid', 'postgres')
-    host = context.get('host', 'localhost')
-    port = context.get('port', 5432)
-    database = context.get('db', 'postgres')
-
-    uri = f'{scheme}://{username}:{password}@{host}:{port}/{database}'
-
-    return cast(PostgresDsn, uri)
+    return MultiHostUrl.build(
+      scheme='postgresql+asyncpg',
+      username=data.get('uid', 'postgres'),
+      password=password,
+      host=data.get('host', 'localhost'),
+      port=data.get('port', 5432),
+      path=data.get('db', 'postgres'),
+    )
 
 
 class ProjectSettings(BaseSettings):
