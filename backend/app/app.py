@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api import api_v1_router
 from app.containers import ApplicationContainer
 from app.core.config import Settings
 
@@ -28,3 +29,5 @@ app.add_middleware(
   allow_methods=['*'],
   allow_headers=['*'],
 )
+
+app.include_router(api_v1_router, prefix=container.config.domain.api_version())
