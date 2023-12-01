@@ -29,7 +29,7 @@ def validate_role_name(role_name: str) -> str:
   ), 'Nombre del rol debe tener menos de 20 caracteres'
   assert role_name.isalpha(), 'Nombre del rol debe contener solo letras'
   assert (
-    len(role_name.strip.split()) == ROLE_NAME_MAX_WORDS
+    len(role_name.strip().split()) == ROLE_NAME_MAX_WORDS
   ), 'Nombre del rol no puede contener espacios en blanco'
 
   return role_name
