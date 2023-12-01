@@ -18,10 +18,11 @@ def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
       bool: Is valid.
   '''
   try:
-    val = UUID(uuid_to_test, version=version)
-    return val.hex == uuid_to_test
+    uuid_obj = UUID(uuid_to_test, version=version)
   except ValueError:
     return False
+
+  return str(uuid_obj) == uuid_to_test.lower() and uuid_obj.version == version
 
 
 def validate_role_id(role_id: UUID | str) -> UUID | str:
