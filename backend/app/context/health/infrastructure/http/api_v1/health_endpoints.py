@@ -19,4 +19,9 @@ async def check_health(
     Provide['health.health_controller']
   ),
 ) -> HealthResponse:
+  '''Health checker for the application.
+
+  Returns:
+  * HealthResponse: Application health.
+  '''
   return await health_controller()
