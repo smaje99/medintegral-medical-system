@@ -3,9 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import api_v1_router
 from app.containers import ApplicationContainer
+from app.context.shared.domain.errors import DaoError
 from app.core.config import Settings
 from app.core.errors import HTTPException
-from app.middlewares.error_handlers import http_exception_handler
+from app.middlewares.error_handlers import (
+    dao_error_exception_handler,
+    http_exception_handler,
+)
 
 
 __all__ = ('app',)
@@ -33,5 +37,7 @@ app.add_middleware(
 )
 
 app.include_router(api_v1_router, prefix=container.config.domain.api_version())
+
+app.add_exception_handler(DaoError, dao_error_exception_handler)
 
 app.add_exception_handler(HTTPException, http_exception_handler)

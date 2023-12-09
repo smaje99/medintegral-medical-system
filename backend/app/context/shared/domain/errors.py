@@ -1,18 +1,23 @@
 from typing import Self
 
-from pydantic import BaseModel
-
 
 __all__ = (
   'DomainError',
   'ResourceNotFound',
   'DaoError',
-  'ApiErrorMessage',
 )
 
 
 class DomainError(Exception):
   '''Domain error class.'''
+
+  def __init__(self, message: str):
+    '''Domain error class constructor.
+
+    Args:
+        message (str): The error message.
+    '''
+    self.message = message
 
 
 class ResourceNotFound(DomainError):
@@ -57,10 +62,3 @@ class DaoError(DomainError):
         DaoError: The error class instance.
     '''
     return cls('Operación de eliminación fallida')
-
-
-class ApiErrorMessage(BaseModel):
-  '''API error message class.'''
-
-  type: str
-  message: str
