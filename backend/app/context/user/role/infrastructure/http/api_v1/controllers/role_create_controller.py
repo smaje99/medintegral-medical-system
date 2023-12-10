@@ -1,5 +1,9 @@
+from starlette.status import HTTP_409_CONFLICT
+
 from app.context.user.role.application import RoleCreator
 from app.context.user.role.domain import Role, RoleSaveDTO
+from app.context.user.role.domain.role_errors import RoleAlreadyExists
+from app.core.errors import HTTPException
 
 
 __all__ = ('RoleCreateController',)
@@ -25,4 +29,9 @@ class RoleCreateController:
     Returns:
         Role: Role created.
     '''
-    return await self.__role_creator(role_in)
+    try:
+      return await self.__role_creator(role_in)
+    except RoleAlreadyExists as error:
+      raise HTTPException(
+        status_code=HTTP_409_CONFLICT, message=error.message, error_type=error
+      ) from error

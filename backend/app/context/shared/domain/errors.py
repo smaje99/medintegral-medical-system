@@ -24,6 +24,10 @@ class ResourceNotFound(DomainError):
   '''Resource not found error class.'''
 
 
+class ResourceAlreadyExists(DomainError):
+  '''Resource already exists error class.'''
+
+
 class DaoError(DomainError):
   '''Data access error class.'''
 
