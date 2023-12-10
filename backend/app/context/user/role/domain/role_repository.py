@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
+from app.context.user.role.domain import RoleId
 from app.context.user.role.domain.role import Role
 from app.context.user.role.domain.role_dto import RoleSaveDTO
 
@@ -19,4 +20,15 @@ class RoleRepository(metaclass=ABCMeta):
 
     Returns:
         Role: Saved role.
+    '''
+
+  @abstractmethod
+  async def contains(self, role_id: RoleId) -> bool:
+    '''Check if a role exists.
+
+    Args:
+        role_id (RoleId): Role id.
+
+    Returns:
+        bool: True if role exists, False otherwise.
     '''

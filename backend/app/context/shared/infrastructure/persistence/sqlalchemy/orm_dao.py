@@ -4,6 +4,7 @@ from uuid import UUID
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.inspection import inspect
 from sqlalchemy.sql.expression import BinaryExpression, select
 from typing_extensions import override
 
@@ -95,3 +96,14 @@ class OrmDao(DAO[EntityBase], metaclass=ABCMeta):
         raise DaoError.delete_operation_failed() from error
 
       return entity
+
+  @override
+  async def exists(self, entity_id: UUID) -> bool:
+    async with self._database.session() as session:
+      try:
+        entity_pk = inspect(self._entity).primary_key[0]
+        sub_query = select(self._entity).where(entity_pk == entity_id)
+        query = select(sub_query.exists())
+        return await session.scalar(query)
+      except SQLAlchemyError as error:
+        raise DaoError.retrieve_operation_failed() from error

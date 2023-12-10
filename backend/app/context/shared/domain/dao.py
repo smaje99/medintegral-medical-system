@@ -66,3 +66,14 @@ class DAO(Generic[EntityBase], metaclass=ABCMeta):
     Returns:
         EntityBase: Deleted entity.
     '''
+
+  @abstractmethod
+  async def exists(self, entity_id: UUID) -> bool:
+    '''Check if an entity exists.
+
+    Args:
+        entity_id (UUID): Entity id.
+
+    Returns:
+        bool: True if entity exists, False otherwise.
+    '''
