@@ -18,7 +18,7 @@ router = APIRouter()
 
 @router.post('/', status_code=HTTP_201_CREATED)
 @inject
-async def create_user(  # noqa: D417
+async def create_role(  # noqa: D417
   role_in: Annotated[RoleSaveDTO, Body(alias='roleIn')],
   *,
   role_controller: RoleCreateController = Depends(  # noqa: B008
