@@ -30,3 +30,9 @@ class OrmRoleRepository(RoleRepository):
   @override
   async def contains(self, role_id: RoleId) -> bool:
     return await self.__dao.exists(role_id)
+
+  @override
+  async def contains_by_name(self, name: str) -> bool:
+    roles = await self.__dao.filter(OrmRoleEntity.name.like(name))
+
+    return len(roles) == 1

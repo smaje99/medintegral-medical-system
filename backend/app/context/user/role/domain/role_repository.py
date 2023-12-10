@@ -32,3 +32,14 @@ class RoleRepository(metaclass=ABCMeta):
     Returns:
         bool: True if role exists, False otherwise.
     '''
+
+  @abstractmethod
+  async def contains_by_name(self, name: str) -> bool:
+    '''Check if a role exists by name.
+
+    Args:
+        name (str): Role name.
+
+    Returns:
+        bool: True if role exists, False otherwise.
+    '''
