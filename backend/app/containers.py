@@ -4,7 +4,7 @@ from dependency_injector.providers import Configuration, Container, Singleton
 from app.context.health.infrastructure.health_containers import HealthContainer
 from app.context.health.infrastructure.http.api_v1 import health_endpoints
 from app.context.user.role.infrastructure.http.api_v1 import role_endpoints
-from app.context.user.role.infrastructure.role_containers import RoleContainer
+from app.context.user.shared.infrastructure.user_main_containers import UserMainContainer
 from app.database.postgres import PostgresDatabase
 
 
@@ -24,6 +24,6 @@ class ApplicationContainer(DeclarativeContainer):
     echo=config.postgres.echo,
   )
 
-  role = Container(RoleContainer, database=database)
+  user = Container(UserMainContainer, database=database)
 
   health = Container(HealthContainer, database=database)

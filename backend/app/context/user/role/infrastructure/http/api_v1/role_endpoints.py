@@ -22,7 +22,7 @@ async def create_role(  # noqa: D417
   role_in: Annotated[RoleSaveDTO, Body(alias='roleIn')],
   *,
   role_controller: RoleCreateController = Depends(  # noqa: B008
-    Provide['role.role_create_controller']
+    Provide['user.role.role_create_controller']
   ),
 ) -> Role:
   '''Create a new role.
