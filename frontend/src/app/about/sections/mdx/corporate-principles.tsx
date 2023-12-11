@@ -22,6 +22,6 @@ export const CorporatePrinciple = ({
     <div className='text-secondary-600 mt-1'>
       <ListTodo size={24} />
     </div>
-    <span>{children}</span>
+    <span className='text-pretty'>{children}</span>
   </li>
 );

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 };
 
 export default function AboutLayout({ children }: Props) {

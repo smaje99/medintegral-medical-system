@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Balancer } from 'react-wrap-balancer';
 
 import { Stat } from '@/components/stat';
 import { Button } from '@/components/ui/button';
@@ -22,14 +21,16 @@ export default function Header() {
       <section
         className={'animate-fade-up flex flex-col items-center justify-center gap-4'}
       >
-        <h1 className='max-w-lg text-center text-4xl font-extrabold sm:text-5xl'>
-          <Balancer>Transforma tu salud con nuestro respaldo</Balancer>
+        <h1
+          className={
+            'text-balance max-w-lg text-center text-4xl font-extrabold sm:text-5xl'
+          }
+        >
+          Transforma tu salud con nuestro respaldo
         </h1>
-        <p className='max-w-2xl text-center text-xl/relaxed'>
-          <Balancer>
-            Nuestro equipo de médicos especializados te guiará en cada paso, ofreciéndote
-            atención médica integral y personalizada para tu cuidado
-          </Balancer>
+        <p className='text-pretty max-w-2xl text-center text-xl/relaxed'>
+          Nuestro equipo de médicos especializados te guiará en cada paso, ofreciéndote
+          atención médica integral y personalizada para tu cuidado
         </p>
         <Button
           variant='floating-secondary'
