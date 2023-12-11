@@ -124,6 +124,9 @@ devDependencies:
   eslint-plugin-import:
     specifier: 2.28.1
     version: 2.28.1(@typescript-eslint/parser@6.6.0)(eslint-import-resolver-typescript@3.6.0)(eslint@8.48.0)
+  eslint-plugin-next-recommended:
+    specifier: ^1.0.3
+    version: 1.0.3(eslint@8.48.0)
   eslint-plugin-node:
     specifier: 11.1.0
     version: 11.1.0(eslint@8.48.0)
@@ -2603,6 +2606,14 @@ packages:
       object.entries: 1.1.6
       object.fromentries: 2.0.6
       semver: 6.3.1
+    dev: true
+
+  /eslint-plugin-next-recommended@1.0.3(eslint@8.48.0):
+    resolution: {integrity: sha512-HeZ2aLFd1navtTxoyWbWqpnMBjBbI+DnBYplQcGj4PAG+Vh0yKA62TLLjUTZtL/nrGZ3tkGsCj/Qsx8R5zpLzQ==}
+    peerDependencies:
+      eslint: '>=8.0.0'
+    dependencies:
+      eslint: 8.48.0
     dev: true
 
   /eslint-plugin-node@11.1.0(eslint@8.48.0):
