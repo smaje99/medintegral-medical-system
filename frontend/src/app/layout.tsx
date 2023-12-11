@@ -1,7 +1,7 @@
 import 'normalize.css';
 import './globals.css';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import { ThemeProvider } from '@/components/theme-provider';
 
@@ -11,7 +11,6 @@ export const metadata: Metadata = {
     'Plataforma médica para citas médicas de' +
     'la MEDICINA INTEGRAL DEL CAQUETÁ IPS S.A.S',
   authors: { name: 'Sergio Andrés Majé Franco', url: 'smajefranco@gmail.com' },
-  viewport: 'width=device-width, initial-scale=1',
   keywords: [
     'Medintegral',
     'Medintegral IPS',
@@ -24,6 +23,11 @@ export const metadata: Metadata = {
     'Caquetá',
     'sugerencias',
   ],
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 type RootLayoutProps = {
