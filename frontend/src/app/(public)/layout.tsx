@@ -1,8 +1,10 @@
 import 'normalize.css';
-import './globals.css';
+import '../globals.css';
 
 import type { Metadata, Viewport } from 'next';
 
+import { InfoFooter } from '@/components/footer';
+import { Navbar } from '@/components/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
@@ -38,7 +40,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang='es'>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <Navbar />
+          {children}
+          <InfoFooter />
+        </ThemeProvider>
       </body>
     </html>
   );
