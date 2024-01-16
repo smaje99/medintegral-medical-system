@@ -69,7 +69,6 @@ const InfoItemLink: React.FC<
       )}
       {...props}
     />
-    <a />
   </InfoItem>
 );
 
