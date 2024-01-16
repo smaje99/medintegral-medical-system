@@ -3,9 +3,10 @@ import '../globals.css';
 
 import type { Metadata, Viewport } from 'next';
 
-import { InfoFooter } from '@/components/footer';
-import { Navbar } from '@/components/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
+
+import { InfoFooter } from './footer';
+import { Navbar } from './navigation';
 
 export const metadata: Metadata = {
   title: 'Medintegral IPS S.A.S',

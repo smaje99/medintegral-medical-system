@@ -5,6 +5,9 @@ import type { Metadata, Viewport } from 'next';
 
 import { ThemeProvider } from '@/components/theme-provider';
 
+import { RightsFooter } from './footer';
+import { FoldingNav } from './navigation';
+
 export const metadata: Metadata = {
   title: 'Medintegral IPS S.A.S',
   description: 'Plataforma médica de MEDICINA INTEGRAL DEL CAQUETÁ',
@@ -25,7 +28,11 @@ export default function CMSLayout({ children }: Props) {
   return (
     <html lang='es'>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <FoldingNav />
+          {children}
+          <RightsFooter />
+        </ThemeProvider>
       </body>
     </html>
   );

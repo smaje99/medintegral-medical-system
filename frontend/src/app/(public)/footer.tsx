@@ -19,8 +19,8 @@ import {
   type LiHTMLAttributes,
 } from 'react';
 
-import { MedintegralRights } from '@/components/footer/rights-footer';
 import { Maps } from '@/components/maps';
+import { MedintegralRights } from '@/components/rights';
 import { ContactRoutes, Routes } from '@/helpers/routes';
 import { cn } from '@/lib/utils';
 
@@ -56,15 +56,13 @@ const InfoItemLink: React.FC<
   <InfoItem>
     <Link
       className={cn(
-        `
-        inline-flex gap-1
-        hover:font-semibold
-        hover:text-primary-700
-        dark:hover:text-foreground/80
-        active:text-primary-400
-        dark:active:text-primary-500
-        transition-colors
-        `,
+        'inline-flex gap-1',
+        'hover:font-semibold',
+        'hover:text-primary-700',
+        'dark:hover:text-foreground/80',
+        'active:text-primary-400',
+        'dark:active:text-primary-500',
+        'transition-colors',
         className,
       )}
       {...props}
@@ -84,18 +82,18 @@ const MedintegralLogo = () => (
 export const InfoFooter: React.FC = () => (
   <footer className='mx-2 mb-6 mt-20 grid gap-10'>
     <section
-      className={cn(`
-        w-4/5
-        mx-auto
-        grid
-        justify-center
-        justify-items-start
-        gap-x-5 gap-y-12
-        grid-flow-dense
-        auto-rows-[max-content]
-        grid-cols-[repeat(auto-fit,_minmax(14rem,_1fr))]
-        overflow-x-hidden
-      `)}
+      className={cn(
+        'w-4/5',
+        'mx-auto',
+        'grid',
+        'justify-center',
+        'justify-items-start',
+        'gap-x-5 gap-y-12',
+        'grid-flow-dense',
+        'auto-rows-[max-content]',
+        'grid-cols-[repeat(auto-fit,_minmax(14rem,_1fr))]',
+        'overflow-x-hidden',
+      )}
     >
       <Info title='Sobre nosotros'>
         <InfoGroup>

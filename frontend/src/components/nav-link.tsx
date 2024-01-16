@@ -12,7 +12,12 @@ type Props = LinkProps & {
   children: ReactNode;
 };
 
-const NavLink: React.FC<Props> = ({ className, activeClassName, children, ...props }) => {
+export const NavLink: React.FC<Props> = ({
+  className,
+  activeClassName,
+  children,
+  ...props
+}) => {
   const pathname = usePathname();
 
   const isActive = useMemo<boolean>(
@@ -28,5 +33,3 @@ const NavLink: React.FC<Props> = ({ className, activeClassName, children, ...pro
     </Link>
   );
 };
-
-export default NavLink;

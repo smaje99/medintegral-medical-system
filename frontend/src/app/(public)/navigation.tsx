@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { type DetailedHTMLProps, type FC, type LiHTMLAttributes } from 'react';
 
 import { ModeToggle } from '@/components/mode-toggle';
+import { NavLink } from '@/components/nav-link';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -18,8 +19,6 @@ import {
 import { AuthRoutes, Route, Routes } from '@/helpers/routes';
 import medintegralIcon from '@/icons/medintegral.svg';
 import { cn } from '@/lib/utils';
-
-import NavLink from './NavLink';
 
 const items: Route[] = [
   { href: '/', name: 'Servicios' },
@@ -102,13 +101,13 @@ const Item: FC<DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>
 }) => (
   <li
     className={cn(
-      `[&:nth-child(-n+5)]:hidden
-        sm:[&:nth-child(4)]:inline-block
-        sm:[&:nth-child(5)]:inline-block
-        lg:[&:nth-child(1)]:inline-block
-        lg:[&:nth-child(2)]:inline-block
-        lg:[&:nth-child(3)]:inline-block
-        lg:last:hidden`,
+      '[&:nth-child(-n+5)]:hidden',
+      'sm:[&:nth-child(4)]:inline-block',
+      'sm:[&:nth-child(5)]:inline-block',
+      'lg:[&:nth-child(1)]:inline-block',
+      'lg:[&:nth-child(2)]:inline-block',
+      'lg:[&:nth-child(3)]:inline-block',
+      'lg:last:hidden',
       className,
     )}
     {...props}
@@ -117,16 +116,16 @@ const Item: FC<DetailedHTMLProps<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>
   </li>
 );
 
-const Navbar: FC = () => (
+export const Navbar: FC = () => (
   <nav
     className={cn(
-      `w-screen
-      fixed z-10
-      flex justify-between items-center flex-nowrap gap-8
-      bg-nav
-      px-6 py-2
-      box-border
-      shadow`,
+      'w-screen',
+      'fixed z-10',
+      'flex justify-between items-center flex-nowrap gap-8',
+      'bg-nav',
+      'px-6 py-2',
+      'box-border',
+      'shadow',
     )}
   >
     <Logo />
@@ -158,5 +157,3 @@ const Navbar: FC = () => (
     </ul>
   </nav>
 );
-
-export default Navbar;
