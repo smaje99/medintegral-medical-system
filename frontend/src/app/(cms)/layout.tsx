@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: 'Medintegral IPS S.A.S',
   description: 'Plataforma médica de MEDICINA INTEGRAL DEL CAQUETÁ',
   authors: { name: 'Sergio Andrés Majé Franco', url: 'smajefranco@gmail.com' },
+  robots: { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
