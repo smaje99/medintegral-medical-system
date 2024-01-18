@@ -1,12 +1,10 @@
-import { IconSettings } from '@tabler/icons-react';
+import { ModeToggle } from '@/components/mode-toggle';
 
-import { Button } from '@/components/ui/button';
+import { Settings } from './settings';
 
 export const FoldingNav: React.FC = () => (
-  <aside role='menu' className='grid'>
-    <Button variant='outline' size='icon' title='Configuración'>
-      <IconSettings />
-      <span className='sr-only'>Configuración</span>
-    </Button>
+  <aside className='grid'>
+    <Settings />
+    <ModeToggle />
   </aside>
 );
