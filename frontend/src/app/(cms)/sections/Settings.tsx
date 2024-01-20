@@ -2,8 +2,9 @@ import { IconSettings } from '@tabler/icons-react';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { RolesAndPermissions } from './RolesAndPermissions';
 
 const Content: React.FC<{
   readonly value: string;
@@ -23,15 +24,9 @@ const Item: React.FC<{ readonly value: string; readonly children: React.ReactNod
   </TabsTrigger>
 );
 
-const RolesAndPermissionContent: React.FC = () => (
+const RolesAndPermissionsContent: React.FC = () => (
   <Content value='roles'>
-    <div className='flex items-center justify-between'>
-      <h2 className='text-xl'>Roles y permisos</h2>
-      <Button size='sm' className='h-max'>
-        Crear rol
-      </Button>
-    </div>
-    <Separator />
+    <RolesAndPermissions />
   </Content>
 );
 
@@ -55,7 +50,7 @@ export const Settings: React.FC = () => (
         <TabsList className='sticky box-border grid h-full grid-cols-1 gap-5 p-3'>
           <Item value='roles'>Roles y permisos</Item>
         </TabsList>
-        <RolesAndPermissionContent />
+        <RolesAndPermissionsContent />
       </Tabs>
     </DialogContent>
   </Dialog>
