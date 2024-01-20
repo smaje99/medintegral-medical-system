@@ -11,5 +11,6 @@ export const Maps: React.FC<{ className?: string }> = ({ className }) => (
     loading='lazy'
     referrerPolicy='no-referrer-when-downgrade'
     aria-label='Mapa de la ubicación de Medintegral IPS S.A.S'
+    title='Mapa de la ubicación de Medintegral IPS S.A.S'
   ></iframe>
 );
