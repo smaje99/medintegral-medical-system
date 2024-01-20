@@ -4,6 +4,7 @@ import '../globals.css';
 import type { Metadata, Viewport } from 'next';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 import { RightsFooter } from './footer';
 import { FoldingNav } from './navigation';
@@ -32,6 +33,7 @@ export default function CMSLayout({ children }: Props) {
           <FoldingNav />
           {children}
           <RightsFooter />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
