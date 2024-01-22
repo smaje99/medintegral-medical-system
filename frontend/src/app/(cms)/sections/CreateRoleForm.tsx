@@ -2,8 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { SheetFooter } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { RoleSaveDTO, type RoleSaveDtoType } from '@/modules/user/role/domain';
+import { roleCreateController } from '@/modules/user/role/infrastructure/roleContainer';
 
 type Props = {
   setOpenSheet: (isOpen: boolean) => void;
@@ -28,8 +27,8 @@ export const CreateRoleForm: React.FC<Props> = ({ setOpenSheet }) => {
     resolver: zodResolver(RoleSaveDTO),
   });
 
-  const onSubmit = (data: RoleSaveDtoType) => {
-    toast(data.name);
+  const onSubmit = async (data: RoleSaveDtoType) => {
+    roleCreateController.run(data, setOpenSheet);
   };
 
   return (
