@@ -1,3 +1,4 @@
 export { RoleId } from './objects/roleId';
 export { Role } from './role';
-export { RoleSaveDTO } from './roleDto';
+export { type RoleResponse, RoleSaveDTO, type RoleSaveDtoType } from './roleDto';
+export { type RoleRepository } from './roleRepository';
