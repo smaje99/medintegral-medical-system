@@ -3,26 +3,10 @@ from uuid import UUID
 
 from pydantic import AfterValidator
 
+from app.core.validations import is_valid_uuid
+
 
 __all__ = ('RoleId',)
-
-
-def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
-  '''Validate uuid.
-
-  Args:
-      uuid_to_test (str): UUID to test.
-      version (int, optional): Version. Defaults to 4.
-
-  Returns:
-      bool: Is valid.
-  '''
-  try:
-    uuid_obj = UUID(uuid_to_test, version=version)
-  except ValueError:
-    return False
-
-  return str(uuid_obj) == uuid_to_test.lower() and uuid_obj.version == version
 
 
 def validate_role_id(role_id: UUID | str) -> UUID | str:
