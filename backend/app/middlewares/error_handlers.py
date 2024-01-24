@@ -1,20 +1,22 @@
 from fastapi import Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
-from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY, HTTP_500_INTERNAL_SERVER_ERROR
 
 from app.context.shared.domain.errors import DaoError
 from app.core.errors import HTTPException
 
 
 __all__ = (
-  'http_exception_handler',
   'dao_error_exception_handler',
+  'http_exception_handler',
+  'request_validation_error_exception_handler',
   'sqlalchemy_error_exception_handler',
 )
 
 
-def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse:
+async def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse:
   '''Handler for the HTTPException's.'''
   content = dict(message=exc.message)
 
@@ -24,12 +26,14 @@ def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse:
   return JSONResponse(content=content, status_code=exc.status_code, headers=exc.headers)
 
 
-def dao_error_exception_handler(_: Request, exc: DaoError):
+async def dao_error_exception_handler(_: Request, exc: DaoError):
   '''Handler for the DAOError's.'''
-  raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, message=exc.message)
+  raise HTTPException(
+    status_code=HTTP_500_INTERNAL_SERVER_ERROR, message=exc.message
+  ) from exc
 
 
-def sqlalchemy_error_exception_handler(_: Request, exc: SQLAlchemyError):
+async def sqlalchemy_error_exception_handler(_: Request, exc: SQLAlchemyError):
   '''Handler for the SQLAlchemy errors.'''
   raise HTTPException(
     status_code=HTTP_500_INTERNAL_SERVER_ERROR,
@@ -37,4 +41,18 @@ def sqlalchemy_error_exception_handler(_: Request, exc: SQLAlchemyError):
       'Lo sentimos, actualmente no podemos procesar su solicitud debido'
       + 'a problemas técnicos. Por favor, inténtelo de nuevo más tarde.'
     ),
-  )
+  ) from exc
+
+
+async def request_validation_error_exception_handler(
+  _: Request, exc: RequestValidationError
+):
+  '''Handler for the RequestValidationError's.'''
+  error = exc.errors()[0]['ctx']['error']
+  message = str(error)
+
+  raise HTTPException(
+    status_code=HTTP_422_UNPROCESSABLE_ENTITY,
+    message=message,
+    error_type=exc,
+  ) from exc
