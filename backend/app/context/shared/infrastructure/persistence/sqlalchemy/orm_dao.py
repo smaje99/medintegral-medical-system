@@ -1,12 +1,11 @@
 from abc import ABCMeta
-from typing import TypeVar
+from typing import override
 from uuid import UUID
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.inspection import inspect
 from sqlalchemy.sql.expression import BinaryExpression, select
-from typing_extensions import override
 
 from app.context.shared.domain import DAO
 from app.context.shared.domain.errors import DaoError
@@ -17,10 +16,9 @@ from app.database.postgres import PostgresDatabase
 __all__ = ('OrmDao',)
 
 
-EntityBase = TypeVar('EntityBase', bound=Base)
-
-
-class OrmDao(DAO[EntityBase], metaclass=ABCMeta):
+class OrmDao[EntityBase: Base, EntityId: UUID | str](
+  DAO[EntityBase, EntityId], metaclass=ABCMeta
+):
   '''Abstract SQLAlchemy ORM DAO.'''
 
   def __init__(self, database: PostgresDatabase):
@@ -65,7 +63,7 @@ class OrmDao(DAO[EntityBase], metaclass=ABCMeta):
         raise DaoError.update_operation_failed() from error
 
   @override
-  async def search(self, entity_id: UUID) -> EntityBase | None:
+  async def search(self, entity_id: EntityId) -> EntityBase | None:
     async with self._database.session() as session:
       try:
         return await session.get(self._entity, entity_id)
@@ -98,12 +96,14 @@ class OrmDao(DAO[EntityBase], metaclass=ABCMeta):
       return entity
 
   @override
-  async def exists(self, entity_id: UUID) -> bool:
+  async def exists(self, entity_id: EntityId) -> bool:
     async with self._database.session() as session:
       try:
         entity_pk = inspect(self._entity).primary_key[0]
         sub_query = select(self._entity).where(entity_pk == entity_id)
         query = select(sub_query.exists())
-        return await session.scalar(query)
+        result = await session.scalar(query)
+
+        return bool(result)
       except SQLAlchemyError as error:
         raise DaoError.retrieve_operation_failed() from error

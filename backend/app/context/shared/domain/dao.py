@@ -1,15 +1,10 @@
 from abc import ABCMeta, abstractmethod
-from typing import Generic, TypeVar
-from uuid import UUID
 
 
 __all__ = ('DAO',)
 
 
-EntityBase = TypeVar('EntityBase')
-
-
-class DAO(Generic[EntityBase], metaclass=ABCMeta):
+class DAO[EntityBase, EntityId](metaclass=ABCMeta):
   '''Generic DAO interface.'''
 
   @abstractmethod
@@ -35,11 +30,11 @@ class DAO(Generic[EntityBase], metaclass=ABCMeta):
     '''
 
   @abstractmethod
-  async def search(self, entity_id: UUID) -> EntityBase | None:
+  async def search(self, entity_id: EntityId) -> EntityBase | None:
     '''Search an entity.
 
     Args:
-        entity_id (UUID): Entity id.
+        entity_id (EntityId): Entity id.
 
     Returns:
         EntityBase: Found entity.
@@ -68,11 +63,11 @@ class DAO(Generic[EntityBase], metaclass=ABCMeta):
     '''
 
   @abstractmethod
-  async def exists(self, entity_id: UUID) -> bool:
+  async def exists(self, entity_id: EntityId) -> bool:
     '''Check if an entity exists.
 
     Args:
-        entity_id (UUID): Entity id.
+        entity_id (EntityId): Entity id.
 
     Returns:
         bool: True if entity exists, False otherwise.
