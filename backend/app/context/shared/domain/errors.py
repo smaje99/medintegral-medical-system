@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from typing import Self
 
 
@@ -24,8 +25,13 @@ class ResourceNotFound(DomainError):
   '''Resource not found error class.'''
 
 
-class ResourceAlreadyExists(DomainError):
+class ResourceAlreadyExists(DomainError, metaclass=ABCMeta):
   '''Resource already exists error class.'''
+
+  @classmethod
+  @abstractmethod
+  def from_id(cls, obj_id) -> Self:
+    ...
 
 
 class DaoError(DomainError):

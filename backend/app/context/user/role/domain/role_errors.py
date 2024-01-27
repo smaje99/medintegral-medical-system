@@ -1,9 +1,10 @@
-from typing import Self
+from typing import Self, final, override
 
 from app.context.shared.domain.errors import ResourceAlreadyExists
 from app.context.user.role.domain import RoleId
 
 
+@final
 class RoleAlreadyExists(ResourceAlreadyExists):
   '''Role already exists error class.'''
 
@@ -20,13 +21,14 @@ class RoleAlreadyExists(ResourceAlreadyExists):
     return cls(f'El rol de {name} ya existe')
 
   @classmethod
-  def from_id(cls, id: RoleId) -> Self:
+  @override
+  def from_id(cls, obj_id: RoleId) -> Self:
     '''Role with ID already exists error factory.
 
     Args:
-        id (RoleId): Role ID.
+        obj_id (RoleId): Role ID.
 
     Returns:
         Self: RoleAlreadyExists error.
     '''
-    return cls(f'El rol con id {id} ya existe')
+    return cls(f'El rol con id {obj_id} ya existe')
