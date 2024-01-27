@@ -1,8 +1,5 @@
-from uuid import UUID
-
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.sql import func
-from sqlalchemy.types import String, Text, Uuid
+from sqlalchemy.types import String, Text
 
 from app.database import Base
 from app.database.mixins import IdentifierMixin
