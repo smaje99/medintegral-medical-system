@@ -2,14 +2,8 @@ from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict
 
-from app.context.person.domain.enums import (
-  BloodType,
-  CivilStatus,
-  DocumentType,
-  Gender,
-  RHFactor,
-)
-from app.context.person.domain.objects import PersonId
+from app.context.person.domain.enums import CivilStatus, DocumentType, Gender
+from app.context.person.domain.objects import PersonAge, PersonId
 
 
 __all__ = ('Person',)
@@ -27,11 +21,11 @@ class Person(BaseModel):
   gender: Gender
   birthdate: date
   document_type: DocumentType
-  blood_type: BloodType | None = None
-  rh_factor: RHFactor | None = None
+  blood_type: str | None = None
   ethnicity: str | None = None
   occupation: str | None = None
   civil_status: CivilStatus | None = None
+  age: PersonAge | None = None
   created_at: datetime
   modified_at: datetime
 

@@ -1,4 +1,5 @@
 from .person_address import PersonAddress
+from .person_age import PersonAge
 from .person_birthdate import PersonBirthdate
 from .person_blood_type import PersonBloodType
 from .person_civil_status import PersonCivilStatus
@@ -16,6 +17,7 @@ from .person_surname import PersonSurname
 
 __all__ = (
   'PersonAddress',
+  'PersonAge',
   'PersonBirthdate',
   'PersonBloodType',
   'PersonCivilStatus',
