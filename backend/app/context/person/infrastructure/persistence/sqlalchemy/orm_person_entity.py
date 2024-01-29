@@ -1,7 +1,8 @@
 from datetime import date, datetime
 
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.sql import func
+from sqlalchemy.orm import Mapped, column_property, mapped_column, object_session
+from sqlalchemy.sql import func, select
+from sqlalchemy.sql.expression import cast
 from sqlalchemy.types import TIMESTAMP, Date, Enum, String, Text
 
 from app.context.person.domain.enums import (
@@ -69,5 +70,15 @@ class OrmPersonEntity(Base):
     onupdate=func.current_timestamp(),
     nullable=False,
   )
+
+  blood_with_rh = column_property(blood_type + rh_factor)
+
+  @property
+  def age(self):
+    """Person's age."""
+    if (session := object_session(self)) is None:
+      return None
+
+    return session.scalar(select(cast(func.age(self.birthdate), Text).label('age')))
 
   __table_args__ = {'schema': 'person'}

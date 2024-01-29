@@ -22,7 +22,10 @@ class OrmPersonRepository(PersonRepository):
     orm_person = OrmPersonEntity(**obj_in_person)
     db_person = await self.__dao.save(orm_person)
 
-    return Person.model_validate(db_person)
+    person = Person.model_validate(db_person)
+    person.blood_type = db_person.blood_with_rh
+
+    return person
 
   @override
   async def contains(self, person_id: PersonId) -> bool:
