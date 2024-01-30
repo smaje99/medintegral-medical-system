@@ -1,0 +1,32 @@
+from abc import ABCMeta, abstractmethod
+
+from app.context.user.user.domain import User, UserId, UserSaveDto
+
+
+__all__ = ('UserRepository',)
+
+
+class UserRepository(metaclass=ABCMeta):
+  '''User repository.'''
+
+  @abstractmethod
+  def save(self, user_in: UserSaveDto) -> User:
+    '''Save a new user.
+
+    Args:
+        user_in (UserSaveDto): New user data.
+
+    Returns:
+        User: Saved user.
+    '''
+
+  @abstractmethod
+  def contains(self, user_id: UserId) -> bool:
+    '''Check if a user exists.
+
+    Args:
+        user_id (UserId): User id.
+
+    Returns:
+        bool: True if user exists, False otherwise.
+    '''
