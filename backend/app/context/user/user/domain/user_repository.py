@@ -10,7 +10,7 @@ class UserRepository(metaclass=ABCMeta):
   '''User repository.'''
 
   @abstractmethod
-  def save(self, user_in: UserSaveDto) -> User:
+  async def save(self, user_in: UserSaveDto) -> User:
     '''Save a new user.
 
     Args:
@@ -21,7 +21,7 @@ class UserRepository(metaclass=ABCMeta):
     '''
 
   @abstractmethod
-  def contains(self, user_id: UserId) -> bool:
+  async def contains(self, user_id: UserId) -> bool:
     '''Check if a user exists.
 
     Args:
