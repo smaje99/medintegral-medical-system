@@ -30,7 +30,7 @@ def upgrade() -> None:
   '''Create User table.'''
   op.create_table(
     'user',
-    Column('id', Text, nullable=True),
+    Column('id', Text, nullable=False),
     Column('username', Text, nullable=False),
     Column('hashed_password', Text, nullable=False),
     Column('is_superuser', Boolean, nullable=False, server_default=false()),
