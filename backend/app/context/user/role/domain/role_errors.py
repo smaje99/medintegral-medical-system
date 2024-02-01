@@ -1,6 +1,6 @@
 from typing import Self, final, override
 
-from app.context.shared.domain.errors import ResourceAlreadyExists
+from app.context.shared.domain.errors import ResourceAlreadyExists, ResourceNotFound
 from app.context.user.role.domain import RoleId
 
 
@@ -32,3 +32,16 @@ class RoleAlreadyExists(ResourceAlreadyExists):
         Self: RoleAlreadyExists error.
     '''
     return cls(f'El rol con id {obj_id} ya existe')
+
+
+@final
+class RoleNotFound(ResourceNotFound):
+  '''Role not found error class.'''
+
+  def __init__(self, message: str = 'El rol indicado no fue encontrado.'):
+    '''Role not found error constructor.
+
+    Args:
+        message (str): Error message. Defaults to 'El rol indicado no fue encontrado.'.
+    '''
+    super().__init__(message)
