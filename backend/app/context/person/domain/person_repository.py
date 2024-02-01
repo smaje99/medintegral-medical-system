@@ -32,3 +32,14 @@ class PersonRepository(metaclass=ABCMeta):
     Returns:
         bool: True if person exists, False otherwise.
     '''
+
+  @abstractmethod
+  async def find(self, person_id: PersonId) -> Person | None:
+    '''Find a person by id.
+
+    Args:
+        person_id (PersonId): Person id.
+
+    Returns:
+        Person: Found person.
+    '''

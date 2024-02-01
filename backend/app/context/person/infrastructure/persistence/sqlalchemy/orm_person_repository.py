@@ -30,3 +30,15 @@ class OrmPersonRepository(PersonRepository):
   @override
   async def contains(self, person_id: PersonId) -> bool:
     return await self.__dao.exists(person_id)
+
+  @override
+  async def find(self, person_id: PersonId) -> Person | None:
+    db_person = await self.__dao.search(person_id)
+
+    if not db_person:
+      return None
+
+    person = Person.model_validate(db_person)
+    person.blood_type = db_person.blood_with_rh
+
+    return person
