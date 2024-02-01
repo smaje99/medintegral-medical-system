@@ -1,11 +1,12 @@
-from typing import cast
-
 from pydantic import AnyHttpUrl, PostgresDsn, SecretStr, ValidationInfo, field_validator
 from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 __all__ = ('Settings',)
+
+
+BOOLEAN = {'true': True, 'false': False}
 
 
 class PostgresSettings(BaseSettings):
@@ -17,7 +18,7 @@ class PostgresSettings(BaseSettings):
   pwd: SecretStr
   db: str
 
-  echo: bool = False
+  echo: bool
 
   uri: PostgresDsn | None = None
 
@@ -40,6 +41,12 @@ class PostgresSettings(BaseSettings):
       port=data.get('port', 5432),
       path=data.get('db', 'postgres'),
     )
+
+  @field_validator('echo', mode='before')
+  @classmethod
+  def transform_echo(cls, value: str) -> bool:
+    '''Transform the echo value to a boolean.'''
+    return BOOLEAN.get(value.lower(), False)
 
 
 class ProjectSettings(BaseSettings):
@@ -70,12 +77,30 @@ class DomainSettings(BaseSettings):
     raise ValueError('Invalid CORS origins.')
 
 
+class EmailSettings(BaseSettings):
+  '''Settings for the emails.'''
+
+  api_key: str
+
+  from_email: str
+  from_name: str
+
+  emails_enabled: bool
+
+  @field_validator('emails_enabled', mode='before')
+  @classmethod
+  def transform_emails_enabled(cls, value: str) -> bool:
+    '''Transform the emails enabled value to a boolean.'''
+    return BOOLEAN.get(value.lower(), False)
+
+
 class Settings(BaseSettings):
   '''Settings for the project.'''
 
   postgres: PostgresSettings
   project: ProjectSettings
   domain: DomainSettings
+  email: EmailSettings
 
   model_config = SettingsConfigDict(
     env_file='.env',
