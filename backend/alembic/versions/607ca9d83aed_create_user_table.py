@@ -52,6 +52,7 @@ def upgrade() -> None:
     ),
     PrimaryKeyConstraint('id', name='pk_user'),
     UniqueConstraint('username', name='uq_user_username'),
+    UniqueConstraint('role_id', name='uq_user_role_id'),
     ForeignKeyConstraint(
       ['id'], ['person.person.dni'], name='fk_user_id_person', onupdate='CASCADE'
     ),
