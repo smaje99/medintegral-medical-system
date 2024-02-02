@@ -1,4 +1,12 @@
-from sqlalchemy.orm import Mapped, column_property, mapped_column, object_session
+from typing import TYPE_CHECKING
+
+from sqlalchemy.orm import (
+  Mapped,
+  column_property,
+  mapped_column,
+  object_session,
+  relationship,
+)
 from sqlalchemy.sql import func, select
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.types import Enum, String, Text
@@ -14,6 +22,10 @@ from app.database import Base
 from app.database.mapped import required_date, required_text, text, text_pk
 from app.database.mixins import TimestampMixin
 from app.database.utils import enum_values_callable
+
+
+if TYPE_CHECKING:
+  from app.context.user.user.infrastructure.persistence.sqlalchemy import OrmUserEntity
 
 
 __all__ = ('OrmPersonEntity',)
@@ -69,5 +81,8 @@ class OrmPersonEntity(Base, TimestampMixin):
       return None
 
     return session.scalar(select(cast(func.age(self.birthdate), Text).label('age')))
+
+  user: Mapped['OrmUserEntity'] = relationship(back_populates='person')
+
 
   __table_args__ = {'schema': 'person'}
