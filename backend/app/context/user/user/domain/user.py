@@ -1,4 +1,5 @@
 from datetime import datetime
+import email
 
 from pydantic import BaseModel, ConfigDict
 
@@ -12,8 +13,10 @@ class User(BaseModel):
   '''User entity.'''
 
   id: UserId
+  fullname: str
   username: str
-  hashed_password: str
+  email: str
+  hashed_password: str | None = None
   is_superuser: bool = False
   is_active: bool = True
   image: str | None = None
