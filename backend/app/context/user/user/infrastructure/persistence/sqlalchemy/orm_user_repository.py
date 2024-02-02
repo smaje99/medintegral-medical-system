@@ -5,6 +5,7 @@ from app.context.user.user.infrastructure.persistence.sqlalchemy import (
   OrmUserDao,
   OrmUserEntity,
 )
+from app.core.security.pwd import get_password_hash
 
 
 class OrmUserRepository(UserRepository):
@@ -21,10 +22,25 @@ class OrmUserRepository(UserRepository):
   @override
   async def save(self, user_in: UserSaveDto) -> User:
     obj_in_user = user_in.model_dump()
-    orm_user = OrmUserEntity(**obj_in_user)
-    db_user = self.__dao.save(orm_user)
+    password = obj_in_user.pop('password', None)
+    obj_in_user['hashed_password'] = get_password_hash(password)
 
-    return User.model_validate(db_user)
+    orm_user = OrmUserEntity(**obj_in_user)
+    db_user = await self.__dao.save(orm_user)
+
+    return User(
+      id=db_user.id,
+      fullname=f'{db_user.person.name} {db_user.person.surname}'.title(),
+      username=db_user.username,
+      email=db_user.person.email,
+      hashed_password=db_user.hashed_password,
+      is_superuser=db_user.is_superuser,
+      is_active=db_user.is_active,
+      image=db_user.image,
+      role=db_user.role.name,
+      created_at=db_user.created_at,
+      modified_at=db_user.modified_at,
+    )
 
   @override
   async def contains(self, user_id: UserId) -> bool:
