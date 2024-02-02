@@ -1,5 +1,4 @@
 from datetime import datetime
-import email
 
 from pydantic import BaseModel, ConfigDict
 
