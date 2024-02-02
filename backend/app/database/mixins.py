@@ -21,7 +21,7 @@ class TimestampMixin(MappedAsDataclass, init=False):
   created_at: Mapped[required_timestamp_default]
   '''Timestamp of the creation of the instance.'''
 
-  updated_at: Mapped[required_timestamp_default] = mapped_column(
+  modified_at: Mapped[required_timestamp_default] = mapped_column(
     onupdate=func.current_timestamp(),
   )
   '''Timestamp of the last update of the instance.'''
