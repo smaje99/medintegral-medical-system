@@ -1,4 +1,4 @@
-from .person_create import RoleCreator
+from .person_create import PersonCreator
 
 
-__all__ = ('RoleCreator',)
+__all__ = ('PersonCreator',)

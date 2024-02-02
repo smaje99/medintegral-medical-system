@@ -2,10 +2,10 @@ from app.context.person.domain import Person, PersonRepository, PersonSaveDTO
 from app.context.person.domain.person_errors import PersonAlreadyExists
 
 
-__all__ = ('RoleCreator',)
+__all__ = ('PersonCreator',)
 
 
-class RoleCreator:
+class PersonCreator:
   '''Person creator.'''
 
   def __init__(self, repository: PersonRepository) -> None:

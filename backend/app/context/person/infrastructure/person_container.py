@@ -1,6 +1,7 @@
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Dependency, Factory
 
+from app.context.person.application import PersonCreator
 from app.context.person.domain import PersonRepository
 from app.context.person.infrastructure.persistence.sqlalchemy import (
   OrmPersonDao,
@@ -23,4 +24,4 @@ class PersonContainer(DeclarativeContainer):
     OrmPersonRepository, dao=person_dao
   )
 
-  person_creator = Factory(PersonRepository)
+  person_creator = Factory(PersonCreator, repository=person_repository)
