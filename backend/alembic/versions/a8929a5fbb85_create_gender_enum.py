@@ -19,7 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
   '''Create the Gender enum.'''
-  op.execute("CREATE TYPE gender AS ENUM ('male', 'female');")
+  op.execute("CREATE TYPE gender AS ENUM ('masculino', 'femenino');")
 
 
 def downgrade() -> None:

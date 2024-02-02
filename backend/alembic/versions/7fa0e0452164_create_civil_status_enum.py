@@ -21,11 +21,11 @@ def upgrade() -> None:
   '''Create CivilStatus enum.'''
   op.execute('''
     CREATE TYPE civilstatus AS ENUM (
-      'single',
-      'married',
-      'divorced',
-      'widowed',
-      'marital union'
+      'soltero',
+      'casado',
+      'divorciado',
+      'viudo',
+      'unión marital'
     );
   ''')
 
