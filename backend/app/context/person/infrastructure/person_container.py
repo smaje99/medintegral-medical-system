@@ -18,7 +18,7 @@ class PersonContainer(DeclarativeContainer):
 
   database = Dependency(instance_of=PostgresDatabase)
 
-  person_dao = Factory(OrmPersonDao)
+  person_dao = Factory(OrmPersonDao, database=database)
 
   person_repository: Factory[PersonRepository] = Factory(
     OrmPersonRepository, dao=person_dao
