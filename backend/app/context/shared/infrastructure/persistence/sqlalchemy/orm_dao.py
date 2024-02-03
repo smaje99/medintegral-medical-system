@@ -100,7 +100,7 @@ class OrmDao[EntityBase: Base, EntityId: UUID | str](
     async with self._database.session() as session:
       try:
         entity_pk = inspect(self._entity).primary_key[0]
-        sub_query = select(self._entity).where(entity_pk == entity_id)
+        sub_query = select(1).where(entity_pk == entity_id)
         query = select(sub_query.exists())
         result = await session.scalar(query)
 
