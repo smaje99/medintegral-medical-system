@@ -41,9 +41,9 @@ class OrmUserEntity(Base, IsActiveMixin, TimestampMixin):
   role_id: Mapped[required_uuid] = mapped_column(ForeignKey('user.role.id'), unique=True)
 
   person: Mapped['OrmPersonEntity'] = relationship(
-    back_populates='user', single_parent=True
+    back_populates='user', single_parent=True, lazy='joined'
   )
 
-  role: Mapped['OrmRoleEntity'] = relationship(back_populates='users')
+  role: Mapped['OrmRoleEntity'] = relationship(back_populates='users', lazy='joined')
 
   __table_args__ = {'schema': 'user'}
