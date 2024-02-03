@@ -19,7 +19,7 @@ def validate_person_surname(person_surname: str) -> str:
   assert isinstance(
     person_surname, str
   ), 'Apellido de la persona debe ser una cadena de texto'
-  assert len(person_surname.strip()) == 0, 'Apellido de la persona no puede estar vacío'
+  assert len(person_surname.split()) > 0, 'Apellido de la persona no puede estar vacío'
 
   return person_surname
 
