@@ -6,7 +6,7 @@ from app.context.person.domain.person_errors import PersonNotFound
 from app.context.shared.domain.email_sender import EmailSender
 from app.context.user.role.domain import RoleRepository
 from app.context.user.role.domain.role_errors import RoleNotFound
-from app.context.user.user.domain import UserRepository, UserSaveDto
+from app.context.user.user.domain import User, UserRepository, UserSaveDto
 from app.context.user.user.domain.user_errors import UserAlreadyExists
 from app.core.client_routes import ClientRoutes
 
@@ -29,7 +29,7 @@ class UserCreator:
     self.email_sender = email_sender
     self.client_host = client_host
 
-  async def __call__(self, user_in: UserSaveDto):
+  async def __call__(self, user_in: UserSaveDto) -> User:
     '''Create a user.
 
     Args:
@@ -64,3 +64,5 @@ class UserCreator:
         'link': f'{self.client_host}{ClientRoutes.DASHBOARD}',
       },
     )
+
+    return new_user
