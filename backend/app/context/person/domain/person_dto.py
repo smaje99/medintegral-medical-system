@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
 
 from app.context.person.domain.objects import (
   PersonAddress,
@@ -23,6 +24,8 @@ __all__ = ('PersonSaveDTO',)
 
 class PersonSaveDTO(BaseModel):
   '''Person create DTO.'''
+
+  model_config = ConfigDict(alias_generator=to_camel)
 
   dni: PersonId
   name: PersonName
