@@ -22,8 +22,7 @@ class OrmUserRepository(UserRepository):
   @override
   async def save(self, user_in: UserSaveDto) -> User:
     obj_in_user = user_in.model_dump()
-    password = obj_in_user.pop('password', None)
-    obj_in_user['hashed_password'] = get_password_hash(password)
+    obj_in_user['hashed_password'] = get_password_hash(user_in.password)
 
     orm_user = OrmUserEntity(**obj_in_user)
     db_user = await self.__dao.save(orm_user)
