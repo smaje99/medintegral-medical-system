@@ -38,7 +38,7 @@ async def sqlalchemy_error_exception_handler(_: Request, exc: SQLAlchemyError):
   raise HTTPException(
     status_code=HTTP_500_INTERNAL_SERVER_ERROR,
     message=(
-      'Lo sentimos, actualmente no podemos procesar su solicitud debido'
+      'Lo sentimos, actualmente no podemos procesar su solicitud debido '
       + 'a problemas técnicos. Por favor, inténtelo de nuevo más tarde.'
     ),
   ) from exc
