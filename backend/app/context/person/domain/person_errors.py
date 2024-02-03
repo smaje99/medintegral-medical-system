@@ -19,7 +19,7 @@ class PersonAlreadyExists(ResourceAlreadyExists):
     Returns:
         Self: PersonAlreadyExists error.
     '''
-    formatted_person_id = f'{obj_id:,}'.replace(',', '.')
+    formatted_person_id = f'{int(obj_id):,}'.replace(',', '.')
     return cls(
       f'La persona con el número de identificación {formatted_person_id} ya existe'
     )
@@ -35,7 +35,7 @@ class PersonNotFound(ResourceNotFound):
     Args:
         person_id (PersonId): Person ID.
     '''
-    formatted_person_id = f'{person_id:,}'.replace(',', '.')
+    formatted_person_id = f'{int(person_id):,}'.replace(',', '.')
     super().__init__(
       f'La persona con el número de identificación {formatted_person_id} no fue encontrada.'
     )
