@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
 
+from sqlalchemy.dialects.postgresql.named_types import ENUM
 from sqlalchemy.orm import (
   Mapped,
   column_property,
   mapped_column,
-  object_session,
   relationship,
 )
-from sqlalchemy.sql import func, select
+from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import cast
-from sqlalchemy.types import Enum, String, Text
+from sqlalchemy.sql.sqltypes import String, Text
 
 from app.context.person.domain.enums import (
   BloodType,
@@ -47,21 +47,19 @@ class OrmPersonEntity(Base, TimestampMixin):
   phonenumber: Mapped[str] = mapped_column(String(28), nullable=False)
 
   gender: Mapped[Gender] = mapped_column(
-    Enum(Gender, values_callable=enum_values_callable), nullable=False
+    ENUM(Gender, values_callable=enum_values_callable), nullable=False
   )
 
-  birthdate: Mapped[required_date]
+  birthdate: Mapped[required_date] = mapped_column()
 
   document_type: Mapped[DocumentType] = mapped_column(
-    Enum(DocumentType, values_callable=enum_values_callable), nullable=False
+    ENUM(DocumentType, values_callable=enum_values_callable), nullable=False
   )
 
-  blood_type: Mapped[BloodType] = mapped_column(
-    Enum(BloodType, values_callable=enum_values_callable)
-  )
+  blood_type: Mapped[BloodType] = mapped_column(ENUM(BloodType))
 
   rh_factor: Mapped[RHFactor] = mapped_column(
-    Enum(RHFactor, values_callable=enum_values_callable)
+    ENUM(RHFactor, values_callable=enum_values_callable)
   )
 
   ethnicity: Mapped[text]
@@ -69,18 +67,12 @@ class OrmPersonEntity(Base, TimestampMixin):
   occupation: Mapped[text]
 
   civil_status: Mapped[CivilStatus] = mapped_column(
-    Enum(CivilStatus, values_callable=enum_values_callable)
+    ENUM(CivilStatus, values_callable=enum_values_callable)
   )
 
-  blood_with_rh = column_property(blood_type + rh_factor)
+  blood_with_rh = column_property(cast(blood_type, Text) + cast(rh_factor, Text))
 
-  @property
-  def age(self):
-    """Person's age."""
-    if (session := object_session(self)) is None:
-      return None
-
-    return session.scalar(select(cast(func.age(self.birthdate), Text).label('age')))
+  age = column_property(cast(func.age(birthdate), Text))
 
   user: Mapped['OrmUserEntity'] = relationship(back_populates='person')
 
