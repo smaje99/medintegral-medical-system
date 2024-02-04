@@ -30,6 +30,9 @@ async def create_role(  # noqa: D417
   Args:
   * role_in (RoleSaveDTO): Role to save.
 
+  Raises:
+  * RoleAlreadyExists: If the role already exist.
+
   Returns:
   * Role: Role created.
   '''
