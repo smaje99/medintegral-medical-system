@@ -1,8 +1,11 @@
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Dependency, Factory
 
-from app.context.person.application import PersonCreator
+from app.context.person.application import PersonCreator, PersonFinderById
 from app.context.person.domain import PersonRepository
+from app.context.person.infrastructure.http.api_v1.controllers import (
+  PersonGetByIdController,
+)
 from app.context.person.infrastructure.persistence.sqlalchemy import (
   OrmPersonDao,
   OrmPersonRepository,
@@ -25,3 +28,9 @@ class PersonContainer(DeclarativeContainer):
   )
 
   person_creator = Factory(PersonCreator, repository=person_repository)
+
+  person_finder_by_id = Factory(PersonFinderById, repository=person_repository)
+
+  person_get_by_id_controller = Factory(
+    PersonGetByIdController, person_finder=person_finder_by_id
+  )

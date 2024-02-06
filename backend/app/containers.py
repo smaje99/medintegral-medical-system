@@ -4,6 +4,7 @@ from dependency_injector.providers import Configuration, Container, Singleton
 from app.context.health.infrastructure.health_containers import HealthContainer
 from app.context.health.infrastructure.http.api_v1 import health_endpoints
 from app.context.person.infrastructure import PersonContainer
+from app.context.person.infrastructure.http.api_v1 import person_endpoints
 from app.context.shared.domain import EmailSender
 from app.context.shared.infrastructure.email_sender import ResendEmailSender
 from app.context.user.role.infrastructure.http.api_v1 import role_endpoints
@@ -19,7 +20,7 @@ class ApplicationContainer(DeclarativeContainer):
   '''Container for the application dependencies.'''
 
   wiring_config = WiringConfiguration(
-    modules=[role_endpoints, health_endpoints, user_endpoints]
+    modules=[role_endpoints, health_endpoints, user_endpoints, person_endpoints]
   )
 
   config = Configuration()
