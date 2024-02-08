@@ -58,7 +58,7 @@
     "import/extensions": "off",
     "tailwindcss/no-custom-classname": ["warn", {
       "whitelist": [
-        "((\\w+)\\-)*(border|input|ring|background|foreground)(\\/(\\d{1,3}))?",
+        "((\\w+)\\-)*(border|input|ring|background|foreground|nav)(\\/(\\d{1,3}))?",
         "((\\w+)\\-)*(primary|secondary|destructive|muted|accent|popover|card)(\\-foreground)?(\\/(\\d{1,3}))?",
         "((\\w+)\\-)*(primary|secondary|tertiary|success|warning|error|surface)\\-(\\d{2,3})(\\/(\\d{1,3}))?",
         "h-screen-d",
