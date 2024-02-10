@@ -7,7 +7,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 
 import { RightsFooter } from './footer';
-import { FoldingNav } from './navigation';
+import { Navigation } from './navigation';
 
 export const metadata: Metadata = {
   title: 'Medintegral IPS S.A.S',
@@ -28,11 +28,13 @@ type Props = {
 export default function CMSLayout({ children }: Props) {
   return (
     <html lang='es'>
-      <body>
+      <body className='flex h-full pt-16'>
         <ThemeProvider>
-          <FoldingNav />
-          {children}
-          <RightsFooter />
+          <Navigation />
+          <div className='ml-2 flex flex-1 flex-col justify-between'>
+            {children}
+            <RightsFooter />
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>

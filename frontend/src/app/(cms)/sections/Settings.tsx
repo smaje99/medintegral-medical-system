@@ -30,16 +30,21 @@ const RolesAndPermissionsContent: React.FC = () => (
   </Content>
 );
 
-export const Settings: React.FC = () => (
+type SettingsProps = {
+  readonly onlyIcon?: boolean;
+};
+
+export const Settings: React.FC<SettingsProps> = ({ onlyIcon = false }) => (
   <Dialog>
     <DialogTrigger asChild>
       <Button
         variant='outline'
         className='flex items-center gap-2'
         aria-label='Botón para ir al panel de configuración'
+        size={onlyIcon ? 'icon' : 'default'}
       >
         <IconSettings />
-        <span className='text-sm'>Configuración</span>
+        <span className={onlyIcon ? 'sr-only' : 'text-sm'}>Configuración</span>
       </Button>
     </DialogTrigger>
     <DialogContent className='max-w-2xl p-0'>

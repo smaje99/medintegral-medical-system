@@ -41,3 +41,8 @@ export const ContactRoutes = Object.freeze({
     name: 'Ubicación en Google Maps',
   }),
 });
+
+export const CmsRoutes = Object.freeze({
+  Dashboard: Object.freeze<Route>({ href: '/dashboard', name: 'Dashboard' }),
+  Users: Object.freeze<Route>({ href: '/users', name: 'Usuarios' }),
+});
