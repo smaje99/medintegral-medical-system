@@ -48,6 +48,4 @@ class UserContainer(DeclarativeContainer):
     client_host=config.domain.client_host.as_(str),
   )
 
-  user_post_controller = Factory(
-    UserPostController, user_creator=user_creator, person_creator=person.person_creator
-  )
+  user_post_controller = Factory(UserPostController, user_creator=user_creator)

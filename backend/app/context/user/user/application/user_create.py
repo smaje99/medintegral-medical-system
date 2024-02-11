@@ -1,8 +1,11 @@
 __all__ = ('UserCreator',)
 
 
-from app.context.person.domain import PersonRepository
-from app.context.person.domain.person_errors import PersonNotFound
+from app.context.person.domain import PersonRepository, PersonSaveDTO
+from app.context.person.domain.objects.person_birthdate import (
+  ensure_person_age_is_of_legal_age,
+)
+from app.context.person.domain.person_errors import PersonNotFound, PersonUnderage
 from app.context.shared.domain.email_sender import EmailSender
 from app.context.user.role.domain import RoleRepository
 from app.context.user.role.domain.role_errors import RoleNotFound
@@ -20,7 +23,7 @@ class UserCreator:
     role_repository: RoleRepository,
     person_repository: PersonRepository,
     email_sender: EmailSender,
-    client_host: str
+    client_host: str,
   ):
     '''User creator constructor.'''
     self.user_repository = user_repository
@@ -29,14 +32,17 @@ class UserCreator:
     self.email_sender = email_sender
     self.client_host = client_host
 
-  async def __call__(self, user_in: UserSaveDto) -> User:
+  async def __call__(self, user_in: UserSaveDto, person_in: PersonSaveDTO | None) -> User:
     '''Create a user.
 
     Args:
       user_in (UserSaveDTO): User to create.
+      person_in (PersonSaveDTO | None): Person to create. If None,
+      it'll only create the user.
 
     Raises:
       UserAlreadyExists: If a user with the same ID already exists.
+      PersonUnderage: If the person is underage.
       PersonNotFound: If the user was not found in people list.
       RoleNotFound: If the role was not found.
 
@@ -46,8 +52,17 @@ class UserCreator:
     if await self.user_repository.contains(user_in.id):
       raise UserAlreadyExists.from_id(user_in.id)
 
-    if (person := await self.person_repository.find(user_in.id)) is None:
+    if person_in is not None and not await self.person_repository.contains(person_in.dni):
+      if not ensure_person_age_is_of_legal_age(person_in.birthdate):
+        raise PersonUnderage()
+
+      person = await self.person_repository.save(person_in)
+    elif (person := await self.person_repository.find(user_in.id)):
+      if not ensure_person_age_is_of_legal_age(person.birthdate):
+        raise PersonUnderage()
+    else:
       raise PersonNotFound(user_in.id)
+
 
     if not await self.role_repository.contains(user_in.role_id):
       raise RoleNotFound()

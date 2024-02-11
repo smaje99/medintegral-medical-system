@@ -1,7 +1,14 @@
 from typing import Self, final, override
 
 from app.context.person.domain.objects import PersonId
-from app.context.shared.domain.errors import ResourceAlreadyExists, ResourceNotFound
+from app.context.shared.domain.errors import (
+  DomainError,
+  ResourceAlreadyExists,
+  ResourceNotFound,
+)
+
+
+__all__ = ('PersonAlreadyExists', 'PersonNotFound', 'PersonUnderage',)
 
 
 @final
@@ -39,3 +46,12 @@ class PersonNotFound(ResourceNotFound):
     super().__init__(
       f'La persona con el número de identificación {formatted_person_id} no fue encontrada.'
     )
+
+
+@final
+class PersonUnderage(DomainError):
+  '''Person underage error class.'''
+
+  def __init__(self):
+    '''Person underage error constructor.'''
+    super().__init__('La persona debe ser mayor de edad.')

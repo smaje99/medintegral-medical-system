@@ -22,7 +22,7 @@ router = APIRouter()
 @inject
 async def create_user(  # noqa: D417
   user_in: Annotated[UserSaveDto, Body(alias='userIn')],
-  person_in: Annotated[PersonSaveDTO, Body(alias='personIn')],
+  person_in: Annotated[PersonSaveDTO | None, Body(alias='personIn')] = None,
   *,
   controller: UserPostController = Depends(  # noqa: B008
     Provide['user.user.user_post_controller']
@@ -37,8 +37,8 @@ async def create_user(  # noqa: D417
   * personIn (PersonSaveDTO): Person to save.
 
   Raises:
-  * PersonAlreadyExists: If a person with the same name already exists.
   * UserAlreadyExists: If a user with the same ID already exists.
+  * PersonUnderage: If the person is underage.
   * PersonNotFound: If the user was not found in people list.
   * RoleNotFound: If the role was not found.
 
