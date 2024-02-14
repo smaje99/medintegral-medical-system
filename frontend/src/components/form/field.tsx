@@ -18,7 +18,7 @@ type ControllerProps<T extends object> = ControllerRenderProps<
   Path<T> | (Path<T> & (string | undefined))
 >;
 
-type InputFieldType = 'text' | 'number' | 'email' | 'date';
+type InputFieldType = 'text' | 'number' | 'email' | 'date' | 'tel';
 
 type FieldType = InputFieldType | 'textarea' | 'custom';
 
