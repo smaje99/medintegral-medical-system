@@ -28,7 +28,7 @@ export const CreateUserSheet: React.FC = () => {
           <span className='sr-only'>Crear usuario</span>
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className='overflow-y-scroll'>
         <SheetTitle>Crear usuario</SheetTitle>
         <SheetDescription>
           Crea nuevos usuarios que gestionen la plataforma. Completa el formulario
