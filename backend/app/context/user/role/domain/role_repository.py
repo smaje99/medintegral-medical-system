@@ -43,3 +43,11 @@ class RoleRepository(metaclass=ABCMeta):
     Returns:
         bool: True if role exists, False otherwise.
     '''
+
+  @abstractmethod
+  async def find_all(self) -> list[Role]:
+    '''Find all roles.
+
+    Returns:
+        list[Role]: Roles.
+    '''
