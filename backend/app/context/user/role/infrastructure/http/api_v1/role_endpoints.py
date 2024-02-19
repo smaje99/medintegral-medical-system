@@ -7,6 +7,7 @@ from starlette.status import HTTP_201_CREATED
 from app.context.user.role.domain import Role, RoleSaveDTO
 from app.context.user.role.infrastructure.http.api_v1.controllers import (
   RoleCreateController,
+  RoleGetAllController,
 )
 
 
@@ -37,3 +38,19 @@ async def create_role(  # noqa: D417
   * Role: Role created.
   '''
   return await role_controller(role_in)
+
+
+@router.get('/')
+@inject
+async def retrieve_roles(  # noqa: D417
+  *,
+  role_controller: RoleGetAllController = Depends(  # noqa: B008
+    Provide['user.role.role_get_all_controller']
+  ),
+) -> list[Role]:
+  '''Retrieve all roles.
+
+  Returns:
+  * list[Role]: Roles retrieved.
+  '''
+  return await role_controller()

@@ -36,3 +36,9 @@ class OrmRoleRepository(RoleRepository):
     roles = await self.__dao.filter(OrmRoleEntity.name.like(name))
 
     return len(roles) == 1
+
+  @override
+  async def find_all(self) -> list[Role]:
+    roles = await self.__dao.filter()
+
+    return [Role.model_validate(role) for role in roles]
