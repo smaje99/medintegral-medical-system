@@ -8,4 +8,10 @@ export interface RoleRepository {
    * @returns Promise<Role> - The saved role.
    */
   save: (roleIn: RoleSaveDtoType) => Promise<Role | undefined>;
+
+  /**
+   * Find all roles.
+   * @returns Promise<Role[]> - The roles.
+   */
+  findAll: () => Promise<Role[]>;
 }
