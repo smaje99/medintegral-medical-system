@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-function getTomorrow(): Date {
+export function getTomorrow(): Date {
   const tomorrow = new Date();
 
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -8,7 +8,7 @@ function getTomorrow(): Date {
   return tomorrow;
 }
 
-function getLegalAge(): Date {
+export function getLegalAge(): Date {
   const legalAge = new Date();
 
   legalAge.setFullYear(legalAge.getFullYear() - 18);
