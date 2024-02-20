@@ -6,7 +6,7 @@ export const personDniSchema = z
     invalid_type_error: 'Ese no es un número de identificación',
   })
   .trim()
-  .regex(/^\d+$/, 'La identificación debe ser numérica');
+  .regex(/^\d+$/, 'Perdón, la identificación debe ser numérica');
 
 export class PersonDni {
   constructor(public readonly value: string) {

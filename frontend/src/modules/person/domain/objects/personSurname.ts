@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const personSurnameSchema = z
   .string({
-    required_error: 'Apellido de la persona es requerido',
-    invalid_type_error: 'El apellido de la persona debe ser una cadena de texto',
+    required_error: 'Por favor, ingresa el apellido de la persona',
+    invalid_type_error: 'Eso no es un apellido',
   })
-  .regex(/\D*/, 'Apellido de la persona debe contener números');
+  .regex(/\D*/, 'Perdón, los apellidos no deben contener números');

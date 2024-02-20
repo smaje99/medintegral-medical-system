@@ -3,8 +3,8 @@ import { z } from 'zod';
 
 export const personPhonenumberSchema = z
   .string({
-    required_error: 'Número de celular de la persona es requerido',
-    invalid_type_error: 'Número de celular de la persona debe ser una cadena de texto',
+    required_error: 'Por favor, ingresa el número de celular',
+    invalid_type_error: 'Eso no es un número de celular',
   })
   .transform((value) => {
     const transformedValue = value.trim().replaceAll(' ', '');
@@ -16,5 +16,5 @@ export const personPhonenumberSchema = z
     return transformedValue;
   })
   .refine((value) => isMobilePhone(value, 'es-CO', { strictMode: true }), {
-    message: 'El número de celular no es valido',
+    message: 'Perdón, el número de celular no es valido',
   });

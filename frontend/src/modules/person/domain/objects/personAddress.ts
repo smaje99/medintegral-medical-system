@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
 export const personAddressSchema = z.string({
-  required_error: 'Dirección de la persona es requerida',
-  invalid_type_error: 'Dirección de la persona debe ser una cadena de texto',
+  required_error: 'Por favor, ingrese la dirección',
+  invalid_type_error: 'Eso no es una dirección física',
 });

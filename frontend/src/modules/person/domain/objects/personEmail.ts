@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const personEmailSchema = z
   .string({
-    required_error: 'Correo electrónico de la persona es requerido',
-    invalid_type_error: 'Correo electrónico de la persona debe ser una cadena de texto',
+    required_error: 'Por favor, ingresa el correo electrónico',
+    invalid_type_error: 'Eso no es un correo electrónico',
   })
-  .email('Correo electrónico de la persona no es válido');
+  .email('Perdón, ese no es un correo electrónico válido');
