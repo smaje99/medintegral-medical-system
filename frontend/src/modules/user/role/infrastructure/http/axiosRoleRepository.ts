@@ -35,7 +35,6 @@ export class AxiosRoleRepository implements RoleRepository {
 
       return data.map(({ id, name, description }) => new Role(id, name, description));
     } catch (error) {
-      axiosErrorHandler(error);
       return [];
     }
   }
