@@ -95,6 +95,7 @@ export const CreateUserForm: React.FC<Props> = ({ roles, setOpenSheet }) => {
           label: gender,
           className: 'capitalize',
         })),
+        className: 'capitalize',
       },
       {
         type: 'date',
@@ -138,6 +139,7 @@ export const CreateUserForm: React.FC<Props> = ({ roles, setOpenSheet }) => {
           label: civilStatus,
           className: 'capitalize',
         })),
+        className: 'capitalize',
       },
       {
         type: 'select',
@@ -149,6 +151,7 @@ export const CreateUserForm: React.FC<Props> = ({ roles, setOpenSheet }) => {
           label: role.name,
           className: 'capitalize',
         })),
+        className: 'capitalize',
       },
     ],
     [roles],

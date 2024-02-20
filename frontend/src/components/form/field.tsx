@@ -72,8 +72,9 @@ function TextareaField<T extends object>(props: TextareaProps<T>): React.JSX.Ele
 
 type SelectFieldAttributes<T extends object> = BaseFieldAttributes<T> & {
   readonly type: 'select';
-  readonly placeholder: string;
+  readonly placeholder?: string;
   readonly options: { value: string; label: string; className?: string }[];
+  readonly className?: string;
 };
 
 type SelectProps<T extends object> = SelectFieldAttributes<T> & ControllerProps<T>;
@@ -83,17 +84,22 @@ function SelectField<T extends object>({
   value,
   options,
   placeholder,
+  className,
 }: SelectProps<T>): React.JSX.Element {
   return (
     <Select onValueChange={onChange} defaultValue={value}>
       <FormControl>
         <SelectTrigger>
-          <SelectValue placeholder={placeholder} />
+          <SelectValue
+            className={className}
+            placeholder={placeholder}
+            aria-label={value}
+          />
         </SelectTrigger>
       </FormControl>
       <SelectContent>
-        {options.map(({ label, value: optionValue, className }) => (
-          <SelectItem key={optionValue} value={optionValue} className={className}>
+        {options.map(({ label, value: optionValue, className: optionClassName }) => (
+          <SelectItem key={optionValue} value={optionValue} className={optionClassName}>
             {label}
           </SelectItem>
         ))}
