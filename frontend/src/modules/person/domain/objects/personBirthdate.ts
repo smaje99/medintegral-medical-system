@@ -16,7 +16,7 @@ export function getLegalAge(): Date {
   return legalAge;
 }
 
-export const personBirthdateSchema = z
+export const personBirthdateSchema = z.coerce
   .date({
     required_error: 'Por favor, ingresa la fecha de nacimiento de la persona',
     invalid_type_error: 'Eso no es una fecha de nacimiento válida',
