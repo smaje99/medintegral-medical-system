@@ -7,7 +7,9 @@ import type {
 export class UserCreate {
   constructor(private readonly repository: UserRepository) {}
 
-  async run(userIn: PersonAssociatedWithUserSaveValues): Promise<UserPostResponse> {
+  async run(
+    userIn: PersonAssociatedWithUserSaveValues,
+  ): Promise<UserPostResponse | undefined> {
     return this.repository.save(userIn);
   }
 }

@@ -21,6 +21,7 @@ import {
   personAssociatedWithUserSaveSchema,
   type PersonAssociatedWithUserSaveValues,
 } from '@/modules/user/user/domain';
+import { userCreateController } from '@/modules/user/user/infrastructure/userContainer';
 
 type Props = {
   readonly roles: RoleAttributes[];
@@ -157,7 +158,9 @@ export const CreateUserForm: React.FC<Props> = ({ roles, setOpenSheet }) => {
     [roles],
   );
 
-  const onSubmit = async (data: PersonAssociatedWithUserSaveValues) => {};
+  const onSubmit = async (data: PersonAssociatedWithUserSaveValues) => {
+    await userCreateController.run(data, setOpenSheet);
+  };
 
   return (
     <Form {...form}>
