@@ -1,6 +1,11 @@
+import { PersonSaveValues } from '@/modules/person/domain/personSchema';
+
 import { UserPostResponse } from './userDto';
-import { PersonAssociatedWithUserSaveValues } from './userSchema';
+import { UserSaveValues } from './userSchema';
 
 export interface UserRepository {
-  save(user: PersonAssociatedWithUserSaveValues): Promise<UserPostResponse | undefined>;
+  save(
+    userIn: UserSaveValues,
+    personIn: PersonSaveValues,
+  ): Promise<UserPostResponse | undefined>;
 }

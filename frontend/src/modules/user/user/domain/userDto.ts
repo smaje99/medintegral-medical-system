@@ -1,6 +1,6 @@
-import { User } from './user';
+import { UserAttributes } from './user';
 
 export type UserPostResponse = Pick<
-  User,
+  UserAttributes,
   'id' | 'fullname' | 'username' | 'email' | 'image' | 'role'
 >;

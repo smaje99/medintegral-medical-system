@@ -29,5 +29,7 @@ export const PersonSaveSchema = z.object({
   rhFactor: personRhFactorSchema.optional(),
   ethnicity: z.string().optional(),
   occupation: z.string().optional(),
-  civilStatus: personCivilStatusSchema,
+  civilStatus: personCivilStatusSchema.optional(),
 });
+
+export type PersonSaveValues = z.infer<typeof PersonSaveSchema>;

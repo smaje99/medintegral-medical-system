@@ -1,1 +1,1 @@
-export { PersonSaveSchema } from './personSchema';
+export { PersonSaveSchema, type PersonSaveValues } from './personSchema';
