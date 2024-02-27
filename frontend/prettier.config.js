@@ -8,4 +8,4 @@ const config = {
   // tailwindFunctions: ['clsx', 'twMerge', 'cn']
 };
 
-export default config;
+module.exports = config;
