@@ -9,7 +9,7 @@ export default async function UsersPage() {
   return (
     <main className='m-4'>
       <section className='mb-1 flex items-center justify-between'>
-        <h1 className='text-2xl'>Usuarios</h1>
+        <h1 className='m-0 text-2xl'>Usuarios</h1>
 
         <CreateUserSheet roles={roles.map((role) => role.toPrimitives())} />
       </section>

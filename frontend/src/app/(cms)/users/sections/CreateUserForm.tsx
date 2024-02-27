@@ -16,7 +16,7 @@ import {
   RhFactor,
 } from '@/modules/person/domain/enum';
 import { getLegalAge } from '@/modules/person/domain/objects/personBirthdate';
-import { RoleAttributes } from '@/modules/user/role/domain';
+import { type RoleAttributes } from '@/modules/user/role/domain';
 import {
   personAssociatedWithUserSaveSchema,
   type PersonAssociatedWithUserSaveValues,
@@ -96,7 +96,7 @@ export const CreateUserForm: React.FC<Props> = ({ roles, setOpenSheet }) => {
           label: gender,
           className: 'capitalize',
         })),
-        className: 'capitalize',
+        className: '[&>span]:capitalize',
       },
       {
         type: 'date',
@@ -140,7 +140,7 @@ export const CreateUserForm: React.FC<Props> = ({ roles, setOpenSheet }) => {
           label: civilStatus,
           className: 'capitalize',
         })),
-        className: 'capitalize',
+        className: '[&>span]:capitalize',
       },
       {
         type: 'select',
@@ -152,7 +152,7 @@ export const CreateUserForm: React.FC<Props> = ({ roles, setOpenSheet }) => {
           label: role.name,
           className: 'capitalize',
         })),
-        className: 'capitalize',
+        className: '[&>span]:capitalize',
       },
     ],
     [roles],
