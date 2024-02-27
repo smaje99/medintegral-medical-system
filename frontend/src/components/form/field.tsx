@@ -89,12 +89,8 @@ function SelectField<T extends object>({
   return (
     <Select onValueChange={onChange} defaultValue={value}>
       <FormControl>
-        <SelectTrigger>
-          <SelectValue
-            className={className}
-            placeholder={placeholder}
-            aria-label={value}
-          />
+        <SelectTrigger className={cn(!!value && className)}>
+          <SelectValue placeholder={placeholder} aria-label={value} />
         </SelectTrigger>
       </FormControl>
       <SelectContent>
