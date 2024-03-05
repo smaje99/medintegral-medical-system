@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import endpoints from '@/helpers/endpoints';
+import { type PersonSaveValues } from '@/modules/person/domain';
 import { PersonNotFound, PersonUnderage } from '@/modules/person/domain/personErrors';
 import {
   axiosConfig,
@@ -8,23 +9,22 @@ import {
 } from '@/modules/shared/infrastructure/axios/axiosConfig';
 import { RoleNotFound } from '@/modules/user/role/domain/roleErrors';
 
-import {
-  PersonAssociatedWithUserSaveValues,
-  UserPostResponse,
-  UserRepository,
-} from '../../domain';
+import { UserPostResponse, UserRepository, UserSaveValues } from '../../domain';
 import { UserAlreadyExists } from '../../domain/userErrors';
 
 const ENDPOINT = endpoints.user.user;
 
 export class AxiosUserRepository implements UserRepository {
   async save(
-    user: PersonAssociatedWithUserSaveValues,
+    userIn: UserSaveValues,
+    personIn: PersonSaveValues,
   ): Promise<UserPostResponse | undefined> {
+    const userToSave = { userIn, personIn };
+
     try {
       const { data: createdUser } = await axios.post<UserPostResponse>(
         ENDPOINT,
-        user,
+        userToSave,
         axiosConfig,
       );
 
