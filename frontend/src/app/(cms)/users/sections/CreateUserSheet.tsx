@@ -1,9 +1,10 @@
 'use client';
 
 import { IconUserPlus } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Sheet,
   SheetContent,
@@ -21,6 +22,10 @@ type Props = {
 
 export const CreateUserSheet: React.FC<Props> = ({ roles }) => {
   const [isOpen, setOpen] = useState(false);
+  const [showOptionalFields, toggleOptionalFields] = useReducer(
+    (state: boolean) => !state,
+    false,
+  );
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -43,7 +48,21 @@ export const CreateUserSheet: React.FC<Props> = ({ roles }) => {
         </SheetDescription>
 
         {roles.length > 0 ? (
-          <CreateUserForm roles={roles} setOpenSheet={setOpen} />
+          <>
+            <label className='mt-4 flex items-center justify-end gap-x-2'>
+              <Checkbox
+                checked={showOptionalFields}
+                onCheckedChange={toggleOptionalFields}
+              />
+              <span
+                className={'cursor-pointer select-none text-sm font-medium leading-none'}
+              >
+                Mostrar campos opcionales
+              </span>
+            </label>
+
+            <CreateUserForm {...{ roles, showOptionalFields, setOpenSheet: setOpen }} />
+          </>
         ) : (
           <span className='text-error-500 dark:text-error-400 inline-block pt-6'>
             Lo sentimos 😥, no se pueden crear usuarios en este momento. Inténtalo más
