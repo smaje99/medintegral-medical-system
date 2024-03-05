@@ -15,3 +15,7 @@ export class InternalServerError extends Error {
     );
   }
 }
+
+export class RequestValidationError extends APIBaseError {
+  static ERROR_TYPE = 'RequestValidationError';
+}

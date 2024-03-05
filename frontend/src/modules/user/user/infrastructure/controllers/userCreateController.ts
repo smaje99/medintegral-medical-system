@@ -1,7 +1,10 @@
 import { toast } from 'sonner';
 
 import { PersonNotFound, PersonUnderage } from '@/modules/person/domain/personErrors';
-import { InternalServerError } from '@/modules/shared/domain/errors';
+import {
+  InternalServerError,
+  RequestValidationError,
+} from '@/modules/shared/domain/errors';
 import { RoleNotFound } from '@/modules/user/role/domain/roleErrors';
 
 import { UserCreate } from '../../application';
@@ -31,10 +34,13 @@ export class UserCreateController {
         error instanceof PersonUnderage ||
         error instanceof PersonNotFound ||
         error instanceof RoleNotFound ||
+        error instanceof RequestValidationError ||
         error instanceof InternalServerError
       ) {
         toast.error(error.message, { id: toastId });
+        return;
       }
+      toast.error('Error inesperado', { id: toastId });
     }
   }
 }

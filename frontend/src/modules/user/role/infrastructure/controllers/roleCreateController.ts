@@ -1,5 +1,10 @@
 import { toast } from 'sonner';
 
+import {
+  InternalServerError,
+  RequestValidationError,
+} from '@/modules/shared/domain/errors';
+
 import { RoleCreate } from '../../application/roleCreate';
 import { RoleSaveDtoType } from '../../domain';
 import { RoleAlreadyExists } from '../../domain/roleErrors';
@@ -21,9 +26,14 @@ export class RoleCreateController {
         setOpenSheet(false);
       }
     } catch (error) {
-      if (error instanceof RoleAlreadyExists) {
+      if (
+        error instanceof RoleAlreadyExists ||
+        error instanceof RequestValidationError ||
+        error instanceof InternalServerError
+      ) {
         toast.error(error.message, { id: toastId });
       }
+      toast.error('Error inesperado', { id: toastId });
     }
   }
 }

@@ -2,7 +2,12 @@ import { AxiosRequestConfig, isAxiosError } from 'axios';
 
 import config from '@/config';
 
-import { APIBaseError, APIError, InternalServerError } from '../../domain/errors';
+import {
+  APIBaseError,
+  APIError,
+  InternalServerError,
+  RequestValidationError,
+} from '../../domain/errors';
 
 const baseURL = config.PUBLIC_API;
 
@@ -15,6 +20,7 @@ export const axiosConfig: AxiosRequestConfig = { baseURL, timeout };
  * @param error - The error object received from Axios.
  * @param errors - List of custom error classes inheriting from APIBaseError
  * @throws {InternalServerError} - Thrown if the response status code is 500 or higher.
+ * @throws {RequestValidationError} - Thrown if the response status code is 422.
  * @throws {APIBaseError} - Thrown if a specific error is found in the server response.
  */
 export function axiosErrorHandler(error: unknown, ...errors: (typeof APIBaseError)[]) {
@@ -23,6 +29,10 @@ export function axiosErrorHandler(error: unknown, ...errors: (typeof APIBaseErro
 
     if (status >= 500) {
       throw new InternalServerError();
+    }
+
+    if (status === 422) {
+      throw new RequestValidationError(data.message);
     }
 
     errors.forEach((apiError) => {
