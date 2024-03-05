@@ -32,4 +32,6 @@ export const PersonSaveSchema = z.object({
   civilStatus: personCivilStatusSchema.optional(),
 });
 
-export type PersonSaveValues = z.infer<typeof PersonSaveSchema>;
+export type PersonSaveValues = Omit<z.infer<typeof PersonSaveSchema>, 'birthdate'> & {
+  birthdate: string;
+};
