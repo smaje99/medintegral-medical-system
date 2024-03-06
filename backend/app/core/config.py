@@ -94,6 +94,14 @@ class EmailSettings(BaseSettings):
     return BOOLEAN.get(value.lower(), False)
 
 
+class RedisSettings(BaseSettings):
+  '''Settings for the Redis cache.'''
+
+  host_url: str
+  prefix: str = 'myapi-cache'
+  ignore_arg_types: list[type[object]] = []
+
+
 class Settings(BaseSettings):
   '''Settings for the project.'''
 
@@ -101,6 +109,7 @@ class Settings(BaseSettings):
   project: ProjectSettings
   domain: DomainSettings
   email: EmailSettings
+  redis: RedisSettings
 
   model_config = SettingsConfigDict(
     env_file='.env',
