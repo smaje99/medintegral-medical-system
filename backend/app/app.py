@@ -1,6 +1,9 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_redis_cache import FastApiRedisCache
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.api import api_v1_router
@@ -23,11 +26,23 @@ container = ApplicationContainer()
 container.config.from_dict(settings.model_dump())
 
 
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+  redis_cache = FastApiRedisCache()
+  redis_cache.init(
+    host_url=container.config.redis.host_url(),
+    prefix=container.config.redis.prefix(),
+    ignore_arg_types=container.config.redis.ignore_arg_types(),
+  )
+  yield
+
+
 app = FastAPI(
   title=container.config.project.name(),
   description=container.config.project.description(),
   version=container.config.project.version(),
   openapi_url=f'{container.config.domain.api_version()}/openapi.json',
+  lifespan=lifespan,
 )
 
 app.container = container  # type: ignore
@@ -42,9 +57,13 @@ app.add_middleware(
 
 app.include_router(api_v1_router, prefix=container.config.domain.api_version())
 
-app.add_exception_handler(DaoError, dao_error_exception_handler)
-app.add_exception_handler(SQLAlchemyError, sqlalchemy_error_exception_handler)
+app.add_exception_handler(DaoError, dao_error_exception_handler)  # type: ignore
 app.add_exception_handler(
-  RequestValidationError, request_validation_error_exception_handler
+  SQLAlchemyError,
+  sqlalchemy_error_exception_handler,  # type: ignore
 )
-app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(
+  RequestValidationError,
+  request_validation_error_exception_handler,  # type: ignore
+)
+app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore
