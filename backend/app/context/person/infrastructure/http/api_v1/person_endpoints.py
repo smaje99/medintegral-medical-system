@@ -1,7 +1,9 @@
-from typing import Annotated
+from datetime import timedelta
+from typing import Annotated, Any
 
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Path
+from fastapi_cache.decorator import cache
 
 from app.context.person.domain import Person, PersonId
 from app.context.person.infrastructure.http.api_v1.controllers import (
@@ -16,6 +18,7 @@ router = APIRouter()
 
 
 @router.get('/{person_id}')
+@cache(expire=int(timedelta(hours=2.5).total_seconds()))
 @inject
 async def read_person_by_id(  # noqa: D417
   person_id: Annotated[PersonId, Path()],
