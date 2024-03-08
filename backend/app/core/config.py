@@ -98,8 +98,7 @@ class RedisSettings(BaseSettings):
   '''Settings for the Redis cache.'''
 
   host_url: str
-  prefix: str = 'myapi-cache'
-  ignore_arg_types: list[type[object]] = []
+  prefix: str = 'fastapi-cache'
 
 
 class Settings(BaseSettings):

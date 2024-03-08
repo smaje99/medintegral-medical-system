@@ -3,7 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_redis_cache import FastApiRedisCache
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis import asyncio as aioredis
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.api import api_v1_router
@@ -28,12 +30,8 @@ container.config.from_dict(settings.model_dump())
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-  redis_cache = FastApiRedisCache()
-  redis_cache.init(
-    host_url=container.config.redis.host_url(),
-    prefix=container.config.redis.prefix(),
-    ignore_arg_types=container.config.redis.ignore_arg_types(),
-  )
+  redis = aioredis.from_url(container.config.redis.host_url())
+  FastAPICache.init(RedisBackend(redis), prefix=container.config.redis.prefix())
   yield
 
 
