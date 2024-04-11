@@ -16,7 +16,7 @@ import {
   RhFactor,
 } from '@/modules/person/domain/enum';
 import { getLegalAge } from '@/modules/person/domain/objects/personBirthdate';
-import * as domain from '@/modules/user/role/domain';
+import { RoleAttributes } from '@/modules/user/role/domain';
 import {
   personAssociatedWithUserSaveSchema,
   type PersonAssociatedWithUserSaveValues,
@@ -24,16 +24,11 @@ import {
 import { userCreateController } from '@/modules/user/user/infrastructure/userContainer';
 
 type Props = {
-  readonly roles: domain.RoleAttributes[];
+  readonly roles: RoleAttributes[];
   readonly showOptionalFields: boolean;
-  readonly setOpenSheet: (isOpen: boolean) => void;
 };
 
-export const CreateUserForm: React.FC<Props> = ({
-  roles,
-  showOptionalFields,
-  setOpenSheet,
-}) => {
+export const CreateUserForm: React.FC<Props> = ({ roles, showOptionalFields }) => {
   const form = useForm<PersonAssociatedWithUserSaveValues>({
     resolver: zodResolver(personAssociatedWithUserSaveSchema),
   });
@@ -172,7 +167,7 @@ export const CreateUserForm: React.FC<Props> = ({
   );
 
   const onSubmit = async (data: PersonAssociatedWithUserSaveValues) => {
-    await userCreateController.run(data, setOpenSheet);
+    await userCreateController.run(data);
   };
 
   return (

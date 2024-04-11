@@ -1,5 +1,7 @@
+import { redirect } from 'next/navigation';
 import { toast } from 'sonner';
 
+import { CmsRoutes } from '@/helpers/routes';
 import { PersonNotFound, PersonUnderage } from '@/modules/person/domain/personErrors';
 import {
   InternalServerError,
@@ -14,10 +16,7 @@ import { UserAlreadyExists } from '../../domain/userErrors';
 export class UserCreateController {
   constructor(private readonly userCreate: UserCreate) {}
 
-  async run(
-    userIn: PersonAssociatedWithUserSaveValues,
-    setOpenCreateUserSheet: (isOpen: boolean) => void,
-  ): Promise<void> {
+  async run(userIn: PersonAssociatedWithUserSaveValues): Promise<void> {
     const toastId = toast("User create's toast");
     toast.loading('Creando usuario...', { id: toastId });
 
@@ -26,7 +25,7 @@ export class UserCreateController {
 
       if (user) {
         toast.success(`Usuario ${user.username} creado con éxito`, { id: toastId });
-        setOpenCreateUserSheet(false);
+        redirect(CmsRoutes.Users.href);
       }
     } catch (error) {
       if (
