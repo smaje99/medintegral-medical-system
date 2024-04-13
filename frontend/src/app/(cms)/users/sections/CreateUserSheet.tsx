@@ -1,20 +1,27 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useReducer, useState } from 'react';
 
 import { Checkbox } from '@/components/ui/checkbox';
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet';
-import { CmsRoutes } from '@/helpers/routes';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { RoleAttributes } from '@/modules/user/role/domain';
 
 import { CreateUserForm } from './CreateUserForm';
+import { Button } from '@/components/ui/button';
+import { IconUserPlus } from '@tabler/icons-react';
 
 const ContentBlock: React.FC<{
   readonly roles: RoleAttributes[];
   readonly showOptionalFields: boolean;
   readonly toggleOptionalFields: () => void;
-}> = ({ roles, showOptionalFields, toggleOptionalFields }) => (
+  readonly setOpenSheet: (open: boolean) => void;
+}> = ({ roles, showOptionalFields, toggleOptionalFields, setOpenSheet }) => (
   <>
     <label className='mt-4 flex items-center justify-end gap-x-2'>
       <Checkbox checked={showOptionalFields} onCheckedChange={toggleOptionalFields} />
@@ -23,7 +30,7 @@ const ContentBlock: React.FC<{
       </span>
     </label>
 
-    <CreateUserForm {...{ roles, showOptionalFields }} />
+    <CreateUserForm {...{ roles, showOptionalFields, setOpenSheet }} />
   </>
 );
 
@@ -38,22 +45,25 @@ type Props = {
 };
 
 export const CreateUserSheet: React.FC<Props> = ({ roles }) => {
-  const router = useRouter();
-
-  const [isOpen, setOpen] = useState(true);
-
+  const [isOpen, setOpen] = useState(false);
   const [showOptionalFields, toggleOptionalFields] = useReducer(
     (state: boolean) => !state,
     false,
   );
 
-  const handleSheetClose = (open: boolean) => {
-    setOpen(open);
-    router.push(CmsRoutes.Users.href);
-  };
-
   return (
-    <Sheet open={isOpen} onOpenChange={handleSheetClose}>
+    <Sheet open={isOpen} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          size='sm'
+          className='inline-flex items-center gap-2'
+          title='Crear usuario'
+        >
+          <IconUserPlus />
+          <span className='hidden md:inline-block'>Crear usuario</span>
+          <span className='sr-only'>Crear usuario</span>
+        </Button>
+      </SheetTrigger>
       <SheetContent className='overflow-y-auto'>
         <SheetTitle>Crear usuario</SheetTitle>
         <SheetDescription>
@@ -62,7 +72,12 @@ export const CreateUserSheet: React.FC<Props> = ({ roles }) => {
         </SheetDescription>
 
         {roles.length > 0 ? (
-          <ContentBlock {...{ roles, showOptionalFields, toggleOptionalFields }} />
+          <ContentBlock
+            roles={roles}
+            showOptionalFields={showOptionalFields}
+            toggleOptionalFields={toggleOptionalFields}
+            setOpenSheet={setOpen}
+          />
         ) : (
           <ErrorBlock />
         )}
